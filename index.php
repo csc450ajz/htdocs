@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row justify-content-sm-center">
             <div class="col col-sm-10">
-                <h1 style="margin-top: 30px;">This is where the content will go</h1>
+                <h1 style="margin-top: 30px;">This is to display the navbar so far</h1>
             </div>
         </div>
     </div>
