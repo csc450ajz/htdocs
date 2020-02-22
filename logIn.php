@@ -7,7 +7,20 @@
 <!DOCTYPE html>
 <html>
 <?php
-require_once('config.html')
+/*
+Values obtained from this file:
+
+user_email : email of user from attempted login
+user_password : password of user from attempted login
+
+Buttons to submi:
+login
+submit
+
+*/
+// gets navbar and other site decoration
+require_once('~/config.html')
+
 ?>
 
 <head>
