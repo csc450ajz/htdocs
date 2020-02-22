@@ -6,7 +6,7 @@
     <title></title>
 </head>
 <body>
-<?PHP>
+<?PHP
 	//POST VARIABLES
 	//if(isset($_POST["ID"])){
 		$ID = $_POST["ID"];
