@@ -8,13 +8,13 @@
     */
 
     // define credentials for db
-    define("SERVER_NAME","localhost");
+    define("SERVER_NAME","mi3-ss48");
     define("DBF_USER_NAME", "sportrad_developer");
-	define("DBF_PASSWORD", "L0aHxAW66vgw");
-	define("DATABASE_NAME", "sportrad_sportrader");
+    define("DBF_PASSWORD", "L0aHxAW66vgw");
+    define("DATABASE_NAME", "sportrad_sportrader");
 
 	// establish connection
-	$conn = new mysqli(SERVER_NAME, DBF_USER_NAME, DBF_PASSWORD);
+    $conn = new mysqli(SERVER_NAME, DBF_USER_NAME, DBF_PASSWORD);
     $conn->select_db(DATABASE_NAME);
     
     // test the connection (TODO -- Remove later after functioning)
