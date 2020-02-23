@@ -1,8 +1,19 @@
-<!-- logIn.php - login page for user's
+<!-- admin.php - admin page
       
     -->
 
+    <?php
+//index.php
+include('databaseConnection.php');
 
+if(!isset($_SESSION["type"]))
+{
+ header("location:logIn.php");
+}
+
+// include('header.php');
+
+?>
 
 <!DOCTYPE html>
 <html>

@@ -1,26 +1,75 @@
 <!-- logIn.php - login page for user's
       
     -->
+<?php
+// require_once('config.html')
+?>
 
+<?php
+//login.php
 
+include('databaseConnection.php');
+
+// if (isset($_SESSION['userEmail'])) {
+//     header("Location: index.php");
+// }
+
+$message = '';
+
+if (isset($_POST["login"])) {
+    $sql = "SELECT * FROM user WHERE userEmail=?";
+    //set up a prepared statement
+    if ($stmt = $conn->prepare($sql)) {
+        //pass parameters
+        $stmt->bind_param("s", $_POST["user_email"]);
+        if ($stmt->errno) {
+            echo "Statement prapare has error";
+        }
+
+        // execute
+        $stmt->execute();
+        if ($stmt->errno) {
+            echo "Could not execute prepared statment";
+        }
+
+        $stmt->store_result();
+        $rowCount = $stmt->num_rows;
+
+        $stmt->bind_result($userEmail, $userFName, $userLName, $userType, $userPassword, $addressID, $userBalance, $userPhotoPath);
+        $stmt->fetch();
+
+        // Free results
+        $stmt->free_result();
+
+        // Close the statement
+        $stmt->close();
+    } // end if( prepare( ))
+
+    if ($rowCount > 0) {
+        
+        if ($_POST["user_password"]==$userPassword) {
+            $_SESSION['type'] = $userType;
+            $_SESSION['userEmail'] = $userEmail;
+            $_SESSION['userName'] = $userFName;
+            if($_SESSION['type']=="admin") {
+                header("Location: admin.php");
+            }else{
+                header("Location: index.php");
+            }
+        } else {
+            $message = "<label>Wrong Password</label>";
+        }
+    } else {
+        $message = "<label>Wrong Email Address</labe>";
+    }
+}
+
+?>
 
 <!DOCTYPE html>
 <html>
 <?php
-/*
-Values obtained from this file:
-
-user_email : email of user from attempted login
-user_password : password of user from attempted login
-
-Buttons to submi:
-login
-submit
-
-*/
-// gets navbar and other site decoration
-require_once('~/config.html')
-
+require_once('config.html')
 ?>
 
 <head>
