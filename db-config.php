@@ -9,8 +9,8 @@
 
     // define credentials for db
     define("SERVER_NAME","localhost");
-    define("DBF_USER_NAME", "root");
-    define("DBF_PASSWORD", "root");
+    define("DBF_USER_NAME", "sportrad_developer");
+    define("DBF_PASSWORD", "L0aHxAW66vgw");
     define("DATABASE_NAME", "sportrad_sportrader");
 
 	// establish connection
