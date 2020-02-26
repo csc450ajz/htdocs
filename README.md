@@ -10,7 +10,7 @@ Main repository for Sportrader site -- CSC 450 Capstone Project
 2. Start a Git Bash window at the htdocs folder (this is important).
 3. Install git-ftp: `curl https://raw.githubusercontent.com/git-ftp/git-ftp/master/git-ftp > /bin/git-ftp`
 4. Change permissions on git-ftp folder: `chmod 755 /bin/git-ftp`
-5. Configure ftp url: `git config git-ftp.url ftpupload.net/htdocs`
+5. Configure ftp url: `git config git-ftp.url ftp.sportrader-csp.com`
 6. Configure ftp username: `git config git-ftp.user (ftp username -- see Slack)`
 7. Configure ftp username: `git config git-ftp.password (ftp password -- see Slack)`
 8. Initialize git-ftp: `git ftp init`(may take a few moments)

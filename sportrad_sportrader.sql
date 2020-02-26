@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 22, 2020 at 04:02 PM
+-- Generation Time: Feb 25, 2020 at 08:29 PM
 -- Server version: 10.3.22-MariaDB-cll-lve
 -- PHP Version: 7.3.6
 
@@ -38,6 +38,13 @@ CREATE TABLE `Address` (
   `addressZip` int(20) NOT NULL,
   `addressCountry` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `Address`
+--
+
+INSERT INTO `Address` (`addressID`, `addressStreet`, `addressApt`, `addressState`, `addressZip`, `addressCountry`) VALUES
+(1, '123 Brooklynn Blvd', NULL, 'NY', 123456, 'US');
 
 -- --------------------------------------------------------
 
@@ -155,6 +162,13 @@ CREATE TABLE `User` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Dumping data for table `User`
+--
+
+INSERT INTO `User` (`userEmail`, `userFName`, `userLName`, `userType`, `userPassword`, `addressID`, `userBalance`, `userPhotoPath`) VALUES
+('test@test.com', 'Test', 'User', 'client', 'password', 1, 200, 'path_to_photo');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -203,7 +217,7 @@ ALTER TABLE `Orders`
 --
 ALTER TABLE `Product`
   ADD PRIMARY KEY (`productID`),
-  ADD KEY `brandId` (`brandId`) USING BTREE,
+  ADD UNIQUE KEY `brandId` (`brandId`),
   ADD KEY `categoryID` (`categoryID`);
 
 --
@@ -228,7 +242,19 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT for table `Address`
 --
 ALTER TABLE `Address`
-  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `Brand`
+--
+ALTER TABLE `Brand`
+  MODIFY `brandId` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `Category`
+--
+ALTER TABLE `Category`
+  MODIFY `categoryId` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Messages`
@@ -237,10 +263,22 @@ ALTER TABLE `Messages`
   MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `Orders`
+--
+ALTER TABLE `Orders`
+  MODIFY `orderId` int(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `Product`
 --
 ALTER TABLE `Product`
   MODIFY `productID` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ProductImage`
+--
+ALTER TABLE `ProductImage`
+  MODIFY `imageID` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
