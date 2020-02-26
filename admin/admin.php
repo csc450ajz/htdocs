@@ -4,7 +4,7 @@
 
     <?php
 //index.php
-include('databaseConnection.php');
+include('util/databaseConnection.php');
 
 if(!isset($_SESSION["type"]))
 {
