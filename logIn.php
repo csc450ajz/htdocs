@@ -1,14 +1,4 @@
-<!-- logIn.php - login page for user's
-      
-    -->
 <?php
-// require_once('util/config.html')
-?>
-
-<?php
-//login.php
-
-include('util/db-config.php');
 
 // if user is already logged in, redirect to profile page
 include('util/check-login.php');
@@ -16,10 +6,12 @@ if (checkAdmin()) {
     header('Location: admin/admin.php');
 } else if (checkClient()) {
     header('Location: admin/admin.php');
-}
+} 
+
+// create db connection 
+include('util/db-config.php');
 
 $message = '';
-
 if (isset($_POST["login"])) {
     $sql = "SELECT * FROM user WHERE userEmail=?";
     //set up a prepared statement
@@ -56,9 +48,9 @@ if (isset($_POST["login"])) {
             $_SESSION['userEmail'] = $userEmail;
             $_SESSION['userName'] = $userFName;
             if($_SESSION['type']=="admin") {
-                header("Location: admin.php");
+                header("Location: admin/admin.php");
             }else{
-                header("Location: index.php");
+                header("Location: index.php"); // TODO -- Update to client page when created.
             }
         } else {
             $message = "<label>Wrong Password</label>";
