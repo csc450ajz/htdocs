@@ -41,8 +41,7 @@ if (isset($_POST["login"])) {
         $stmt->close();
     } // end if( prepare( ))
 
-    if ($rowCount > 0) {
-        
+    if ($rowCount > 0) {     
         if ($_POST["user_password"]==$userPassword) {
             $_SESSION['type'] = $userType;
             $_SESSION['userEmail'] = $userEmail;
@@ -65,7 +64,7 @@ if (isset($_POST["login"])) {
 <!DOCTYPE html>
 <html>
 <?php
-require_once('config.html')
+require_once('util/config.html')
 ?>
 
 <head>
