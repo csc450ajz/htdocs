@@ -17,7 +17,7 @@ include('util/databaseConnection.php');
 <!DOCTYPE html>
 <html>
 <?php
-require_once('config.html')
+require_once('util/config.html')
 ?>
 
 <head>
