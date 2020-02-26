@@ -2,13 +2,13 @@
       
     -->
 <?php
-// require_once('config.html')
+// require_once('util/config.html')
 ?>
 
 <?php
 //login.php
 
-include('databaseConnection.php');
+include('util/databaseConnection.php');
 
 // if (isset($_SESSION['userEmail'])) {
 //     header("Location: index.php");
