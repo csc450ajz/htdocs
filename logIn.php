@@ -2,17 +2,21 @@
       
     -->
 <?php
-// require_once('config.html')
+// require_once('util/config.html')
 ?>
 
 <?php
 //login.php
 
-include('databaseConnection.php');
+include('util/db-config.php');
 
-// if (isset($_SESSION['userEmail'])) {
-//     header("Location: index.php");
-// }
+// if user is already logged in, redirect to profile page
+include('util/check-login.php');
+if (checkAdmin()) {
+    header('Location: admin/admin.php');
+} else if (checkClient()) {
+    header('Location: admin/admin.php');
+}
 
 $message = '';
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-require_once('config.html')
+require_once('util/config.html')
 ?>
 
 <head>

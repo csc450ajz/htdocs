@@ -4,7 +4,7 @@
 
 <?php
 //index.php
-include('databaseConnection.php');
+include('util/databaseConnection.php');
 
 // if (!isset($_SESSION["type"])) {
 //     header("location:logIn.php");
@@ -17,7 +17,7 @@ include('databaseConnection.php');
 <!DOCTYPE html>
 <html>
 <?php
-require_once('config.html')
+require_once('../util/config.html')
 ?>
 
 <head>
