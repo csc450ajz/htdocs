@@ -4,7 +4,7 @@
 
 <?php
 //index.php
-include('util/databaseConnection.php');
+include('db-config.php');
 
 // if (!isset($_SESSION["type"])) {
 //     header("location:logIn.php");
