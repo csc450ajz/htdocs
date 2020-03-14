@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 25, 2020 at 08:29 PM
+-- Generation Time: Mar 13, 2020 at 11:48 PM
 -- Server version: 10.3.22-MariaDB-cll-lve
 -- PHP Version: 7.3.6
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `sportrad_sportrader`
 --
-CREATE DATABASE IF NOT EXISTS `sportrad_sportrader` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `sportrad_sportrader`;
 
 -- --------------------------------------------------------
 
@@ -44,7 +42,10 @@ CREATE TABLE `Address` (
 --
 
 INSERT INTO `Address` (`addressID`, `addressStreet`, `addressApt`, `addressState`, `addressZip`, `addressCountry`) VALUES
-(1, '123 Brooklynn Blvd', NULL, 'NY', 123456, 'US');
+(1, '123 Brooklynn Blvd', NULL, 'NY', 123456, 'US'),
+(2, '456 House Blvd', NULL, 'WI', 45678, 'US'),
+(3, '5674 First Ave', '102', 'IA', 35292, 'US'),
+(4, '9124 Fourth Ave', '141', 'KS', 12419, 'US');
 
 -- --------------------------------------------------------
 
@@ -57,6 +58,15 @@ CREATE TABLE `Brand` (
   `brandName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `brandStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `Brand`
+--
+
+INSERT INTO `Brand` (`brandId`, `brandName`, `brandStatus`) VALUES
+(1, 'Nike', 'active'),
+(2, 'Adidas', 'active'),
+(3, 'Spalding', 'active');
 
 -- --------------------------------------------------------
 
@@ -81,6 +91,16 @@ CREATE TABLE `Category` (
   `categoryStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `Category`
+--
+
+INSERT INTO `Category` (`categoryId`, `categoryName`, `categoryStatus`) VALUES
+(1, 'Sporting Goods', 'active'),
+(2, 'Memorabilia', 'active'),
+(3, 'Footwear', 'active'),
+(4, 'Equipment', 'active');
+
 -- --------------------------------------------------------
 
 --
@@ -92,7 +112,8 @@ CREATE TABLE `Messages` (
   `senderEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `recipientEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `messageText` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `messageTime` date NOT NULL
+  `messageTime` date NOT NULL,
+  `messageStatus` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -111,6 +132,13 @@ CREATE TABLE `Orders` (
   `productId` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `Orders`
+--
+
+INSERT INTO `Orders` (`orderId`, `userEmail`, `orderTotal`, `orderDate`, `orderDiscount`, `orderShipAddress`, `productId`) VALUES
+(1, 'test@test.com', 50, '2020-03-13', 0, '123 SomeStreet, New York, NY 11223', 4);
+
 -- --------------------------------------------------------
 
 --
@@ -128,8 +156,20 @@ CREATE TABLE `Product` (
   `productStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `brandId` int(20) NOT NULL,
   `categoryID` int(20) NOT NULL,
-  `productDiscount` float NOT NULL
+  `productDiscount` float NOT NULL,
+  `userEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productViews` int(11) DEFAULT NULL,
+  `productRate` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `Product`
+--
+
+INSERT INTO `Product` (`productID`, `productName`, `productDesc`, `productPrice`, `productCondition`, `productSize`, `productColor`, `productStatus`, `brandId`, `categoryID`, `productDiscount`, `userEmail`, `productViews`, `productRate`) VALUES
+(3, 'Spalding Basketball', 'This basketball is in great condition, only used twice.', 25, 'Like New', '29.5\"', 'orange', 'active', 3, 4, 0, 'bob@gmail.com', NULL, NULL),
+(4, 'Nike Free Run 5.0', 'This pair of running shoes is in great shape! New without tags.', 55, 'New', '11.5', 'Blue', 'active', 1, 3, 0.1, 'joe@gmail.com', NULL, NULL),
+(5, 'Men\'s Adidas Black Sweatshirt', 'Lightly worn Adidas Originals sweatshirt.', 15, 'Used - Good', 'Men\'s Large', 'Black', 'active', 2, 4, 0, 'sally@gmail.com', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -143,6 +183,27 @@ CREATE TABLE `ProductImage` (
   `imagePath` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `productId` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProductReview`
+--
+
+CREATE TABLE `ProductReview` (
+  `reviewId` int(20) NOT NULL,
+  `userEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productId` int(20) NOT NULL,
+  `reviewRating` int(11) NOT NULL,
+  `reviewContent` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ProductReview`
+--
+
+INSERT INTO `ProductReview` (`reviewId`, `userEmail`, `productId`, `reviewRating`, `reviewContent`) VALUES
+(1, 'sally@gmail.com', 3, 4, 'I had a basketball like this and it was great! I wish I had bought two more');
 
 -- --------------------------------------------------------
 
@@ -166,6 +227,10 @@ CREATE TABLE `User` (
 --
 
 INSERT INTO `User` (`userEmail`, `userFName`, `userLName`, `userType`, `userPassword`, `addressID`, `userBalance`, `userPhotoPath`) VALUES
+('admin@admin.com', 'Admin', 'Admin', 'admin', 'admin', 1, 0, ''),
+('bob@gmail.com', 'Bob', 'Johnson', 'client', 'password', 4, 200, 'path_to_photo'),
+('joe@gmail.com', 'Joe', 'Smith', 'client', 'password', 2, 200, 'path_to_photo'),
+('sally@gmail.com', 'Sally', 'User', 'client', 'password', 3, 200, 'path_to_photo'),
 ('test@test.com', 'Test', 'User', 'client', 'password', 1, 200, 'path_to_photo');
 
 --
@@ -218,6 +283,7 @@ ALTER TABLE `Orders`
 ALTER TABLE `Product`
   ADD PRIMARY KEY (`productID`),
   ADD UNIQUE KEY `brandId` (`brandId`),
+  ADD UNIQUE KEY `userEmail` (`userEmail`),
   ADD KEY `categoryID` (`categoryID`);
 
 --
@@ -225,6 +291,14 @@ ALTER TABLE `Product`
 --
 ALTER TABLE `ProductImage`
   ADD PRIMARY KEY (`imageID`),
+  ADD KEY `productId` (`productId`);
+
+--
+-- Indexes for table `ProductReview`
+--
+ALTER TABLE `ProductReview`
+  ADD PRIMARY KEY (`reviewId`),
+  ADD KEY `userEmail` (`userEmail`),
   ADD KEY `productId` (`productId`);
 
 --
@@ -242,19 +316,19 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT for table `Address`
 --
 ALTER TABLE `Address`
-  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Brand`
 --
 ALTER TABLE `Brand`
-  MODIFY `brandId` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `brandId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `Category`
 --
 ALTER TABLE `Category`
-  MODIFY `categoryId` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `categoryId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Messages`
@@ -266,19 +340,25 @@ ALTER TABLE `Messages`
 -- AUTO_INCREMENT for table `Orders`
 --
 ALTER TABLE `Orders`
-  MODIFY `orderId` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `orderId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `Product`
 --
 ALTER TABLE `Product`
-  MODIFY `productID` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `productID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `ProductImage`
 --
 ALTER TABLE `ProductImage`
   MODIFY `imageID` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ProductReview`
+--
+ALTER TABLE `ProductReview`
+  MODIFY `reviewId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -296,13 +376,21 @@ ALTER TABLE `Orders`
 --
 ALTER TABLE `Product`
   ADD CONSTRAINT `Product_ibfk_1` FOREIGN KEY (`brandId`) REFERENCES `Brand` (`brandId`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `Product_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `Category` (`categoryId`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `Product_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `Category` (`categoryId`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `Product_ibfk_3` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ProductImage`
 --
 ALTER TABLE `ProductImage`
   ADD CONSTRAINT `ProductImage_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `Product` (`productID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `ProductReview`
+--
+ALTER TABLE `ProductReview`
+  ADD CONSTRAINT `ProductReview_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `ProductReview_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`productID`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `User`
