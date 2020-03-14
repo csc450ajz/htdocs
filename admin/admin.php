@@ -4,8 +4,8 @@
 
 <?php
 //index.php
-include('db-config.php');
-
+// include('db-config.php');
+include('../databaseConnection.php')
 // if (!isset($_SESSION["type"])) {
 //     header("location:logIn.php");
 // }
@@ -47,10 +47,11 @@ require_once('../util/config.html')
                         <div class="col-md-3">
                             <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
                                 <div class="card-header">Quick Profile Info</div>
-                                <img class="card-img-top" src="images/Logo.png" alt="Card image cap">
+                                <img class="card-img-top" src="../images/profile.jpg" alt="Card image cap">
                                 <div class="card-body text-dark">
                                     <h5 class="card-title">My Name</h5>
                                     <p class="card-text">User Details Below: email, username, etc.</p>
+                                    <button>Edit Profile</button>
                                 </div>
                             </div>
                         </div>

@@ -102,8 +102,77 @@ require_once('util/config.html')
 
 
         </div>
+
+
+        <hr>
+
         
+        <hr>
+
+        <div class="row flex-row flex-nowrap overflow-auto">
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card card-block">
+                <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+
+                </div>
+            </div>
+
+            
+            
+        </div>
+
     </div>
+
+    <br><br><br>
+
+    <script>
+        $('.stop').carousel({
+            interval: false
+        });
+    </script>
+
 
 
 
