@@ -48,6 +48,9 @@ require_once('util/config.html')
         <h2 class="text-center">Featured Products</h2>
 
         <div class="row">
+            <?php 
+               $query = "SELECT TOP 4 FROM product ORDER BY product.productHit DESC" 
+            ?>
 
             <div class="col-sm-3">
 

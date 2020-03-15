@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 13, 2020 at 11:48 PM
--- Server version: 10.3.22-MariaDB-cll-lve
--- PHP Version: 7.3.6
+-- Host: localhost
+-- Generation Time: Mar 14, 2020 at 06:08 PM
+-- Server version: 8.0.18
+-- PHP Version: 7.3.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,29 +19,29 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sportrad_sportrader`
+-- Database: `sportrader`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Address`
+-- Table structure for table `address`
 --
 
-CREATE TABLE `Address` (
+CREATE TABLE `address` (
   `addressID` int(20) NOT NULL,
-  `addressStreet` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `addressApt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `addressState` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `addressStreet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `addressApt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `addressState` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `addressZip` int(20) NOT NULL,
-  `addressCountry` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+  `addressCountry` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `Address`
+-- Dumping data for table `address`
 --
 
-INSERT INTO `Address` (`addressID`, `addressStreet`, `addressApt`, `addressState`, `addressZip`, `addressCountry`) VALUES
+INSERT INTO `address` (`addressID`, `addressStreet`, `addressApt`, `addressState`, `addressZip`, `addressCountry`) VALUES
 (1, '123 Brooklynn Blvd', NULL, 'NY', 123456, 'US'),
 (2, '456 House Blvd', NULL, 'WI', 45678, 'US'),
 (3, '5674 First Ave', '102', 'IA', 35292, 'US'),
@@ -50,20 +50,20 @@ INSERT INTO `Address` (`addressID`, `addressStreet`, `addressApt`, `addressState
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Brand`
+-- Table structure for table `brand`
 --
 
-CREATE TABLE `Brand` (
+CREATE TABLE `brand` (
   `brandId` int(20) NOT NULL,
-  `brandName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `brandStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `brandName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `brandStatus` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `Brand`
+-- Dumping data for table `brand`
 --
 
-INSERT INTO `Brand` (`brandId`, `brandName`, `brandStatus`) VALUES
+INSERT INTO `brand` (`brandId`, `brandName`, `brandStatus`) VALUES
 (1, 'Nike', 'active'),
 (2, 'Adidas', 'active'),
 (3, 'Spalding', 'active');
@@ -71,31 +71,31 @@ INSERT INTO `Brand` (`brandId`, `brandName`, `brandStatus`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `CartItems`
+-- Table structure for table `cartitems`
 --
 
-CREATE TABLE `CartItems` (
-  `userEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `cartitems` (
+  `userEmail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `productId` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Category`
+-- Table structure for table `category`
 --
 
-CREATE TABLE `Category` (
+CREATE TABLE `category` (
   `categoryId` int(20) NOT NULL,
-  `categoryName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `categoryStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `categoryName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `categoryStatus` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `Category`
+-- Dumping data for table `category`
 --
 
-INSERT INTO `Category` (`categoryId`, `categoryName`, `categoryStatus`) VALUES
+INSERT INTO `category` (`categoryId`, `categoryName`, `categoryStatus`) VALUES
 (1, 'Sporting Goods', 'active'),
 (2, 'Memorabilia', 'active'),
 (3, 'Footwear', 'active'),
@@ -104,129 +104,128 @@ INSERT INTO `Category` (`categoryId`, `categoryName`, `categoryStatus`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Messages`
+-- Table structure for table `messages`
 --
 
-CREATE TABLE `Messages` (
+CREATE TABLE `messages` (
   `messageId` int(20) NOT NULL,
-  `senderEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `recipientEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `messageText` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `senderEmail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `recipientEmail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `messageText` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `messageTime` date NOT NULL,
-  `messageStatus` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+  `messageStatus` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Orders`
+-- Table structure for table `orders`
 --
 
-CREATE TABLE `Orders` (
+CREATE TABLE `orders` (
   `orderId` int(20) NOT NULL,
-  `userEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userEmail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `orderTotal` float NOT NULL,
   `orderDate` date NOT NULL,
   `orderDiscount` float NOT NULL,
-  `orderShipAddress` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `orderShipAddress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `productId` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `Orders`
+-- Dumping data for table `orders`
 --
 
-INSERT INTO `Orders` (`orderId`, `userEmail`, `orderTotal`, `orderDate`, `orderDiscount`, `orderShipAddress`, `productId`) VALUES
+INSERT INTO `orders` (`orderId`, `userEmail`, `orderTotal`, `orderDate`, `orderDiscount`, `orderShipAddress`, `productId`) VALUES
 (1, 'test@test.com', 50, '2020-03-13', 0, '123 SomeStreet, New York, NY 11223', 4);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Product`
+-- Table structure for table `product`
 --
 
-CREATE TABLE `Product` (
+CREATE TABLE `product` (
   `productID` int(20) NOT NULL,
-  `productName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `productDesc` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productDesc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `productPrice` float NOT NULL,
-  `productCondition` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `productSize` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `productColor` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `productStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productCondition` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productSize` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productColor` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productStatus` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `brandId` int(20) NOT NULL,
   `categoryID` int(20) NOT NULL,
   `productDiscount` float NOT NULL,
-  `userEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `productViews` int(11) DEFAULT NULL,
-  `productRate` int(11) DEFAULT NULL
+  `userEmail` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productViews` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `Product`
+-- Dumping data for table `product`
 --
 
-INSERT INTO `Product` (`productID`, `productName`, `productDesc`, `productPrice`, `productCondition`, `productSize`, `productColor`, `productStatus`, `brandId`, `categoryID`, `productDiscount`, `userEmail`, `productViews`, `productRate`) VALUES
-(3, 'Spalding Basketball', 'This basketball is in great condition, only used twice.', 25, 'Like New', '29.5\"', 'orange', 'active', 3, 4, 0, 'bob@gmail.com', NULL, NULL),
-(4, 'Nike Free Run 5.0', 'This pair of running shoes is in great shape! New without tags.', 55, 'New', '11.5', 'Blue', 'active', 1, 3, 0.1, 'joe@gmail.com', NULL, NULL),
-(5, 'Men\'s Adidas Black Sweatshirt', 'Lightly worn Adidas Originals sweatshirt.', 15, 'Used - Good', 'Men\'s Large', 'Black', 'active', 2, 4, 0, 'sally@gmail.com', NULL, NULL);
+INSERT INTO `product` (`productID`, `productName`, `productDesc`, `productPrice`, `productCondition`, `productSize`, `productColor`, `productStatus`, `brandId`, `categoryID`, `productDiscount`, `userEmail`, `productViews`) VALUES
+(3, 'Spalding Basketball', 'This basketball is in great condition, only used twice.', 25, 'Like New', '29.5\"', 'orange', 'active', 3, 4, 0, 'bob@gmail.com', 20),
+(4, 'Nike Free Run 5.0', 'This pair of running shoes is in great shape! New without tags.', 55, 'New', '11.5', 'Blue', 'active', 1, 3, 0.1, 'joe@gmail.com', 15),
+(5, 'Men\'s Adidas Black Sweatshirt', 'Lightly worn Adidas Originals sweatshirt.', 15, 'Used - Good', 'Men\'s Large', 'Black', 'active', 2, 4, 0, 'sally@gmail.com', 5);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ProductImage`
+-- Table structure for table `productimage`
 --
 
-CREATE TABLE `ProductImage` (
+CREATE TABLE `productimage` (
   `imageID` int(20) NOT NULL,
   `isPrimary` tinyint(1) NOT NULL,
-  `imagePath` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `imagePath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `productId` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ProductReview`
+-- Table structure for table `productreview`
 --
 
-CREATE TABLE `ProductReview` (
+CREATE TABLE `productreview` (
   `reviewId` int(20) NOT NULL,
-  `userEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userEmail` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `productId` int(20) NOT NULL,
   `reviewRating` int(11) NOT NULL,
-  `reviewContent` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `reviewContent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `ProductReview`
+-- Dumping data for table `productreview`
 --
 
-INSERT INTO `ProductReview` (`reviewId`, `userEmail`, `productId`, `reviewRating`, `reviewContent`) VALUES
+INSERT INTO `productreview` (`reviewId`, `userEmail`, `productId`, `reviewRating`, `reviewContent`) VALUES
 (1, 'sally@gmail.com', 3, 4, 'I had a basketball like this and it was great! I wish I had bought two more');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `User`
+-- Table structure for table `user`
 --
 
-CREATE TABLE `User` (
-  `userEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `userFName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `userLName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `userType` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `userPassword` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `user` (
+  `userEmail` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userFName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userLName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userType` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userPassword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `addressID` int(20) NOT NULL,
   `userBalance` float NOT NULL,
-  `userPhotoPath` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `userPhotoPath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `User`
+-- Dumping data for table `user`
 --
 
-INSERT INTO `User` (`userEmail`, `userFName`, `userLName`, `userType`, `userPassword`, `addressID`, `userBalance`, `userPhotoPath`) VALUES
+INSERT INTO `user` (`userEmail`, `userFName`, `userLName`, `userType`, `userPassword`, `addressID`, `userBalance`, `userPhotoPath`) VALUES
 ('admin@admin.com', 'Admin', 'Admin', 'admin', 'admin', 1, 0, ''),
 ('bob@gmail.com', 'Bob', 'Johnson', 'client', 'password', 4, 200, 'path_to_photo'),
 ('joe@gmail.com', 'Joe', 'Smith', 'client', 'password', 2, 200, 'path_to_photo'),
@@ -238,73 +237,73 @@ INSERT INTO `User` (`userEmail`, `userFName`, `userLName`, `userType`, `userPass
 --
 
 --
--- Indexes for table `Address`
+-- Indexes for table `address`
 --
-ALTER TABLE `Address`
+ALTER TABLE `address`
   ADD PRIMARY KEY (`addressID`);
 
 --
--- Indexes for table `Brand`
+-- Indexes for table `brand`
 --
-ALTER TABLE `Brand`
+ALTER TABLE `brand`
   ADD PRIMARY KEY (`brandId`);
 
 --
--- Indexes for table `CartItems`
+-- Indexes for table `cartitems`
 --
-ALTER TABLE `CartItems`
+ALTER TABLE `cartitems`
   ADD PRIMARY KEY (`userEmail`,`productId`);
 
 --
--- Indexes for table `Category`
+-- Indexes for table `category`
 --
-ALTER TABLE `Category`
+ALTER TABLE `category`
   ADD PRIMARY KEY (`categoryId`);
 
 --
--- Indexes for table `Messages`
+-- Indexes for table `messages`
 --
-ALTER TABLE `Messages`
+ALTER TABLE `messages`
   ADD PRIMARY KEY (`messageId`),
   ADD KEY `senderEmail` (`senderEmail`),
   ADD KEY `recipientEmail` (`recipientEmail`);
 
 --
--- Indexes for table `Orders`
+-- Indexes for table `orders`
 --
-ALTER TABLE `Orders`
+ALTER TABLE `orders`
   ADD PRIMARY KEY (`orderId`),
   ADD KEY `userEmail` (`userEmail`),
   ADD KEY `productId` (`productId`);
 
 --
--- Indexes for table `Product`
+-- Indexes for table `product`
 --
-ALTER TABLE `Product`
+ALTER TABLE `product`
   ADD PRIMARY KEY (`productID`),
   ADD UNIQUE KEY `brandId` (`brandId`),
   ADD UNIQUE KEY `userEmail` (`userEmail`),
   ADD KEY `categoryID` (`categoryID`);
 
 --
--- Indexes for table `ProductImage`
+-- Indexes for table `productimage`
 --
-ALTER TABLE `ProductImage`
+ALTER TABLE `productimage`
   ADD PRIMARY KEY (`imageID`),
   ADD KEY `productId` (`productId`);
 
 --
--- Indexes for table `ProductReview`
+-- Indexes for table `productreview`
 --
-ALTER TABLE `ProductReview`
+ALTER TABLE `productreview`
   ADD PRIMARY KEY (`reviewId`),
   ADD KEY `userEmail` (`userEmail`),
   ADD KEY `productId` (`productId`);
 
 --
--- Indexes for table `User`
+-- Indexes for table `user`
 --
-ALTER TABLE `User`
+ALTER TABLE `user`
   ADD PRIMARY KEY (`userEmail`),
   ADD KEY `FOREIGN` (`addressID`) USING BTREE;
 
@@ -313,51 +312,51 @@ ALTER TABLE `User`
 --
 
 --
--- AUTO_INCREMENT for table `Address`
+-- AUTO_INCREMENT for table `address`
 --
-ALTER TABLE `Address`
+ALTER TABLE `address`
   MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `Brand`
+-- AUTO_INCREMENT for table `brand`
 --
-ALTER TABLE `Brand`
+ALTER TABLE `brand`
   MODIFY `brandId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `Category`
+-- AUTO_INCREMENT for table `category`
 --
-ALTER TABLE `Category`
+ALTER TABLE `category`
   MODIFY `categoryId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `Messages`
+-- AUTO_INCREMENT for table `messages`
 --
-ALTER TABLE `Messages`
+ALTER TABLE `messages`
   MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `Orders`
+-- AUTO_INCREMENT for table `orders`
 --
-ALTER TABLE `Orders`
+ALTER TABLE `orders`
   MODIFY `orderId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `Product`
+-- AUTO_INCREMENT for table `product`
 --
-ALTER TABLE `Product`
+ALTER TABLE `product`
   MODIFY `productID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `ProductImage`
+-- AUTO_INCREMENT for table `productimage`
 --
-ALTER TABLE `ProductImage`
+ALTER TABLE `productimage`
   MODIFY `imageID` int(20) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `ProductReview`
+-- AUTO_INCREMENT for table `productreview`
 --
-ALTER TABLE `ProductReview`
+ALTER TABLE `productreview`
   MODIFY `reviewId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -365,38 +364,38 @@ ALTER TABLE `ProductReview`
 --
 
 --
--- Constraints for table `Orders`
+-- Constraints for table `orders`
 --
-ALTER TABLE `Orders`
-  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `Orders_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`productID`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `orders`
+  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `user` (`userEmail`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Orders_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`productID`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `Product`
+-- Constraints for table `product`
 --
-ALTER TABLE `Product`
-  ADD CONSTRAINT `Product_ibfk_1` FOREIGN KEY (`brandId`) REFERENCES `Brand` (`brandId`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `Product_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `Category` (`categoryId`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `Product_ibfk_3` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `product`
+  ADD CONSTRAINT `Product_ibfk_1` FOREIGN KEY (`brandId`) REFERENCES `brand` (`brandId`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Product_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `category` (`categoryId`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Product_ibfk_3` FOREIGN KEY (`userEmail`) REFERENCES `user` (`userEmail`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `ProductImage`
+-- Constraints for table `productimage`
 --
-ALTER TABLE `ProductImage`
-  ADD CONSTRAINT `ProductImage_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `Product` (`productID`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `productimage`
+  ADD CONSTRAINT `ProductImage_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`productID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `ProductReview`
+-- Constraints for table `productreview`
 --
-ALTER TABLE `ProductReview`
-  ADD CONSTRAINT `ProductReview_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `ProductReview_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`productID`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `productreview`
+  ADD CONSTRAINT `ProductReview_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `user` (`userEmail`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `ProductReview_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `product` (`productID`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `User`
+-- Constraints for table `user`
 --
-ALTER TABLE `User`
-  ADD CONSTRAINT `User_ibfk_1` FOREIGN KEY (`addressID`) REFERENCES `Address` (`addressID`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `user`
+  ADD CONSTRAINT `User_ibfk_1` FOREIGN KEY (`addressID`) REFERENCES `address` (`addressID`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
