@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-require_once('util/config.html')
+include('databaseConnection.php');
+
+require_once('util/config.html');
+
+
 ?>
 
 <head>
@@ -45,39 +49,31 @@ require_once('util/config.html')
     </div>
 
     <div class="container">
+    <?php 
+         $sql = "SELECT * FROM product LIMIT 4";
+         $result = $conn->query($sql);
+    ?>
         <h2 class="text-center">Featured Products</h2>
 
         <div class="row">
-            <?php 
-               $query = "SELECT TOP 4 FROM product ORDER BY product.productHit DESC" 
-            ?>
-
+            
+            <?php while($product = mysqli_fetch_assoc($result)): ?>
             <div class="col-sm-3">
 
                 <div class="card">
                     <img src="images/1.jpg" alt="" style="width: auto; height: 200px;">
                     <div class="card-body">
-                        <h4 class="card-title"><b>Basketball</b></h4>
-                        <p class="card-text">Price: $20.00</p>
-                        <a href="#" class="btn btn-primary">Add to Order</a>
+                        <h4 class="card-title"><b><?= $product['productName']; ?></b></h4>
+                        <!-- TODO: Add product star reviews -->
+                        <p class="card-text"><?= $product['productPrice']; ?></p> 
+                        <!-- Send product id as encoded value -->
+                        <a href="productDetail.php?productId=<?php echo $product['productId'];?>" class="btn btn-primary">Details</a>
                     </div>
                 </div>
 
             </div>
-            <div class="col-sm-3">
-
-                <div class="card">
-                    <img src="images/1.jpg" alt="" style="width: auto; height: 200px;">
-                    <div class="card-body">
-                        <h4 class="card-title"><b>Basketball</b></h4>
-                        <p class="card-text">Price: $20.00</p>
-                        <a href="#" class="btn btn-primary">Add to Order</a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-sm-3">
+            <?php endwhile; ?>
+            <!-- <div class="col-sm-3">
 
                 <div class="card">
                     <img src="images/1.jpg" alt="" style="width: auto; height: 200px;">
@@ -102,6 +98,19 @@ require_once('util/config.html')
                 </div>
 
             </div>
+
+            <div class="col-sm-3">
+
+                <div class="card">
+                    <img src="images/1.jpg" alt="" style="width: auto; height: 200px;">
+                    <div class="card-body">
+                        <h4 class="card-title"><b>Basketball</b></h4>
+                        <p class="card-text">Price: $20.00</p>
+                        <a href="#" class="btn btn-primary">Add to Order</a>
+                    </div>
+                </div>
+
+            </div> -->
 
 
         </div>
