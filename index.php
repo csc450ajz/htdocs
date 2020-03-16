@@ -10,7 +10,7 @@ require_once('util/config.html');
 ?>
 
 <head>
-    <title>index.php</title>
+    <title>Sportrader</title>
 </head>
 
 <body>
