@@ -30,7 +30,8 @@ if (isset($_POST["login"])) {
 
         $stmt->store_result();
         $rowCount = $stmt->num_rows;
-
+        
+        // bind results to variables
         $stmt->bind_result($userEmail, $userFName, $userLName, $userType, $userPassword, $addressID, $userBalance, $userPhotoPath);
         $stmt->fetch();
 
@@ -46,10 +47,12 @@ if (isset($_POST["login"])) {
             $_SESSION['type'] = $userType;
             $_SESSION['userEmail'] = $userEmail;
             $_SESSION['userName'] = $userFName;
+            // log the results to console for DEBUG
+            console_log("Username: $userEmail | Password: $userPassword");
             if($_SESSION['type']=="admin") {
-                header("Location: admin/admin.php");
+                //header("Location: admin/admin.php");
             }else{
-                header("Location: index.php"); // TODO -- Update to client page when created.
+                //header("Location: index.php"); // TODO -- Update to client page when created.
             }
         } else {
             $message = "<label>Wrong Password</label>";
@@ -57,6 +60,10 @@ if (isset($_POST["login"])) {
     } else {
         $message = "<label>Wrong Email Address</labe>";
     }
+}
+
+function console_log($message) {
+    echo "<script>console.log('$message');</script>"; 
 }
 
 ?>
