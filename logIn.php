@@ -24,7 +24,7 @@ include('util/db-config.php');
     }
 $message = '';
 if (isset($_POST["login"])) {
-    $sql = "SELECT * FROM user WHERE userEmail=?";
+    $sql = "SELECT * FROM User WHERE userEmail=?";
     //set up a prepared statement
     $rowCount;
     if ($stmt = $conn->prepare($sql)) {
