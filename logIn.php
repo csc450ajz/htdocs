@@ -1,5 +1,4 @@
 <?php
-
 // if user is already logged in, redirect to profile page
 include('util/check-login.php');
 if (checkAdmin()) {
@@ -10,6 +9,16 @@ if (checkAdmin()) {
 
 // create db connection 
 include('util/db-config.php');
+
+// test db connection
+$sql = "SELECT * FROM user";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$stmt->bind_result($userEmail, $userFName, $userLName, $userType, $userPassword, $addressID, $userBalance, $userPhotoPath);
+$rows = $stmt->num_rows();
+for ($x = 0; $x < $rows; $x++) {
+    console_log($userEmail);
+}
 
 $message = '';
 if (isset($_POST["login"])) {
