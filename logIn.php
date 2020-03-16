@@ -10,16 +10,18 @@ if (checkAdmin()) {
 // create db connection 
 include('util/db-config.php');
 
-// test db connection
-$sql = "SELECT * FROM user";
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$stmt->bind_result($userEmail, $userFName, $userLName, $userType, $userPassword, $addressID, $userBalance, $userPhotoPath);
-$rows = $stmt->num_rows();
-for ($x = 0; $x < $rows; $x++) {
-    console_log($userEmail);
-}
-
+    // DEBUG test the connection
+    $sql = "SELECT * FROM User";
+    $result = $conn -> query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            $current = $row['userEmail'];
+            console_log("User Email: $current");
+        }
+    } else {
+        console_log("0 results");
+    }
 $message = '';
 if (isset($_POST["login"])) {
     $sql = "SELECT * FROM user WHERE userEmail=?";
