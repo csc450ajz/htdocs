@@ -18,14 +18,14 @@
     $conn->select_db(DATABASE_NAME);
     
     // DEBUG test the connection
-    //$sql = "SELECT * FROM User";
-    //$result = $conn -> query($sql);
-    //if ($result->num_rows > 0) {
-    //    // output data of each row
-    //    while($row = $result->fetch_assoc()) {
-    //        echo "User Email: " . $row["userEmail"];
-    //    }
-    //} else {
-    //    echo "0 results";
-    //}
+    $sql = "SELECT * FROM User";
+    $result = $conn -> query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            echo "User Email: " . $row["userEmail"];
+        }
+    } else {
+        echo "0 results";
+    }
 ?>
