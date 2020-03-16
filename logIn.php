@@ -44,22 +44,26 @@ if (isset($_POST["login"])) {
 
     if ($rowCount > 0) {     
         if ($_POST["user_password"]==$userPassword) {
+
             // set session variables
             $_SESSION['type'] = $userType;
             $_SESSION['userEmail'] = $userEmail;
             $_SESSION['userName'] = $userFName;
-            // log the results to console for DEBUG
-            console_log("Successful Login! | Username: $userEmail | Password: $userPassword");
+
+            // DEBUG log the results to console
+            //console_log("Successful Login! | Username: $userEmail | Password: $userPassword");
+
+            // redirect to proper page for admin or client
             if($_SESSION['type']=="admin") {
                 header("Location: admin/admin.php");
             }else{
-                //header("Location: index.php"); // TODO -- Update to client page when created.
+                header("Location: client/client.php");
             }
         } else {
             $message = "<label>Wrong username or password</label>";
         }
     } else {
-        console_log("Unsuccessful login.");
+        //console_log("Unsuccessful login.");
         $message = "<label>Wrong username or password</label>";
     }
 }
