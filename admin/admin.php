@@ -35,6 +35,8 @@ require_once('../util/config.html')
                     <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-users" role="tab" aria-controls="nav-users" aria-selected="false">Users</a>
                     <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-categories" role="tab" aria-controls="nav-categories" aria-selected="false">Categories</a>
                     <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-coupons" role="tab" aria-controls="nav-coupons" aria-selected="false">Coupons</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-spinner" role="tab" aria-controls="nav-spinner" aria-selected="false">Spinner</a>
+                      
 
                 </div>
             </nav>
@@ -151,6 +153,7 @@ require_once('../util/config.html')
                 </div>
                 <div class="tab-pane fade" id="nav-categories" role="tabpanel" aria-labelledby="nav-categories-tab">...</div>
                 <div class="tab-pane fade" id="nav-coupons" role="tabpanel" aria-labelledby="nav-coupons-tab">...</div>
+                <div class="tab-pane fade" id="nav-spinner" role="tabpanel" aria-labelledby="nav-spinner-tab">...</div>
             </div>
         </div>
 
