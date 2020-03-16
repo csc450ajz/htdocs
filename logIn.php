@@ -4,7 +4,7 @@ include('util/check-login.php');
 if (checkAdmin()) {
     header('Location: admin/admin.php');
 } else if (checkClient()) {
-    header('Location: admin/admin.php');
+    header('Location: client/client.php');
 } 
 
 // create db connection 
