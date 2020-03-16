@@ -9,7 +9,7 @@
 
     // define credentials for db
     define("SERVER_NAME","mi3-ss48");
-    define("DBF_USER_NAME", "sportrad");
+    define("DBF_USER_NAME", "sportrad_developer");
     define("DBF_PASSWORD", "L0aHxAW66vgw");
     define("DATABASE_NAME", "sportrad_sportrader");
 
