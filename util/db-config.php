@@ -8,9 +8,9 @@
     */
 
     // define credentials for db
-    define("SERVER_NAME","sportrad_sportrader");
-    define("DBF_USER_NAME", "sportrad");
-    define("DBF_PASSWORD", "L0aHxAW66vgw");
+    define("SERVER_NAME","localhost");
+    define("DBF_USER_NAME", "root");
+    define("DBF_PASSWORD", "root");
     define("DATABASE_NAME", "sportrad_sportrader");
 
 	// establish connection
@@ -18,14 +18,14 @@
     $conn->select_db(DATABASE_NAME);
     
     // DEBUG test the connection
-    //$sql = "SELECT * FROM User";
-    //$result = $conn -> query($sql);
-    //if ($result->num_rows > 0) {
-    //    // output data of each row
-    //    while($row = $result->fetch_assoc()) {
-    //        echo "User Email: " . $row["userEmail"];
-    //    }
-    //} else {
-    //    echo "0 results";
-    //}
+    $sql = "SELECT * FROM User";
+    $result = $conn -> query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            echo "User Email: " . $row["userEmail"];
+        }
+    } else {
+        echo "0 results";
+    }
 ?>
