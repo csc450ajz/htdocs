@@ -59,7 +59,7 @@ if (isset($_POST["login"])) {
             $_SESSION['userEmail'] = $userEmail;
             $_SESSION['userName'] = $userFName;
             // log the results to console for DEBUG
-            console_log("Username: $userEmail | Password: $userPassword");
+            console_log("Successful Login! | Username: $userEmail | Password: $userPassword");
             if($_SESSION['type']=="admin") {
                 //header("Location: admin/admin.php");
             }else{
@@ -69,6 +69,7 @@ if (isset($_POST["login"])) {
             $message = "<label>Wrong Password</label>";
         }
     } else {
+        console_log("Unsuccessful login :(");
         $message = "<label>Wrong Email Address</labe>";
     }
 }
