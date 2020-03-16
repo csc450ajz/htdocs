@@ -18,7 +18,7 @@
     $conn->select_db(DATABASE_NAME);
     
     // DEBUG test the connection
-    $sql = "SELECT * FROM User";
+    /*$sql = "SELECT * FROM User";
     $result = $conn -> query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
@@ -27,5 +27,5 @@
         }
     } else {
         echo "0 results";
-    }
+    }*/
 ?>
