@@ -26,6 +26,7 @@ $message = '';
 if (isset($_POST["login"])) {
     $sql = "SELECT * FROM user WHERE userEmail=?";
     //set up a prepared statement
+    $rowCount;
     if ($stmt = $conn->prepare($sql)) {
         //pass parameters
         $stmt->bind_param("s", $_POST["user_email"]);
