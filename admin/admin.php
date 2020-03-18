@@ -4,13 +4,12 @@
 
 <?php
 //index.php
-// include('db-config.php');
-include('../databaseConnection.php')
-// if (!isset($_SESSION["type"])) {
-//     header("location:logIn.php");
-// }
-
-// include('header.php');
+include('../util/db-config.php');
+// ensure that user is admin, otherwise kick back to login page
+include('../util/check-login.php');
+if (!checkAdmin()) {
+    header("Location: ../logIn.php");
+}
 
 ?>
 
