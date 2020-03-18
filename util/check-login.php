@@ -19,7 +19,7 @@
     not what type of user they are
     */
     function checkLogin() {
-        if (isset($_SESSION['login'])) {
+        if (isset($_SESSION['type'])) {
             return true;
         } else {
             return false;
@@ -35,7 +35,7 @@
     - Returns true if logged in and user type is admin, false if not both.
     */
     function checkAdmin() {
-        if (checkLogin() && $_SESSION['login'] = "admin") {
+        if (checkLogin() && $_SESSION['type'] = "admin") {
             return true;
         } else {
             return false;
@@ -51,7 +51,7 @@
     - Returns true if logged in and user type is type, false if not both.
     */
     function checkClient() {
-        if (checkLogin() && $_SESSION['login'] = "client") {
+        if (checkLogin() && $_SESSION['type'] = "client") {
             return true;
         } else {
             return false;
