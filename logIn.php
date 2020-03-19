@@ -105,15 +105,16 @@ require_once('util/config.html')
                     </div>
                     <div class="form-group">
                         <input type="submit" name="login" value="Login" class="btn btn-success" />
-                        <input type="submit" name="signup" value="Signup" class="btn btn-primary" style="float: right;"/>
                     </div>
-
-
                     <!-- <div>
                         <label for=""></label>
                     </div> -->
                 </form>
-
+            </div>
+        </div>
+        <div class="row justify-content-sm-center">
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <p>Don't have an account yet?<br><a id='create' href="/signup.php">Create one!</a></p>
             </div>
         </div>
     </div>
