@@ -7,8 +7,8 @@
 <html>
 <?php
 require_once('util/config.html');
-include('util/db-config.php');
-// include('databaseConnection.php');
+// include('util/db-config.php');
+include('databaseConnection.php');
 
 $error = "";
 $errormsg = "";
