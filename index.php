@@ -16,6 +16,7 @@ try {
     $sql = "CALL getFeaturedProducts();";
     // call the stored procedure
     $result = $conn->query($sql);
+    echo "\n" . var_dump($result);
 } catch (Exception $e) {
     die("Error occurred:" . $e->getMessage());
 }
