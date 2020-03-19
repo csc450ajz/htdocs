@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 14, 2020 at 08:16 PM
+-- Generation Time: Mar 15, 2020 at 07:47 PM
 -- Server version: 10.3.22-MariaDB-cll-lve
 -- PHP Version: 7.3.6
 
@@ -88,18 +88,28 @@ CREATE TABLE `CartItems` (
 CREATE TABLE `Category` (
   `categoryId` int(20) NOT NULL,
   `categoryName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `categoryStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `categoryStatus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `genderId` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `Category`
 --
 
-INSERT INTO `Category` (`categoryId`, `categoryName`, `categoryStatus`) VALUES
-(1, 'Sporting Goods', 'active'),
-(2, 'Memorabilia', 'active'),
-(3, 'Footwear', 'active'),
-(4, 'Equipment', 'active');
+INSERT INTO `Category` (`categoryId`, `categoryName`, `categoryStatus`, `genderId`) VALUES
+(3, 'Footwear', 'active', NULL),
+(4, 'Equipment', 'active', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Gender`
+--
+
+CREATE TABLE `Gender` (
+  `genderId` int(20) NOT NULL,
+  `genderType` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -194,15 +204,16 @@ CREATE TABLE `ProductReview` (
   `userEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `productId` int(20) NOT NULL,
   `reviewRating` int(11) NOT NULL,
-  `reviewContent` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `reviewContent` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reviewDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `ProductReview`
 --
 
-INSERT INTO `ProductReview` (`reviewId`, `userEmail`, `productId`, `reviewRating`, `reviewContent`) VALUES
-(1, 'sally@gmail.com', 3, 4, 'I had a basketball like this and it was great! I wish I had bought two more');
+INSERT INTO `ProductReview` (`reviewId`, `userEmail`, `productId`, `reviewRating`, `reviewContent`, `reviewDate`) VALUES
+(1, 'sally@gmail.com', 3, 4, 'I had a basketball like this and it was great! I wish I had bought two more', '2020-03-15');
 
 -- --------------------------------------------------------
 
@@ -258,7 +269,14 @@ ALTER TABLE `CartItems`
 -- Indexes for table `Category`
 --
 ALTER TABLE `Category`
-  ADD PRIMARY KEY (`categoryId`);
+  ADD PRIMARY KEY (`categoryId`),
+  ADD KEY `genderId` (`genderId`);
+
+--
+-- Indexes for table `Gender`
+--
+ALTER TABLE `Gender`
+  ADD PRIMARY KEY (`genderId`);
 
 --
 -- Indexes for table `Messages`
@@ -330,6 +348,12 @@ ALTER TABLE `Category`
   MODIFY `categoryId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `Gender`
+--
+ALTER TABLE `Gender`
+  MODIFY `genderId` int(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `Messages`
 --
 ALTER TABLE `Messages`
@@ -364,6 +388,12 @@ ALTER TABLE `ProductReview`
 --
 
 --
+-- Constraints for table `Category`
+--
+ALTER TABLE `Category`
+  ADD CONSTRAINT `Category_ibfk_1` FOREIGN KEY (`genderId`) REFERENCES `Gender` (`genderId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `Orders`
 --
 ALTER TABLE `Orders`
@@ -375,7 +405,7 @@ ALTER TABLE `Orders`
 --
 ALTER TABLE `Product`
   ADD CONSTRAINT `Product_ibfk_1` FOREIGN KEY (`brandId`) REFERENCES `Brand` (`brandId`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `Product_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `Category` (`categoryId`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `Product_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `Category` (`categoryId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Product_ibfk_3` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --

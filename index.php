@@ -45,7 +45,7 @@ if (isset($_POST['productId'])) {
 ?>
 
 <head>
-    <title>index.php</title>
+    <title>Sportrader</title>
 </head>
 
 <body>
