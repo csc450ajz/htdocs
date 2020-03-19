@@ -27,13 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = ("SELECT * FROM User WHERE userEmail = $userEmail");
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
+    if (!$result) {
         echo "<div class='alert alert-danger' role='alert'>Username already taken!</div>";
     } else {
         //call procedure (each new account for now starts with $50.00)
         $sql = "CALL createAccount('$userEmail', '$fName', '$lName', '$userType', '$userPassword', '50.0', '$streetAddress', '$state', '$zipCode', '$city');";
         $conn->query($sql);
-        $conn->next_result();
         echo $sql;
 
         // create stored procedure call
