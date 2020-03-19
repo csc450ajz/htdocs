@@ -7,8 +7,8 @@
 <html>
 <?php
 require_once('util/config.html');
-// include('util/db-config.php');
-include('databaseConnection.php');
+include('util/db-config.php');
+//include('databaseConnection.php');
 
 $error = "";
 $errormsg = "";
@@ -29,7 +29,7 @@ if (isset($_GET['productId'])) {
         $sql = "SELECT * FROM product WHERE product.productId ='$productId' ";
         $result = $conn->query($sql);
         if ($result) {
-            $num = mysqli_num_rows($results);
+            $num = mysqli_num_rows($result);
             $product = mysqli_fetch_assoc($result);
         } //results
         else {
