@@ -29,11 +29,7 @@ $cartResult = getCartItems($conn);
                         // echo $cartItems['productId'];
                         $sql = "SELECT * FROM product WHERE productId= " . $cartItems['productId'];
                         $result2 = $conn->query($sql);
-                        // $product = mysqli_fetch_assoc($result);
-                        // <?php while ($product = mysqli_fetch_assoc($result)) : 
-
-                        // echo json_encode($product);
-
+                        echo $conn->error;
                         while ($product = mysqli_fetch_assoc($result2)) {
                             $total_price += ($product['productPrice']);
                     ?>

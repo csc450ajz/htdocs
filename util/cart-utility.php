@@ -28,7 +28,7 @@
             $sql = "CALL insertCartItem('$productId', '$userEmail');";
             $cartResult = $conn->query($sql);
             $conn->next_result(); // allows following queries to occur
-            // DEBUG echo $conn->error;
+            echo $conn->error;
         } else {
             header("Location: /logIn.php");
             $_SESSION['redirect'] = '/index.php'; // setting this in case we implement a redirect on login page
