@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 15, 2020 at 07:47 PM
+-- Generation Time: Mar 18, 2020 at 09:17 PM
 -- Server version: 10.3.22-MariaDB-cll-lve
 -- PHP Version: 7.3.6
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `sportrad_sportrader`
 --
+CREATE DATABASE IF NOT EXISTS `sportrad_sportrader` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `sportrad_sportrader`;
 
 -- --------------------------------------------------------
 
@@ -110,6 +112,15 @@ CREATE TABLE `Gender` (
   `genderId` int(20) NOT NULL,
   `genderType` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `Gender`
+--
+
+INSERT INTO `Gender` (`genderId`, `genderType`) VALUES
+(1, 'Male'),
+(2, 'Female'),
+(3, 'Both');
 
 -- --------------------------------------------------------
 
@@ -263,7 +274,8 @@ ALTER TABLE `Brand`
 -- Indexes for table `CartItems`
 --
 ALTER TABLE `CartItems`
-  ADD PRIMARY KEY (`userEmail`,`productId`);
+  ADD PRIMARY KEY (`userEmail`,`productId`),
+  ADD KEY `productId` (`productId`);
 
 --
 -- Indexes for table `Category`
@@ -351,7 +363,7 @@ ALTER TABLE `Category`
 -- AUTO_INCREMENT for table `Gender`
 --
 ALTER TABLE `Gender`
-  MODIFY `genderId` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `genderId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `Messages`
@@ -386,6 +398,13 @@ ALTER TABLE `ProductReview`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `CartItems`
+--
+ALTER TABLE `CartItems`
+  ADD CONSTRAINT `CartItems_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `Product` (`productId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `CartItems_ibfk_2` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Category`
