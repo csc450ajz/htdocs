@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+// check that user is logged in, if not kick to login page
+require_once('util/check-login.php');
+if(!checkLogin()) {
+    header("Location: /login.php");
+}
+// get db connection
 //include('databaseConnection.php');
 include('util/db-config.php');
-
+// get navbar
 require_once('util/config.html');
-
 // get items in cart
 require_once('util/cart-utility.php');
 $cartResult = getCartItems($conn);
@@ -29,7 +34,6 @@ $cartResult = getCartItems($conn);
                         // echo $cartItems['productId'];
                         $sql = "SELECT * FROM Product WHERE productId= " . $cartItems['productId'];
                         $result2 = $conn->query($sql);
-                        //$conn->next_result();
                         echo $conn->error;
                         while ($product = mysqli_fetch_assoc($result2)) {
                             $total_price += ($product['productPrice']);
