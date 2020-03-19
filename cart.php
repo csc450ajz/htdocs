@@ -45,7 +45,7 @@ $cartResult = getCartItems($conn);
                                             <div class="col-md-6">
                                                 <h3><?= $product['productName'] ?></h3>
                                                 <h4>$<?= $product['productPrice'] ?></h4>
-                                                <p><i>Sold by: Zulkifl M</i></p>
+                                                <p><i>Sold by: <?= $product['userEmail'] ?></i></p>
                                             </div>
                                         </div>
                                     </div>
