@@ -69,7 +69,7 @@ $result = $conn->query($sql);
                     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
 
                         <div class="card" >
-                            <img src="images/1.jpg" alt="" style="width: auto; height: 200px;">
+                            <img src="images/placeholder.jpg" alt="" style="width: auto; height: 200px;">
                             <div class="card-body">
                                 <h4 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h4>
                                 <!-- TODO: Add product star reviews -->
