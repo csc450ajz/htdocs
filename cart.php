@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-include('databaseConnection.php');
-// include('util/db-config.php');
+//include('databaseConnection.php');
+include('util/db-config.php');
 
 require_once('util/config.html');
 
