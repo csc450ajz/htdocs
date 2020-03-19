@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $state = $_POST['state'];
     $zipCode = $_POST['zip-code'];
 
-    //check to make sure other users are not taken
+    //check to make sure other users are not taken // TODO -- make this a stored procedure
     $sql = ("SELECT * FROM User WHERE userEmail = $userEmail");
     $result = $conn->query($sql);
 
