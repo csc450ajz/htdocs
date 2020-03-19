@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "CALL createAccount()";
 
         // send to login page
-        header("Location: /logIn.php");
+        //header("Location: /logIn.php");
     }
 } else {
     //echo "bummer";
