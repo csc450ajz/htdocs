@@ -10,23 +10,28 @@ include('util/db-config.php');
 // call getFeaturedProducts() stored procedure
 $sql = "CALL getFeaturedProducts();";
 $result = $conn->query($sql);
-// DEBUG echo var_dump($result);
+$conn->next_result(); // allows following queries to occur
 
+/* 
+    Add Cart Items 
+*/
 if (isset($_POST['productId'])) {
-    
-    $productId = $_POST['productId'];
-    $userEmail = "sally@gmail.com";
-    $new_sql = "CALL insertCartItem('$productId', '$userEmail');";
-    //echo $sql;
-    require_once('util/db-config.php');
-    $result2 = $conn->query($new_sql);
-    echo var_dump($result2);
-    /*switch ($_POST['btnCart']) {
-        case 'new':
-            
-            
-            break;
-    }*/
+    // make sure the user is logged in, otherwise redirect to login page
+    session_start();
+    if(isset($_SESSION['userEmail'])) {
+
+        // get productId and userEmail
+        $productId = $_POST['productId'];
+        $userEmail = $_SESSION['userEmail'];
+        
+        // execute stored procedure
+        $sql = "CALL insertCartItem('$productId', '$userEmail');";
+        $cartResult = $conn->query($sql);
+        // DEBUG echo $conn->error;
+    } else {
+        header("Location: login.php");
+        $_SESSION['redirect'] = '/index.php'; // setting this in case we implement a redirect on login page
+    }
 }
 
 ?>
