@@ -29,7 +29,7 @@ if (isset($_POST['productId'])) {
         $cartResult = $conn->query($sql);
         // DEBUG echo $conn->error;
     } else {
-        header("Location: login.php");
+        header("Location: /logIn.php");
         $_SESSION['redirect'] = '/index.php'; // setting this in case we implement a redirect on login page
     }
 }
