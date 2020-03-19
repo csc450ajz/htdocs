@@ -6,21 +6,11 @@ require_once('util/config.html');
 
 //require_once('databaseConnection.php');
 require_once('util/db-config.php');
-// test db connection
-$sql = "SELECT * FROM User;";
+
+// call getFeaturedProducts() stored procedure
+$sql = "CALL getFeaturedProducts();";
 $result = $conn->query($sql);
 echo var_dump($result);
-// call getFeaturedProducts() stored procedure
-try {
-    // execute the stored procedure
-    $sql = "CALL getFeaturedProducts();";
-    // call the stored procedure
-    $result = $conn->query($sql);
-    echo "\n" . var_dump($result);
-} catch (Exception $e) {
-    die("Error occurred:" . $e->getMessage());
-}
-
 
 if (isset($_POST['productId'])) {
     echo ($_POST['productId']);
