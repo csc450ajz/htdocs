@@ -5,7 +5,7 @@
 require_once('util/config.html');
 
 //include('databaseConnection.php');
-include('util/db-config.php');
+require_once('util/db-config.php');
 // test db connection
 $sql = "SELECT * FROM User;";
 $result = $conn->query($sql);
