@@ -4,12 +4,9 @@
 // get navbar
 require_once('util/config.html');
 
-//include('databaseConnection.php');
+//require_once('databaseConnection.php');
 require_once('util/db-config.php');
-// test db connection
-$sql = "SELECT * FROM User;";
-$result = $conn->query($sql);
-echo var_dump($result);
+
 // call getFeaturedProducts() stored procedure
 try {
     // execute the stored procedure
