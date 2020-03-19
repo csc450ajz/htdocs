@@ -12,9 +12,8 @@ include('util/db-config.php');
 
 $error = "";
 $errormsg = "";
-//check if
-//A) a bookid has been submitted
-//B) the submitted value is numeric
+// if productId was sent by GET
+// display information.
 if (isset($_GET['productId'])) {
     //clean it up
     if (!is_numeric($_GET['productId'])) {
@@ -24,21 +23,19 @@ if (isset($_GET['productId'])) {
     } else {
         //book_id is numeric number
         //clean it up
-        // $id =preg_replace('/\D/', '', $_GET['productID']) ;
         $productId = mysqli_real_escape_string($conn, $_GET['productId']);
-        $sql = "SELECT * FROM product WHERE product.productId ='$productId' ";
+        $sql = "CALL getProductInfo('$productId')";
         $result = $conn->query($sql);
+        $conn->next_result(); // allow next query to execute
         if ($result) {
-            $num = mysqli_num_rows($result);
             $product = mysqli_fetch_assoc($result);
-        } //results
+        }
         else {
             //there's a query error
-            // $error = true;
-            // $errormsg .= mysqli_error($error);
-        } //result test
-    } //numeric
-} //if isset
+            // TODO - Implement an error message to tell user that the product is not available.
+        }
+    } 
+} 
 ?>
 
 <head>
@@ -109,11 +106,11 @@ if (isset($_GET['productId'])) {
                     <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab"><?= $product['productDesc']; ?></div>
                     <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
                         <?php
-                        $sql = "SELECT * FROM productReview WHERE productReview.productId = " . $product['productId'];
+                        $sql = "CALL getProductReview(" . $product['productId'] . ");";
                         $result = $conn->query($sql);
                         if ($result) {
                             $productReview = mysqli_fetch_assoc($result);
-                        } //results
+                        } // TODO -- implement some way to handle 0 or multiple reviews
                         ?>
 
                         <p><?= $productReview['userEmail']; ?></p>
