@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = ("SELECT * FROM User WHERE userEmail = $userEmail");
     $result = $conn->query($sql);
 
-    if (!$result) {
+    if ($result) {
         echo "<div class='alert alert-danger' role='alert'>Username already taken!</div>";
     } else {
         //call procedure (each new account for now starts with $50.00)
