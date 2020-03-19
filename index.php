@@ -1,39 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+//require_once('databaseConnection.php');
+include('util/db-config.php');
+
+// if productId is passed in POST, add to cart
+if (isset($_POST['productId'])) {
+    require_once("util/cart-utility.php");
+    addCartItem($_POST['productId'], $conn);
+}
 // get navbar
 require_once('util/config.html');
 
-//require_once('databaseConnection.php');
-include('util/db-config.php');
 
 // call getFeaturedProducts() stored procedure
 $sql = "CALL getFeaturedProducts();";
 $result = $conn->query($sql);
-$conn->next_result(); // allows following queries to occur
-
-/* 
-    Add Cart Items 
-*/
-if (isset($_POST['productId'])) {
-    // make sure the user is logged in, otherwise redirect to login page
-    session_start();
-    if(isset($_SESSION['userEmail'])) {
-
-        // get productId and userEmail
-        $productId = $_POST['productId'];
-        $userEmail = $_SESSION['userEmail'];
-        
-        // execute stored procedure
-        $sql = "CALL insertCartItem('$productId', '$userEmail');";
-        $cartResult = $conn->query($sql);
-        // DEBUG echo $conn->error;
-    } else {
-        header("Location: /logIn.php");
-        $_SESSION['redirect'] = '/index.php'; // setting this in case we implement a redirect on login page
-    }
-}
-
 ?>
 
 <head>
