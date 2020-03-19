@@ -27,7 +27,7 @@
             // execute stored procedure
             $sql = "CALL insertCartItem('$productId', '$userEmail');";
             $cartResult = $conn->query($sql);
-            //$conn->next_result(); // allows following queries to occur
+            $conn->next_result(); // allows following queries to occur
             echo $conn->error;
         } else {
             header("Location: /logIn.php");
@@ -50,7 +50,7 @@
             // execute stored procedure
             $sql = "CALL getCartItems('$userEmail');";
             $result = $conn->query($sql);
-            $conn->next_result();
+            //$conn->next_result();
             echo $conn->error;
             return $result;
         }
