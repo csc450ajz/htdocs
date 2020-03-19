@@ -2,6 +2,11 @@
 <html lang="en">
 <?PHP
     require_once('../util/config.html');
+    // ensure that the user is logged in, otherwise kick back to login.
+    require_once('../util/check-login.php');
+    if (!checkLogin()) {
+        header("Location: ../login.php");
+    }
 ?>
 <head>
     <title>User Page</title>

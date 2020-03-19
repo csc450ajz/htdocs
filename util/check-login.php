@@ -8,7 +8,7 @@
     requiring a user to be logged in. Then, call the 
     particular function that is needed for the page.
     */
-
+    session_start();
     /* 
     ---------------
     checkLogin()
