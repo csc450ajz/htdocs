@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+// get navbar
+require_once('util/config.html');
+
 //include('databaseConnection.php');
 include('util/db-config.php');
 
-require_once('util/config.html');
+// call getFeaturedProducts() stored procedure
+try {
+    // execute the stored procedure
+    $sql = "CALL getFeaturedProducts();";
+    // call the stored procedure
+    $result = $conn->query($sql);
+} catch (Exception $e) {
+    die("Error occurred:" . $e->getMessage());
+}
+
+
 if (isset($_POST['productId'])) {
     echo ($_POST['productId']);
 
@@ -85,20 +98,16 @@ if (isset($_POST['productId'])) {
     </div>
 
     <div class="container">
-        <?php
-        $sql = "SELECT * FROM product LIMIT 4";
-        $result = $conn->query($sql);
-        ?>
         <h2 class="text-center">Featured Products</h2>
 
         <div class="row">
 
-            <?php while ($product = mysqli_fetch_assoc($result)) : ?>
+            <?php while ($product = mysqli_fetch_assoc($result)):?>
 
                 <div class="col-sm-3">
                     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
 
-                        <div class="card">
+                        <div class="card" >
                             <img src="images/1.jpg" alt="" style="width: auto; height: 200px;">
                             <div class="card-body">
                                 <h4 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h4>
