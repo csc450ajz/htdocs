@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 18, 2020 at 09:17 PM
+-- Generation Time: Mar 19, 2020 at 02:49 AM
 -- Server version: 10.3.22-MariaDB-cll-lve
 -- PHP Version: 7.3.6
 
@@ -24,6 +24,37 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `sportrad_sportrader` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `sportrad_sportrader`;
 
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createAccount` (IN `newEmail` VARCHAR(100), IN `newFName` VARCHAR(100), IN `newLName` VARCHAR(100), IN `newType` VARCHAR(20), IN `newPassword` VARCHAR(255), IN `newBalance` FLOAT, IN `newStreet` VARCHAR(100), IN `newState` VARCHAR(2), IN `newZip` INT(20), IN `newCity` VARCHAR(100))  NO SQL
+BEGIN
+	INSERT INTO Address(addressStreet, addressState, addressZip, addressCity) VALUES (newStreet, newState, newZip, newCity);
+	INSERT INTO User(userEmail, userFName, userLName, userType, userPassword, addressId, userBalance) 
+    VALUES(newEmail, newFName, newLName, newType, newPassword, (SELECT addressId from Address WHERE Address.addressStreet = newStreet AND Address.addressZip = newZip LIMIT 1), newBalance);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getFeaturedProducts` ()  BEGIN
+	SELECT * FROM Product LIMIT 4;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductInfo` (IN `requestId` INT(20))  BEGIN
+	SELECT * FROM Product WHERE Product.productId = requestId;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductReview` (IN `requestId` INT(20))  NO SQL
+    COMMENT 'Gets review for a specific product.'
+BEGIN
+	SELECT * FROM ProductReview WHERE ProductReview.productId = requestId;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertCartItem` (IN `cartProductId` INT(20), IN `cartUserEmail` VARCHAR(100))  BEGIN
+	INSERT INTO CartItems (productId, userEmail) VALUES (cartProductId, cartUserEmail);
+END$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -33,21 +64,20 @@ USE `sportrad_sportrader`;
 CREATE TABLE `Address` (
   `addressID` int(20) NOT NULL,
   `addressStreet` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `addressApt` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `addressState` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
   `addressZip` int(20) NOT NULL,
-  `addressCountry` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+  `addressCity` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `Address`
 --
 
-INSERT INTO `Address` (`addressID`, `addressStreet`, `addressApt`, `addressState`, `addressZip`, `addressCountry`) VALUES
-(1, '123 Brooklynn Blvd', NULL, 'NY', 123456, 'US'),
-(2, '456 House Blvd', NULL, 'WI', 45678, 'US'),
-(3, '5674 First Ave', '102', 'IA', 35292, 'US'),
-(4, '9124 Fourth Ave', '141', 'KS', 12419, 'US');
+INSERT INTO `Address` (`addressID`, `addressStreet`, `addressState`, `addressZip`, `addressCity`) VALUES
+(1, '123 Brooklynn Blvd', 'NY', 123456, ''),
+(2, '456 House Blvd', 'WI', 45678, ''),
+(3, '5674 First Ave', 'IA', 35292, ''),
+(4, '9124 Fourth Ave', 'KS', 12419, '');
 
 -- --------------------------------------------------------
 
@@ -80,6 +110,13 @@ CREATE TABLE `CartItems` (
   `userEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `productId` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `CartItems`
+--
+
+INSERT INTO `CartItems` (`userEmail`, `productId`) VALUES
+('bob@gmail.com', 3);
 
 -- --------------------------------------------------------
 
@@ -240,7 +277,7 @@ CREATE TABLE `User` (
   `userPassword` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `addressID` int(20) NOT NULL,
   `userBalance` float NOT NULL,
-  `userPhotoPath` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `userPhotoPath` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -345,7 +382,7 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT for table `Address`
 --
 ALTER TABLE `Address`
-  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `Brand`
