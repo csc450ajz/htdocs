@@ -27,8 +27,9 @@ $cartResult = getCartItems($conn);
                     $total_price = 0;
                     while ($cartItems = mysqli_fetch_assoc($cartResult)) {
                         // echo $cartItems['productId'];
-                        $sql = "SELECT * FROM product WHERE productId= " . $cartItems['productId'];
+                        $sql = "SELECT * FROM Product WHERE productId= " . $cartItems['productId'];
                         $result2 = $conn->query($sql);
+                        $conn->next_result();
                         echo $conn->error;
                         while ($product = mysqli_fetch_assoc($result2)) {
                             $total_price += ($product['productPrice']);
