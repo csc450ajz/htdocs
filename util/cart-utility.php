@@ -50,7 +50,7 @@
             // execute stored procedure
             $sql = "CALL getCartItems('$userEmail');";
             $result = $conn->query($sql);
-            //$conn->next_result();
+            $conn->next_result();
             echo $conn->error;
             return $result;
         }
