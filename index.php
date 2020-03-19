@@ -5,48 +5,28 @@
 require_once('util/config.html');
 
 //require_once('databaseConnection.php');
-require_once('util/db-config.php');
+include('util/db-config.php');
 
 // call getFeaturedProducts() stored procedure
 $sql = "CALL getFeaturedProducts();";
 $result = $conn->query($sql);
-echo var_dump($result);
+// DEBUG echo var_dump($result);
 
 if (isset($_POST['productId'])) {
-    echo ($_POST['productId']);
-
-    switch ($_POST['btnCart']) {
+    
+    $productId = $_POST['productId'];
+    $userEmail = "sally@gmail.com";
+    $new_sql = "CALL insertCartItem('$productId', '$userEmail');";
+    //echo $sql;
+    require_once('util/db-config.php');
+    $result2 = $conn->query($new_sql);
+    echo var_dump($result2);
+    /*switch ($_POST['btnCart']) {
         case 'new':
-            $productId = $_POST['productId'];
-            $userEmail = "admin@admin.com";
-            $sql = "INSERT INTO cartitems (userEmail, productId) VALUES (?, ?) ";
-
-            // Set up a prepared statement
-            if ($stmt = $conn->prepare($sql)) {
-                // Pass the parameters
-                $stmt->bind_param("si", $userEmail, $productId);
-                if ($stmt->errno) {
-                    echo ("stmt prepare() had error.");
-                }
-
-                // Execute the query
-                $stmt->execute();
-                if ($stmt->errno) {
-                    echo ("Could not execute prepared statement");
-                }
-
-                // Store the result
-                $stmt->store_result();
-                $totalCount = $stmt->num_rows;
-
-                // Free results
-                $stmt->free_result();
-                // Close the statement
-                $stmt->close();
-            } // end if( prepare( ))
-
+            
+            
             break;
-    }
+    }*/
 }
 
 ?>
@@ -108,7 +88,7 @@ if (isset($_POST['productId'])) {
                                 <!-- TODO: Add product star reviews -->
                                 <p class="card-text">$<?= $product['productPrice']; ?></p>
                                 <!-- Send product id as encoded value -->
-                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>"/>
 
                                 <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button>
 
