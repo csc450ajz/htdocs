@@ -30,13 +30,14 @@ $cartResult = getCartItems($conn);
                 <div class="col-md-8">
                     <?php
                     $total_price = 0;
-                    while ($cartItems = mysqli_fetch_assoc($cartResult)) {
-                        // echo $cartItems['productId'];
-                        $sql = "SELECT * FROM Product WHERE productId= " . $cartItems['productId'];
-                        $result2 = $conn->query($sql);
-                        echo $conn->error;
-                        while ($product = mysqli_fetch_assoc($result2)) {
-                            $total_price += ($product['productPrice']);
+                    if($cartResult) {
+                        while ($cartItems = mysqli_fetch_assoc($cartResult)) {
+                            // echo $cartItems['productId'];
+                            $sql = "SELECT * FROM Product WHERE productId= " . $cartItems['productId'];
+                            $result2 = $conn->query($sql);
+                            echo $conn->error;
+                            while ($product = mysqli_fetch_assoc($result2)) {
+                                $total_price += ($product['productPrice']);
                     ?>
 
                             <div class="col-md-8">
@@ -57,9 +58,9 @@ $cartResult = getCartItems($conn);
                                 <hr />
                             </div>
                     <?php
+                            }
                         }
-                    }
-                    ?>
+                    }?>
                 </div>
 
                 <div class="col-md-4">

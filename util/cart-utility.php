@@ -9,7 +9,7 @@
     call, as this ensures there are not duplicate
     connection objects.
     */
-    session_start();
+    
     /* 
     ---------------
     addCartItem()
@@ -18,6 +18,7 @@
     - If logged in, stores productId in CartItems table with session userEmail
     */
     function addCartItem($itemId, $conn) {
+        session_start();
         // make sure the user is logged in, otherwise redirect to login page
         if(isset($_SESSION['userEmail'])) {
             // get productId and userEmail
