@@ -6,13 +6,9 @@ include('util/db-config.php');
 
 require_once('util/config.html');
 
-$sql = "SELECT * FROM cartitems WHERE userEmail = 'admin@admin.com'";
-$result = $conn->query($sql);
-// $cartItems = mysqli_fetch_assoc($result);
-// echo json_encode($result -> fetch_all());
-// echo "<br />";
-
-
+// get items in cart
+require_once('util/cart-utility.php');
+$cartResult = getCartItems($conn);
 ?>
 
 <head>
@@ -29,7 +25,7 @@ $result = $conn->query($sql);
                 <div class="col-md-8">
                     <?php
                     $total_price = 0;
-                    while ($cartItems = mysqli_fetch_assoc($result)) {
+                    while ($cartItems = mysqli_fetch_assoc($cartResult)) {
                         // echo $cartItems['productId'];
                         $sql = "SELECT * FROM product WHERE productId= " . $cartItems['productId'];
                         $result2 = $conn->query($sql);

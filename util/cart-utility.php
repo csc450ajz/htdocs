@@ -34,5 +34,26 @@
             $_SESSION['redirect'] = '/index.php'; // setting this in case we implement a redirect on login page
         }
     }
+    /* 
+    ---------------
+    getCartItems()
+    ---------------
+    - Checks if user is logged in, otherwise route to login page
+    - If logged in, gets all items in Cart at their email address 
+    - Returns mysqli_result of query
+    */
+    function getCartItems($conn) {
+        // make sure the user is logged in, otherwise redirect to login page
+        if(isset($_SESSION['userEmail'])) {
+            $userEmail = $_SESSION['userEmail'];
+
+            // execute stored procedure
+            $sql = "CALL getCartItems('$userEmail');";
+            $result = $conn->query($sql);
+            $conn->next_result();
+            echo $conn->error;
+            return $result;
+        }
+    }
 
 ?>
