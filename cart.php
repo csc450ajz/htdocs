@@ -4,7 +4,7 @@
 // check that user is logged in, if not kick to login page
 require_once('util/check-login.php');
 if(!checkLogin()) {
-    header("Location: /login.php");
+    header("Location: logIn.php");
 }
 // get db connection
 //include('databaseConnection.php');
