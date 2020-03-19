@@ -120,7 +120,7 @@ require_once('util/config.html')
         </div>
         <div class="row justify-content-sm-center">
             <div class="col-sm-6 col-md-5 col-lg-4">
-                <p>Already have an account?<br><a href="signin.php">Sign in!</a></p>
+                <p>Already have an account?<br><a href="logIn.php">Sign in!</a></p>
             </div>
         </div>
     </div>
