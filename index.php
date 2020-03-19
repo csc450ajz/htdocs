@@ -8,7 +8,7 @@ require_once('util/config.html');
 include('util/db-config.php');
 // test db connection
 $sql = "SELECT * FROM Products;";
-$result = $conn->query($sql)->fetch_assoc();
+$result = $conn->query($sql);
 echo var_dump($result);
 // call getFeaturedProducts() stored procedure
 try {
