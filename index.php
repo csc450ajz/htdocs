@@ -31,6 +31,9 @@ $result = $conn->query($sql);
     .col {
         margin-top: 10px;
     }
+    .card {
+        min-height: 400px;
+    }
 </style>
 
 <body>
