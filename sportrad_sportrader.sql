@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 19, 2020 at 02:49 AM
+-- Generation Time: Mar 19, 2020 at 08:00 PM
 -- Server version: 10.3.22-MariaDB-cll-lve
 -- PHP Version: 7.3.6
 
@@ -33,6 +33,10 @@ BEGIN
 	INSERT INTO Address(addressStreet, addressState, addressZip, addressCity) VALUES (newStreet, newState, newZip, newCity);
 	INSERT INTO User(userEmail, userFName, userLName, userType, userPassword, addressId, userBalance) 
     VALUES(newEmail, newFName, newLName, newType, newPassword, (SELECT addressId from Address WHERE Address.addressStreet = newStreet AND Address.addressZip = newZip LIMIT 1), newBalance);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCartItems` (IN `email` VARCHAR(100))  BEGIN	
+	SELECT * FROM CartItems WHERE CartItems.userEmail = email;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getFeaturedProducts` ()  BEGIN
@@ -77,7 +81,10 @@ INSERT INTO `Address` (`addressID`, `addressStreet`, `addressState`, `addressZip
 (1, '123 Brooklynn Blvd', 'NY', 123456, ''),
 (2, '456 House Blvd', 'WI', 45678, ''),
 (3, '5674 First Ave', 'IA', 35292, ''),
-(4, '9124 Fourth Ave', 'KS', 12419, '');
+(4, '9124 Fourth Ave', 'KS', 12419, ''),
+(9, 'Ryan Street', 'NY', 55555, 'Top Hat Falls'),
+(10, 'MyHouse', 'NY', 88888, 'Valley Hill'),
+(11, 'MyHouse', 'NY', 88888, 'Finland');
 
 -- --------------------------------------------------------
 
@@ -98,7 +105,8 @@ CREATE TABLE `Brand` (
 INSERT INTO `Brand` (`brandId`, `brandName`, `brandStatus`) VALUES
 (1, 'Nike', 'active'),
 (2, 'Adidas', 'active'),
-(3, 'Spalding', 'active');
+(3, 'Spalding', 'active'),
+(4, 'Ogio', 'active');
 
 -- --------------------------------------------------------
 
@@ -116,7 +124,15 @@ CREATE TABLE `CartItems` (
 --
 
 INSERT INTO `CartItems` (`userEmail`, `productId`) VALUES
-('bob@gmail.com', 3);
+('admin@admin.com', 3),
+('bob@gmail.com', 3),
+('RyanStick@sporTrader.com', 3),
+('RyanStick@sporTrader.com', 4),
+('RyanStick@sporTrader.com', 5),
+('sally@gmail.com', 4),
+('TopHat@TopHat.com', 3),
+('TopHat@TopHat.com', 4),
+('TopHat@TopHat.com', 5);
 
 -- --------------------------------------------------------
 
@@ -226,7 +242,8 @@ CREATE TABLE `Product` (
 INSERT INTO `Product` (`productId`, `productName`, `productDesc`, `productPrice`, `productCondition`, `productSize`, `productColor`, `productStatus`, `brandId`, `categoryID`, `productDiscount`, `userEmail`, `productViews`) VALUES
 (3, 'Spalding Basketball', 'This basketball is in great condition, only used twice.', 25, 'Like New', '29.5\"', 'orange', 'active', 3, 4, 0, 'bob@gmail.com', 20),
 (4, 'Nike Free Run 5.0', 'This pair of running shoes is in great shape! New without tags.', 55, 'New', '11.5', 'Blue', 'active', 1, 3, 0.1, 'joe@gmail.com', 15),
-(5, 'Men\'s Adidas Black Sweatshirt', 'Lightly worn Adidas Originals sweatshirt.', 15, 'Used - Good', 'Men\'s Large', 'Black', 'active', 2, 4, 0, 'sally@gmail.com', 5);
+(5, 'Men\'s Adidas Black Sweatshirt', 'Lightly worn Adidas Originals sweatshirt.', 15, 'Used - Good', 'Men\'s Large', 'Black', 'active', 2, 4, 0, 'sally@gmail.com', 5),
+(8, 'Ogio Golf Bag', 'Great condition golf bag, ready for the upcoming season!', 120.59, 'Used - Like New', '45\" x 15\"', 'Black', 'active', 4, 4, 0, 'TopHat@TopHat.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -288,8 +305,10 @@ INSERT INTO `User` (`userEmail`, `userFName`, `userLName`, `userType`, `userPass
 ('admin@admin.com', 'Admin', 'Admin', 'admin', 'admin', 1, 0, ''),
 ('bob@gmail.com', 'Bob', 'Johnson', 'client', 'password', 4, 200, 'path_to_photo'),
 ('joe@gmail.com', 'Joe', 'Smith', 'client', 'password', 2, 200, 'path_to_photo'),
+('RyanStick@sporTrader.com', 'Ryan', 'Stick', 'client', 'password123', 9, 50, NULL),
 ('sally@gmail.com', 'Sally', 'User', 'client', 'password', 3, 200, 'path_to_photo'),
-('test@test.com', 'Test', 'User', 'client', 'password', 1, 200, 'path_to_photo');
+('test@test.com', 'Test', 'User', 'client', 'password', 1, 200, 'path_to_photo'),
+('TopHat@TopHat.com', 'Top', 'Hat', 'client', 'password', 10, 50, NULL);
 
 --
 -- Indexes for dumped tables
@@ -382,13 +401,13 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT for table `Address`
 --
 ALTER TABLE `Address`
-  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `Brand`
 --
 ALTER TABLE `Brand`
-  MODIFY `brandId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `brandId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Category`
@@ -418,7 +437,7 @@ ALTER TABLE `Orders`
 -- AUTO_INCREMENT for table `Product`
 --
 ALTER TABLE `Product`
-  MODIFY `productId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `productId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `ProductImage`
