@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 19, 2020 at 08:00 PM
+-- Generation Time: Mar 24, 2020 at 10:46 PM
 -- Server version: 10.3.22-MariaDB-cll-lve
 -- PHP Version: 7.3.6
 
@@ -28,11 +28,19 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createAccount` (IN `newEmail` VARCHAR(100), IN `newFName` VARCHAR(100), IN `newLName` VARCHAR(100), IN `newType` VARCHAR(20), IN `newPassword` VARCHAR(255), IN `newBalance` FLOAT, IN `newStreet` VARCHAR(100), IN `newState` VARCHAR(2), IN `newZip` INT(20), IN `newCity` VARCHAR(100))  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addProduct` (IN `productName` VARCHAR(255), IN `productDesc` VARCHAR(255), IN `productPrice` FLOAT, IN `productCondition` VARCHAR(255), IN `productSize` VARCHAR(255), IN `productStatus` INT, IN `categoryId` INT(20), IN `brandId` INT(20), IN `productDiscount` FLOAT, IN `userEmail` VARCHAR(100))  NO SQL
 BEGIN
+	INSERT INTO Product (Product.productName, Product.productDesc, Product.productPrice, Product.productCondition, Product.productSize, Product.productStatus, Product.categoryID, Product.brandId, Product.productDiscount, Product.userEmail) VALUES (productName, productDesc, productPrice, productCondition, productSize, productStatus, categoryId, brandId, productDiscount, userEmail);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createAccount` (IN `newEmail` VARCHAR(100), IN `newFName` VARCHAR(100), IN `newLName` VARCHAR(100), IN `newType` VARCHAR(20), IN `newPassword` VARCHAR(255), IN `newBalance` FLOAT, IN `newStreet` VARCHAR(100), IN `newState` VARCHAR(2), IN `newZip` INT(20), IN `newCity` VARCHAR(100))  BEGIN
 	INSERT INTO Address(addressStreet, addressState, addressZip, addressCity) VALUES (newStreet, newState, newZip, newCity);
 	INSERT INTO User(userEmail, userFName, userLName, userType, userPassword, addressId, userBalance) 
     VALUES(newEmail, newFName, newLName, newType, newPassword, (SELECT addressId from Address WHERE Address.addressStreet = newStreet AND Address.addressZip = newZip LIMIT 1), newBalance);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProduct` (IN `itemId` INT(20))  BEGIN
+	DELETE FROM Product WHERE productId = itemId;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCartItems` (IN `email` VARCHAR(100))  BEGIN	
@@ -47,14 +55,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductInfo` (IN `requestId` INT
 	SELECT * FROM Product WHERE Product.productId = requestId;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductReview` (IN `requestId` INT(20))  NO SQL
-    COMMENT 'Gets review for a specific product.'
-BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductReview` (IN `requestId` INT(20))  BEGIN
 	SELECT * FROM ProductReview WHERE ProductReview.productId = requestId;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductsBySeller` (IN `sellerEmail` VARCHAR(100))  BEGIN
+	SELECT * FROM Product WHERE Product.userEmail = sellerEmail;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertCartItem` (IN `cartProductId` INT(20), IN `cartUserEmail` VARCHAR(100))  BEGIN
 	INSERT INTO CartItems (productId, userEmail) VALUES (cartProductId, cartUserEmail);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `performTransaction` (IN `buyerEmail` VARCHAR(255), IN `sellerEmail` VARCHAR(100), IN `productId` INT(20), IN `orderTotal` FLOAT, IN `orderDiscount` FLOAT, IN `orderShipAddress` VARCHAR(255))  BEGIN 
+	DELETE FROM CartItems WHERE CartItems.productId = productId; 
+    INSERT INTO Orders (Orders.buyerEmail, Orders.sellerEmail, Orders.productId, Orders.orderTotal, Orders.orderDiscount, Orders.orderShipAddress) VALUES (buyerEmail, sellerEmail, productId, orderTotal, orderDiscount, orderShipAddress); 
+    UPDATE Product SET Product.productStatus = "sold" WHERE Product.productId = productId; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProduct` (IN `productName` VARCHAR(255), IN `productDesc` VARCHAR(255), IN `productPrice` FLOAT, IN `productCondition` VARCHAR(255), IN `productSize` VARCHAR(255), IN `productColor` VARCHAR(255), IN `productStatus` VARCHAR(255), IN `brandId` INT(20), IN `categoryId` INT(20), IN `productDiscount` FLOAT, IN `userEmail` VARCHAR(100), IN `productId` INT(20))  BEGIN
+	UPDATE Product SET Product.productName = productName, Product.productDesc = productDesc, Product.productPrice = productPrice, Product.productCondition = productCondition, Product.productSize = productSize, Product.productColor = productColor, Product.productStatus = productStatus, Product.brandId = brandId, Product.categoryID = categoryId, Product.productDiscount = productDiscount, Product.userEmail = userEmail WHERE Product.productId = productId;
 END$$
 
 DELIMITER ;
@@ -85,6 +105,20 @@ INSERT INTO `Address` (`addressID`, `addressStreet`, `addressState`, `addressZip
 (9, 'Ryan Street', 'NY', 55555, 'Top Hat Falls'),
 (10, 'MyHouse', 'NY', 88888, 'Valley Hill'),
 (11, 'MyHouse', 'NY', 88888, 'Finland');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `AdminMessages`
+--
+
+CREATE TABLE `AdminMessages` (
+  `messageId` int(20) NOT NULL,
+  `clientEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `issueId` int(20) NOT NULL,
+  `messageText` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `messageTime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -129,10 +163,8 @@ INSERT INTO `CartItems` (`userEmail`, `productId`) VALUES
 ('RyanStick@sporTrader.com', 3),
 ('RyanStick@sporTrader.com', 4),
 ('RyanStick@sporTrader.com', 5),
-('sally@gmail.com', 4),
-('TopHat@TopHat.com', 3),
-('TopHat@TopHat.com', 4),
-('TopHat@TopHat.com', 5);
+('RyanStick@sporTrader.com', 8),
+('sally@gmail.com', 4);
 
 -- --------------------------------------------------------
 
@@ -158,6 +190,20 @@ INSERT INTO `Category` (`categoryId`, `categoryName`, `categoryStatus`, `genderI
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ChatMessages`
+--
+
+CREATE TABLE `ChatMessages` (
+  `messageId` int(20) NOT NULL,
+  `userEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chatId` int(20) NOT NULL,
+  `messageText` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `messageSentTime` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Gender`
 --
 
@@ -178,16 +224,15 @@ INSERT INTO `Gender` (`genderId`, `genderType`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Messages`
+-- Table structure for table `Issue`
 --
 
-CREATE TABLE `Messages` (
-  `messageId` int(20) NOT NULL,
-  `senderEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `recipientEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `messageText` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `messageTime` date NOT NULL,
-  `messageStatus` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+CREATE TABLE `Issue` (
+  `issueId` int(20) NOT NULL,
+  `clientEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `issueType` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `issueText` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `issueDateSubmitted` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -198,20 +243,21 @@ CREATE TABLE `Messages` (
 
 CREATE TABLE `Orders` (
   `orderId` int(20) NOT NULL,
-  `userEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `buyerEmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sellerEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productId` int(20) NOT NULL,
   `orderTotal` float NOT NULL,
-  `orderDate` date NOT NULL,
+  `orderDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `orderDiscount` float NOT NULL,
-  `orderShipAddress` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `productId` int(20) NOT NULL
+  `orderShipAddress` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `Orders`
 --
 
-INSERT INTO `Orders` (`orderId`, `userEmail`, `orderTotal`, `orderDate`, `orderDiscount`, `orderShipAddress`, `productId`) VALUES
-(1, 'test@test.com', 50, '2020-03-13', 0, '123 SomeStreet, New York, NY 11223', 4);
+INSERT INTO `Orders` (`orderId`, `buyerEmail`, `sellerEmail`, `productId`, `orderTotal`, `orderDate`, `orderDiscount`, `orderShipAddress`) VALUES
+(1, 'test@test.com', '', 4, 50, '2020-03-13 04:00:00', 0, '123 SomeStreet, New York, NY 11223');
 
 -- --------------------------------------------------------
 
@@ -244,6 +290,20 @@ INSERT INTO `Product` (`productId`, `productName`, `productDesc`, `productPrice`
 (4, 'Nike Free Run 5.0', 'This pair of running shoes is in great shape! New without tags.', 55, 'New', '11.5', 'Blue', 'active', 1, 3, 0.1, 'joe@gmail.com', 15),
 (5, 'Men\'s Adidas Black Sweatshirt', 'Lightly worn Adidas Originals sweatshirt.', 15, 'Used - Good', 'Men\'s Large', 'Black', 'active', 2, 4, 0, 'sally@gmail.com', 5),
 (8, 'Ogio Golf Bag', 'Great condition golf bag, ready for the upcoming season!', 120.59, 'Used - Like New', '45\" x 15\"', 'Black', 'active', 4, 4, 0, 'TopHat@TopHat.com', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProductChat`
+--
+
+CREATE TABLE `ProductChat` (
+  `chatId` int(20) NOT NULL,
+  `buyerEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sellerEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productId` int(20) NOT NULL,
+  `chatStartDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -321,6 +381,14 @@ ALTER TABLE `Address`
   ADD PRIMARY KEY (`addressID`);
 
 --
+-- Indexes for table `AdminMessages`
+--
+ALTER TABLE `AdminMessages`
+  ADD PRIMARY KEY (`messageId`),
+  ADD KEY `clientEmail` (`clientEmail`),
+  ADD KEY `issueId` (`issueId`);
+
+--
 -- Indexes for table `Brand`
 --
 ALTER TABLE `Brand`
@@ -341,26 +409,34 @@ ALTER TABLE `Category`
   ADD KEY `genderId` (`genderId`);
 
 --
+-- Indexes for table `ChatMessages`
+--
+ALTER TABLE `ChatMessages`
+  ADD PRIMARY KEY (`messageId`),
+  ADD KEY `userEmail` (`userEmail`),
+  ADD KEY `chatId` (`chatId`);
+
+--
 -- Indexes for table `Gender`
 --
 ALTER TABLE `Gender`
   ADD PRIMARY KEY (`genderId`);
 
 --
--- Indexes for table `Messages`
+-- Indexes for table `Issue`
 --
-ALTER TABLE `Messages`
-  ADD PRIMARY KEY (`messageId`),
-  ADD KEY `senderEmail` (`senderEmail`),
-  ADD KEY `recipientEmail` (`recipientEmail`);
+ALTER TABLE `Issue`
+  ADD PRIMARY KEY (`issueId`),
+  ADD KEY `clientEmail` (`clientEmail`);
 
 --
 -- Indexes for table `Orders`
 --
 ALTER TABLE `Orders`
   ADD PRIMARY KEY (`orderId`),
-  ADD KEY `userEmail` (`userEmail`),
-  ADD KEY `productId` (`productId`);
+  ADD KEY `productId` (`productId`),
+  ADD KEY `buyerEmail` (`buyerEmail`) USING BTREE,
+  ADD KEY `sellerEmail` (`sellerEmail`);
 
 --
 -- Indexes for table `Product`
@@ -370,6 +446,15 @@ ALTER TABLE `Product`
   ADD UNIQUE KEY `brandId` (`brandId`),
   ADD UNIQUE KEY `userEmail` (`userEmail`),
   ADD KEY `categoryID` (`categoryID`);
+
+--
+-- Indexes for table `ProductChat`
+--
+ALTER TABLE `ProductChat`
+  ADD PRIMARY KEY (`chatId`),
+  ADD KEY `buyerEmail` (`buyerEmail`),
+  ADD KEY `sellerEmail` (`sellerEmail`),
+  ADD KEY `productId` (`productId`);
 
 --
 -- Indexes for table `ProductImage`
@@ -404,6 +489,12 @@ ALTER TABLE `Address`
   MODIFY `addressID` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT for table `AdminMessages`
+--
+ALTER TABLE `AdminMessages`
+  MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `Brand`
 --
 ALTER TABLE `Brand`
@@ -416,16 +507,22 @@ ALTER TABLE `Category`
   MODIFY `categoryId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `ChatMessages`
+--
+ALTER TABLE `ChatMessages`
+  MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `Gender`
 --
 ALTER TABLE `Gender`
   MODIFY `genderId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `Messages`
+-- AUTO_INCREMENT for table `Issue`
 --
-ALTER TABLE `Messages`
-  MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `Issue`
+  MODIFY `issueId` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Orders`
@@ -438,6 +535,12 @@ ALTER TABLE `Orders`
 --
 ALTER TABLE `Product`
   MODIFY `productId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `ProductChat`
+--
+ALTER TABLE `ProductChat`
+  MODIFY `chatId` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ProductImage`
@@ -456,6 +559,13 @@ ALTER TABLE `ProductReview`
 --
 
 --
+-- Constraints for table `AdminMessages`
+--
+ALTER TABLE `AdminMessages`
+  ADD CONSTRAINT `AdminMessages_ibfk_1` FOREIGN KEY (`clientEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `AdminMessages_ibfk_2` FOREIGN KEY (`issueId`) REFERENCES `Issue` (`issueId`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
 -- Constraints for table `CartItems`
 --
 ALTER TABLE `CartItems`
@@ -469,11 +579,25 @@ ALTER TABLE `Category`
   ADD CONSTRAINT `Category_ibfk_1` FOREIGN KEY (`genderId`) REFERENCES `Gender` (`genderId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `ChatMessages`
+--
+ALTER TABLE `ChatMessages`
+  ADD CONSTRAINT `ChatMessages_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `ChatMessages_ibfk_2` FOREIGN KEY (`chatId`) REFERENCES `ProductChat` (`chatId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Issue`
+--
+ALTER TABLE `Issue`
+  ADD CONSTRAINT `Issue_ibfk_1` FOREIGN KEY (`clientEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
 -- Constraints for table `Orders`
 --
 ALTER TABLE `Orders`
-  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `Orders_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`productID`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`buyerEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `Orders_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`productID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `Orders_ibfk_3` FOREIGN KEY (`buyerEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Product`
@@ -482,6 +606,14 @@ ALTER TABLE `Product`
   ADD CONSTRAINT `Product_ibfk_1` FOREIGN KEY (`brandId`) REFERENCES `Brand` (`brandId`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `Product_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `Category` (`categoryId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Product_ibfk_3` FOREIGN KEY (`userEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `ProductChat`
+--
+ALTER TABLE `ProductChat`
+  ADD CONSTRAINT `ProductChat_ibfk_1` FOREIGN KEY (`buyerEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `ProductChat_ibfk_2` FOREIGN KEY (`sellerEmail`) REFERENCES `User` (`userEmail`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `ProductChat_ibfk_3` FOREIGN KEY (`productId`) REFERENCES `Product` (`productId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ProductImage`
