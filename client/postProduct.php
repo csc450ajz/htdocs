@@ -9,6 +9,27 @@ if (!checkLogin()) {
 include('../util/db-config.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // gather form values
+    $title = $_POST['title'];
+    $category = $_POST['category'];
+    $description = $_POST['description'];
+    $price = $_POST['price'];
+    $size = $_POST['size'];
+    $brand = $_POST['brand'];
+    $condition = $_POST['condition'];
+    $color = $_POST['color'];
+    $gender = $_POST['gender'];
+    $userEmail = $_SESSION['userEmail'];
+    // DEBUG
+    // echo "title: $title | desc: $description | price: $price | size: $size | brand: $brand | condition: $condition | color: $color | gender: $gender";
+
+    // setup stored procedure call
+    $sql = "CALL addProduct('$title', '$description', '$price', '$condition', '$size', 'active', '$category', '$brand', '$gender', '0.0', '$userEmail', '$color');";
+    // run query
+    $conn->query($sql);
+    // DEBUG
+    //echo $conn->error;
+    //echo $sql;
     
 } else {
     //echo "bummer";
@@ -37,9 +58,25 @@ include('../util/config.html');
             <div class="col col-sm-10 col-md-8 col-lg-8">
                 <form method="post" action="<?php $self ?>">
                     <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                             <label for="title">Product Title</label>
                             <input type="text" name="title" class="form-control" id="title" placeholder="A catchy, informative title for your product." maxlength="100" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" name="category" required>
+                                <option></option>
+                                <?PHP 
+                                $sql = "SELECT * FROM Category";
+                                $conn->next_result();
+                                $result = $conn->query($sql);
+                                while ($category = mysqli_fetch_assoc($result)):
+                                    $id = $category['categoryId'];
+                                    $name = $category['categoryName'];
+                                    echo "<option value='$id'>$name</option>";
+                                endwhile;
+                                    ?>
+                            </select>
                         </div>
                     </div>
                     <div class="form-row">
@@ -86,9 +123,9 @@ include('../util/config.html');
                         <div class="form-group col-md-4">
                             <label for="gender">Gender</label>
                             <select class="form-control" id="gender" name="gender" required>
-                                <option>Men's</option>
-                                <option>Women's</option>
-                                <option>Other/None</option>
+                                <option value="1">Men's</option>
+                                <option value="2">Women's</option>
+                                <option value="3">Other/None</option>
                             </select>
                         </div>
                     </div>
