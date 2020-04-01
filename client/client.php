@@ -2,15 +2,15 @@
 <html lang="en">
 <?php
 	// check that user is logged in, if not kick to login page
-	require_once('util/check-login.php');
+	require_once('../util/check-login.php');
 	if(!checkLogin()) {
 		header("Location: logIn.php");
 	}
 	//Database Connection
-	include('util/db-config.php');
+	include('../util/db-config.php');
 
 	//Get Navigation Bar
-	require_once('util/config.html');
+	require_once('../util/config.html');
 
 	//Get Sold Items
 	function getSoldItems($conn) {
@@ -321,11 +321,5 @@
 
         </div>
     </div>
-
-	<?php
-    require_once('footer.html');
-
-    ?>
-
 </body>
 </html>
