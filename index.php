@@ -9,6 +9,8 @@ if (isset($_POST['productId'])) {
     require_once("util/cart-utility.php");
     addCartItem($_POST['productId'], $conn);
 }
+
+
 // get navbar
 require_once('util/config.html');
 
@@ -25,13 +27,16 @@ $result = $conn->query($sql);
     .row {
         margin: 15px 0px;
     }
+
     .btn-dark {
         width: 100%;
     }
+
     .col {
         margin-top: 10px;
     }
-    .card {
+
+    .featured {
         min-height: 400px;
     }
 </style>
@@ -46,7 +51,7 @@ $result = $conn->query($sql);
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10">    
+            <div class="col-md-10">
                 <!-- Search form -->
                 <input class="form-control" type="text" placeholder="Search" aria-label="Search">
             </div>
@@ -96,19 +101,19 @@ $result = $conn->query($sql);
 
         <div class="row">
 
-            <?php while ($product = mysqli_fetch_assoc($result)):?>
+            <?php while ($product = mysqli_fetch_assoc($result)) : ?>
 
                 <div class="col-xs-8 col-md-6 col-lg-3">
                     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
 
-                        <div class="card" >
+                        <div class="card featured">
                             <img src="images/placeholder.jpg" alt="" style="width: auto; height: 200px;">
                             <div class="card-body">
-                                <h4 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h4>
+                                <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
                                 <!-- TODO: Add product star reviews -->
                                 <p class="card-text">$<?= $product['productPrice']; ?></p>
                                 <!-- Send product id as encoded value -->
-                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>"/>
+                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
 
                                 <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button>
 
@@ -127,58 +132,62 @@ $result = $conn->query($sql);
 
 
         <hr>
+        <?php
+        $conn->next_result();
+        $sql = "SELECT * FROM product WHERE product.genderId=1";
+        $result = $conn->query($sql);
 
+
+
+        ?>
+        <h2>Featured Men Products</h2>
         <div class="row flex-row flex-nowrap overflow-auto">
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+ <?php while ($product = mysqli_fetch_assoc($result)) {
 
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+                ?>
 
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+               
+                    <div class="col-4">
+                        <div class="card card-block">
+                            <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+                            <h5>$<?= $product['productPrice']; ?></h5>
 
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+                            <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                            <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
+                        </div>
+                    </div>
 
-                </div>
-            </div>
+            </form>
+        <?php } ?>
 
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
-
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
-
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card card-block">
-                    <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
-
-                </div>
-            </div>
+        </div>
 
 
+        <hr>
+        <h2>Featured Women Products</h2>
+        <div class="row flex-row flex-nowrap overflow-auto">
+
+            <?php
+            $sql = "SELECT * FROM product WHERE product.genderId=2";
+            $result = $conn->query($sql);
+
+            while ($product = mysqli_fetch_assoc($result)) {
+
+            ?>
+                <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+
+                    <div class="col-4">
+                        <div class="card card-block">
+                            <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
+                            <h5>$<?= $product['productPrice']; ?></h5>
+
+                            <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                            <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
+                        </div>
+                    </div>
+                </form>
+            <?php } ?>
 
         </div>
 

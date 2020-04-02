@@ -6,10 +6,11 @@
 <!DOCTYPE html>
 <html>
 <?php
+session_start();
+
 require_once('util/config.html');
 include('util/db-config.php');
 //include('databaseConnection.php');
-
 $error = "";
 $errormsg = "";
 // if productId was sent by GET
@@ -29,13 +30,34 @@ if (isset($_GET['productId'])) {
         $conn->next_result(); // allow next query to execute
         if ($result) {
             $product = mysqli_fetch_assoc($result);
-        }
-        else {
+        } else {
             //there's a query error
             // TODO - Implement an error message to tell user that the product is not available.
         }
-    } 
-} 
+    }
+}
+
+if (array_key_exists('hdnMessage', $_POST)) {
+    if (isset($_POST['productMessage'])) {
+
+        $userEmail = $_SESSION['userEmail'];
+        $messageText = $_POST['messageText'];
+        $sellerEmail = $_POST['sellerEmail'];
+        $productId = $_POST['hdnMessage'];
+        $conn->next_result();
+
+        $sql = "INSERT INTO productchat (buyerEmail, sellerEmail, productId, recentSender) VALUES('$userEmail', '$sellerEmail', '$productId', '$userEmail')";
+        $result = $conn->query($sql);
+        
+        $chatId = mysqli_insert_id($conn);
+        $messageTime = $product['chatStartDat'];
+        $sql = "INSERT INTO chatmessages (userEmail, chatId, messageText, messageSentTime) VALUES ('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
+        if($conn->query($sql)) {
+            echo '<script>alert("Message Sent")</script>'; 
+        }
+        
+    }
+}
 ?>
 
 <head>
@@ -118,7 +140,31 @@ if (isset($_GET['productId'])) {
                         <p>Comment: <?= $productReview['reviewContent']; ?></p>
 
                     </div>
-                    <div class="tab-pane fade" id="nav-message" role="tabpanel" aria-labelledby="nav-message-tab">Place for buyer to message seller</div>
+                    <div class="tab-pane fade" id="nav-message" role="tabpanel" aria-labelledby="nav-message-tab">
+
+                        <?php if (isset($_SESSION['userEmail'])) { ?>
+                        <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST" name="frmMessage" id="frmMessage">
+
+                            <div class="container">
+
+                                <div class="row">
+                                    <textarea name="messageText" class="form-control" rows="3" placeholder="Enter your message here"></textarea>
+                                    <input type='hidden' name='hdnMessage' value='<?= $product['productId']; ?>' />
+                                    <input type='hidden' name='sellerEmail' value='<?= $product['userEmail']; ?>' />
+                                    <button type="submit" name="productMessage" class="btn btn-success">Send</button>
+                                </div>
+                            </div>
+
+                        </form>
+                        <?php }else { ?>
+                            <div>
+                                <h5>Please sign in to message the seller</h5>
+                                <a href="logIn.php" type="button" class="btn btn-primary">Sign in</a>
+                                <!-- <button class="btn btn-primary" href="logIn.php">Sign in</button> -->
+                            </div>
+
+                        <?php } ?> 
+                    </div>
                 </div>
             </div>
 
