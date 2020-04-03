@@ -220,7 +220,7 @@
 														<div class="card-body">
 															<div class="row">
 																<div class="col-md-6">
-																	<img src="../images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+																	<img src="../images/clothing.jpg" alt="" class="img-fluid img-thumbnail">
 																</div>
 																<div class="col-md-6">
 																	<h3><?= $product['productName'] ?></h3>
@@ -255,7 +255,7 @@
 														<div class="card-body">
 															<div class="row">
 																<div class="col-md-6">
-																	<img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+																	<img src="../images/balls.jpg" alt="" class="img-fluid img-thumbnail">
 																</div>
 																<div class="col-md-6">
 																	<h3><?= $product['productName'] ?></h3>
@@ -289,7 +289,7 @@
 														<div class="card-body">
 															<div class="row">
 																<div class="col-md-6">
-																	<img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+																	<img src="../images/balls.jpg" alt="" class="img-fluid img-thumbnail">
 																</div>
 																<div class="col-md-6">
 																	<h3><?= $product['productName'] ?></h3>
