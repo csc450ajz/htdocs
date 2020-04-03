@@ -57,19 +57,10 @@ ul.dropdown-cart li .item-right button {
     margin-top: 14px;
 }
 
-/* Products images on display page */
-
 .images {
     width: auto;
     height: 150px;
 }
-
-/* scrolling products on home page */
-
-/* .overflow-auto::-webkit-scrollbar {
-    width: 0 !important;
-    display: none !important;
-} */
 
 .overflow-auto::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
