@@ -4,17 +4,7 @@
 <?php
 include('../util/db-config.php');
 // include('../../util/db-config.php');
-if (array_key_exists('hdnMessage', $_POST)) {
-    echo ("Got here");
-    if (isset($_POST['productMessage'])) {
-        $userEmail = $_SESSION['userEmail'];
-        $messageText = $_POST['productMessage'];
-        echo ($messageText);
-        // $sql = "INSERT INTO chatmessages (userEmail, messageText, messageSentTime) VALUES('$userEmail', '$messageText', CURRENT_TIMESTAMP)";
-        // $result = $conn->query($sql);
-        // echo $result;
-    }
-}
+
 require_once('message-utility.php');
 $messageResult = getProductMessage($conn);
 
@@ -42,10 +32,6 @@ $messageResult = getProductMessage($conn);
                     <tr>
                         <input type='hidden' name='hdnMessage' value='true' />
 
-
-                        <td class="check-box">
-                            <input type="checkbox" class="mail-checkbox">
-                        </td>
                         <!-- <td class="inbox-small-cells"><i class="fa fa-star"></i></td> -->
                         <td class="sender"><?= $thisRow['recentSender'] ?></td>
                         <td class="content"><?= $thisRow['productId'] ?></td>
@@ -68,7 +54,55 @@ $messageResult = getProductMessage($conn);
         $(document).ready(function() {
             $('.viewDetail').click(function() {
                 var chatId = $(this).attr("id");
-                // console.log(chatId);
+                fetchMessageDetails(chatId);
+                $('#dataModal').modal("show");
+            });
+
+            $('#issueMessage').click(function() {
+                // alert("Got Clicked");
+                // var hrefVal = ('#nav-messages-tab').attr("href");
+                // var fullUrl = window.location.href + hrefVal;
+                // var issueType = ('#issueType').val()
+                // var issueText=('#issueText').val()
+
+
+                // $.ajax({
+                //     url: fullUrl,
+                //     method: "post",
+                //     data: {
+                //         issueType: issueType,
+                //         issueText: issueText
+                //     },
+                //     success: function(data) {
+                //         console.log(data)
+                //         // $('#messageDetail').html(data);
+                //         // $('#dataModal').modal("show");
+                //     }
+                // });
+                // console.log("chatId");
+                // event.preventDefault();
+            });
+
+            $('#frmProductMessage').on('submit', function(event) {
+
+                event.preventDefault();
+                var messageText= $('#messageText').val()
+                var chatId = $('.chatId').val()
+                $.ajax({
+                    url: "admin.php",
+                    type: "POST",
+                    data: {
+                        hdnMessage: true,
+                        productMessage: true,
+                        messageText: messageText,
+                        chatId: chatId
+                    }
+                }).done(function(msg) {
+                    fetchMessageDetails(chatId)
+                });
+            });
+
+            function fetchMessageDetails(chatId) {
                 $.ajax({
                     url: "../util/messages/messageAJAX.php",
                     method: "post",
@@ -78,17 +112,15 @@ $messageResult = getProductMessage($conn);
                     success: function(data) {
                         console.log(data)
                         $('#messageDetail').html(data);
-                        $('#dataModal').modal("show");
+                        // $('#dataModal').modal("show");
                     }
                 });
-            });
+            }
 
-            $('#sendMessage').submit(function(event) {
-                var chatId = $(this).attr("id");
-
-                console.log("chatId");
-                event.preventDefault();
-            });
+            // $('#nav-messages-tab').click(function() {
+            //     var loc = $(this).attr("href");
+            //     console.log(window.location.href + loc)
+            // })
         });
     </script>
     <!-- Modal -->
@@ -101,9 +133,10 @@ $messageResult = getProductMessage($conn);
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST" name="frmMessage" id="frmMessage">
-                    <div class="modal-body" id="messageDetail">
 
+                <form action="<?php echo htmlentities($_SERVER['SCRIPT_FILENAME']); ?>" method="POST" name="frmProductMessage" id="frmProductMessage">
+                    <div class="modal-body" id="messageDetail">
+                        <!-- window.location.href -->
 
 
                     </div>
@@ -137,18 +170,18 @@ $messageResult = getProductMessage($conn);
 
                         <div class="form-group">
                             <label for="txtIssue">Issue Type</label>
-                            <input type="text" name="issueType" id="txtIssue" class="form-control">
+                            <input type="text" name="issueType" id="issueType" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="txtMessage">Message</label>
-                            <textarea name="issueText" class="form-control" rows="3" placeholder="Enter message"></textarea>
+                            <textarea name="issueText" id="issueText" class="form-control" rows="3" placeholder="Enter message"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <!-- Use a hidden field to tell server if return visitor -->
                         <input type="hidden" name="hdnMessage" value="true" />
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button name="issueMessage" value="new" type="submit" class="btn btn-primary">Send</button>
+                        <button name="issueMessage" value="new" type="submit" class="btn btn-primary" id="issueMessage">Send</button>
                     </div>
                 </form>
             </div>

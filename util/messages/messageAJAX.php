@@ -57,8 +57,8 @@ if (isset($_POST['chatId'])) {
         <div class="container">
 
             <div class="row">
-                <textarea name="messageText" class="form-control" rows="3" placeholder="Enter your message here"></textarea>
-                <input type="hidden" name="hdnMessage" value="' . $chatId . '" />
+                <textarea name="messageText" id="messageText" class="form-control" rows="3" placeholder="Enter your message here"></textarea>
+                <input type="hidden" name="hdnMessage" class="chatId" value="' . $chatId . '" id="' . $chatId . '" />
                 <button type="submit" name="productMessage" value="' . $chatId . '" class="btn btn-success" id="sendMessage">Send</button>
             </div>
         </div>

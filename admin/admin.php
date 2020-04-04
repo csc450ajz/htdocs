@@ -7,21 +7,21 @@
 include('../util/db-config.php');
 // ensure that user is admin, otherwise kick back to login page
 include('../util/check-login.php');
-if (!checkAdmin()) {
-    header("Location: ../logIn.php");
-}
+// if (!checkAdmin()) {
+//     header("Location: ../logIn.php");
+// }
 
 
 if (array_key_exists('hdnMessage', $_POST)) {
     if (isset($_POST['productMessage'])) {
-        $chatId= $_POST['productMessage'];
+        $chatId = $_POST['chatId'];
         $userEmail = $_SESSION['userEmail'];
         $messageText = $_POST['messageText'];
         // echo ($messageText);
         $sql = "INSERT INTO chatmessages (userEmail, chatId, messageText, messageSentTime) VALUES('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
         $result = $conn->query($sql);
         // echo $result;
-    }elseif (isset($_POST['issueMessage'])){
+    } elseif (isset($_POST['issueMessage'])) {
         $userEmail = $_SESSION['userEmail'];
         $messageText = $_POST['issueText'];
         $issueType = $_POST['issueType'];
@@ -29,7 +29,16 @@ if (array_key_exists('hdnMessage', $_POST)) {
         $sql = "INSERT INTO issue (clientEmail, issueType, issueText, issueDateSubmitted) VALUES('$userEmail', '$issueType' ,'$messageText', CURRENT_TIMESTAMP)";
         $result = $conn->query($sql);
 
-    }elseif (isset($_POST['deleteChat'])){
+        $issueId = mysqli_insert_id($conn);
+        $sql = "INSERT INTO adminmessages (clientEmail, issueId, messageText, messageTime) VALUES ('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
+        if ($conn->query($sql)) {
+            $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
+            $tabTag = "#messages";
+
+            header("Location: {$currentUrl}{$tabTag}");
+            // echo '<script>$("a[href="#nav-messages"]").tab("show")</script>';
+        }
+    } elseif (isset($_POST['deleteChat'])) {
         $chatId = $_POST['deleteChat'];
         $sql = "DELETE FROM productChat WHERE chatId = '$chatId'";
         $conn->query($sql);
@@ -45,29 +54,59 @@ if (array_key_exists('hdnMessage', $_POST)) {
 require_once('../util/config.html')
 ?>
 
+
 <head>
     <title>Admin</title>
 </head>
 
+<script>
+    $(document).ready(() => {
+        let url = location.href.replace(/\/$/, "");
+        if (location.hash) {
+            const hash = url.split("#");
+            $('#myTab a[href="#' + hash[1] + '"]').tab("show");
+            url = location.href.replace(/\/#/, "#");
+            history.replaceState(null, null, url);
+            setTimeout(() => {
+                $(window).scrollTop(0);
+            }, 400);
+        }
+
+        $('a[data-toggle="tab"]').on("click", function() {
+            let newUrl;
+            const hash = $(this).attr("href");
+            if (hash == "#nav-home") {
+                newUrl = url.split("#")[0];
+            } else {
+                newUrl = url.split("#")[0] + hash;
+            }
+            newUrl += "/";
+            history.replaceState(null, null, newUrl);
+        });
+    });
+</script>
+
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h3 class="display-4">Welcome Admin</h3>
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
-                    <a class="nav-item nav-link" id="nav-messages-tab" data-toggle="tab" href="#nav-messages" role="tab" aria-controls="nav-messages" aria-selected="false">Messages</a>
-                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-users" role="tab" aria-controls="nav-users" aria-selected="false">Users</a>
-                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-categories" role="tab" aria-controls="nav-categories" aria-selected="false">Categories</a>
-                    <!-- <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-coupons" role="tab" aria-controls="nav-coupons" aria-selected="false">Coupons</a> -->
-                    <!-- <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-spinner" role="tab" aria-controls="nav-spinner" aria-selected="false">Spinner</a> -->
 
-                </div>
-            </nav>
+            <ul class="nav nav-mytabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="false">Users</a>
+                </li>
 
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-
+                <li class="nav-item">
+                    <a class="nav-link" id="categories-tab" data-toggle="tab" href="#categories" role="tab" aria-controls="categories" aria-selected="false">Categories</a>
+                </li>
+            </ul>
+            <div class="tab-content mytab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <br>
                     <div class="row">
                         <div class="col-md-3">
@@ -126,46 +165,48 @@ require_once('../util/config.html')
 
                     </div>
                 </div>
-                <div class="tab-pane fade" id="nav-messages" role="tabpanel" aria-labelledby="nav-messages-tab">
+                <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
                     <div class="row">
                         <div class="col-2">
-                            <a href="#" class="btn btn-primary btn-sm" role="button" data-toggle="modal" data-target="#messageModal"><i class="fas fa-edit" style='font-size:20px'></i></a>
+                        <!-- <i class="fas fa-edit" data-toggle="modal" data-target="#messageModal" style="cursor: pointer;"></i> -->
+                            <!-- <a href="#" class="btn btn-primary btn-" role="button" data-toggle="modal" data-target="#messageModal"><i class="fas fa-external-link-alt"></i></a> -->
                         </div>
-                        <div class="col-10">
+                        <div class="col-10" style="margin: 0px;">
                             <h3>Messages</h3>
+                            <i class="fas fa-edit" data-toggle="modal" data-target="#messageModal" style="cursor: pointer; float: right; margin-bottom: 5px;"></i>
+
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-2">
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                 <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Inbox</a>
-                                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Sent</a>
-                                <!-- <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Trash</a> -->
+                                <!-- <a class="nav-link" id="v-pills-inbox-tab" data-toggle="pill" href="#v-pills-inbox" role="tab" aria-controls="v-pills-inbox" aria-selected="false">Sent</a> -->
                             </div>
                         </div>
                         <div class="col-10">
                             <div class="tab-content" id="v-pills-tabContent">
                                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-
+                                    <h5>Messages With Sellers and Buyers</h5>
                                     <?php
                                     require_once('../util/messages/messages.php');
 
                                     ?>
                                 </div>
-                                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
-                                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
+                                <!-- <div class="tab-pane fade" id="v-pills-inbox" role="tabpanel" aria-labelledby="v-pills-inbox-tab">...</div> -->
                             </div>
                         </div>
 
 
                     </div>
                 </div>
-                <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
-
+                <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="city-attractions-tab">
+                    <p>Users</p>
                 </div>
-                <div class="tab-pane fade" id="nav-categories" role="tabpanel" aria-labelledby="nav-categories-tab">...</div>
-                <div class="tab-pane fade" id="nav-coupons" role="tabpanel" aria-labelledby="nav-coupons-tab">...</div>
-                <div class="tab-pane fade" id="nav-spinner" role="tabpanel" aria-labelledby="nav-spinner-tab">...</div>
+
+                <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="city-attractions-tab">
+                    <p>Categories</p>
+                </div>
             </div>
         </div>
 
