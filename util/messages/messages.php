@@ -2,8 +2,6 @@
 <html lang="en">
 
 <?php
-include('../util/db-config.php');
-// include('../../util/db-config.php');
 
 require_once('message-utility.php');
 $messageResult = getProductMessage($conn);
@@ -28,6 +26,7 @@ $messageResult = getProductMessage($conn);
 
             <table class="table">
                 <?php while ($thisRow = $messageResult->fetch_assoc()) {
+                    echo var_dump($thisRow);
                     $chatId = $thisRow['chatId']; ?>
                     <tr>
                         <input type='hidden' name='hdnMessage' value='true' />
@@ -36,7 +35,7 @@ $messageResult = getProductMessage($conn);
                         <td class="sender"><?= $thisRow['recentSender'] ?></td>
                         <td class="content"><?= $thisRow['productId'] ?></td>
                         <!-- <td class="view-message inbox-small-cells"><i class="fa fa-paperclip"></i></td> -->
-                        <td class="date"><?= $thisRow['messageSentTime'] ?></td>
+                        <td class="date"><?= $thisRow['chatStartDate'] ?></td>
                         <td> <input type="button" name="view" value="view" class="viewDetail btn btn-primary btn-sm" id="<?= $thisRow['chatId'] ?>" /></td>
                         <td><button type="submit" name="deleteChat" value="<?= $thisRow['chatId'] ?>" class="btn btn-danger">Delete</button></td>
                     </tr>

@@ -1,6 +1,5 @@
 <?php
 //index.php
-session_start();
 
 // The JSON standard MIME header. Output as JSON, not HTML
 // header('Content-type: application/json');
@@ -107,7 +106,7 @@ function getProductMessage($conn)
 
         // execute stored procedure
         // $sql = "CALL getCartItems('$userEmail');";
-        $sql = "SELECT * FROM productchat WHERE buyerEmail= '$userEmail' OR sellerEmail= '$userEmail'";
+        $sql = "SELECT * FROM productchat";
         $result = $conn->query($sql);
         $conn->next_result();
         echo $conn->error;
