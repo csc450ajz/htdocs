@@ -9,30 +9,35 @@ if (!checkLogin()) {
 include('../util/db-config.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // gather form values
-    $title = $_POST['title'];
-    $category = $_POST['category'];
-    $description = $_POST['description'];
-    $price = $_POST['price'];
-    $size = $_POST['size'];
-    $brand = $_POST['brand'];
-    $condition = $_POST['condition'];
-    $color = $_POST['color'];
-    $gender = $_POST['gender'];
-    $userEmail = $_SESSION['userEmail'];
-    // DEBUG
-    // echo "title: $title | desc: $description | price: $price | size: $size | brand: $brand | condition: $condition | color: $color | gender: $gender";
+    // check that a max of 5 files were passed
+    if (sizeof($_FILES['productImages']['name']) < 6) {
+        // gather form values
+        $title = $_POST['title'];
+        $category = $_POST['category'];
+        $description = $_POST['description'];
+        $price = $_POST['price'];
+        $size = $_POST['size'];
+        $brand = $_POST['brand'];
+        $condition = $_POST['condition'];
+        $color = $_POST['color'];
+        $gender = $_POST['gender'];
+        $userEmail = $_SESSION['userEmail'];
 
-    // setup stored procedure call
-    $sql = "CALL addProduct('$title', '$description', '$price', '$condition', '$size', 'active', '$category', '$brand', '$gender', '0.0', '$userEmail', '$color');";
-    // run query
-    $conn->query($sql);
-    // DEBUG
-    //echo $conn->error;
-    //echo $sql;
-    
-} else {
-    //echo "bummer";
+        // run query and store result (which is productId of product just inserted)    
+        $sql = "CALL addProduct('$title', '$description', '$price', '$condition', '$size', 'active', '$category', '$brand', '$gender', '0.0', '$userEmail', '$color');";
+        $result = $conn->query($sql);
+        $row = mysqli_fetch_assoc($result);
+        $conn->next_result();
+        // DEBUG
+        //echo $conn->error;
+        //echo $sql;
+
+        // store the images in file system and db
+        require_once('../util/image-util.php');
+        storeProductImage($_FILES['productImages'], $row['productId'], $conn);
+    } else {
+        echo "Too many files selected!";
+    }
 }
 
 ?>
@@ -56,7 +61,7 @@ include('../util/config.html');
         </div>
         <div class="row justify-content-sm-center">
             <div class="col col-sm-10 col-md-8 col-lg-8">
-                <form method="post" action="<?php $self ?>">
+                <form method="post" action="<?php $self ?>" enctype="multipart/form-data" id="product-form">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="title">Product Title</label>
@@ -131,8 +136,8 @@ include('../util/config.html');
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="images">Upload Images</label>
-                            <input type="file" class="form-control-file" id="images">
+                            <label for="productImage">Upload Images of Your Product! (Limit 5)</label>
+                            <input type="file" class="form-control-file" name="productImages[]" accept=".jpg,.JPEG,.JPG,.jpeg,.png,.PNG,.gif,.GIF" multiple>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Post for sale!</button>
@@ -144,6 +149,17 @@ include('../util/config.html');
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        // function prevents more than 5 files from being uploaded
+        jQuery('#product-form').submit(function(){
+            var $fileUpload = $("input[type='file']");
+            if (parseInt($fileUpload.get(0).files.length) > 5) {
+                alert("You can only upload a maximum of 5 files");
+                return false;
+            }
+            return true;
+        });
+    </script>
 </body>
 
 </html>
