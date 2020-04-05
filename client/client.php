@@ -101,6 +101,12 @@ $purchasedResult = getPurchasedtems($conn);
     <title>Seller</title>
 </head>
 
+<style>
+    #profile-pic {
+        background: gray;
+    }
+</style>
+
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
@@ -125,11 +131,22 @@ $purchasedResult = getPurchasedtems($conn);
                     <div class="row">
                         <div class="col-md-3">
                             <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
+                                <?PHP 
+                                    $userEmail = $_SESSION['userEmail'];
+                                    $sql = "SELECT * FROM User WHERE User.userEmail = '$userEmail' LIMIT 1;";
+                                    $result = $conn->query($sql);
+                                    $row = mysqli_fetch_assoc($result);
+                                ?>
                                 <div class="card-header">Quick Profile Info</div>
-                                <img class="card-img-top" src="../images/profile.jpg" alt="Card image cap">
+                                <img id="profile-pic" class="card-img-top" src="../<?PHP echo $row['userPhotoPath']?>" onerror="this.src='../images/placeholder.jpg';" alt="Profile picture">
                                 <div class="card-body text-dark">
-                                    <h5 class="card-title">My Name</h5>
-                                    <p class="card-text">User Details Below: email, username, etc.</p>
+                                    <h5 class="card-title"><?PHP echo $row['userFName']." ".$row['userLName'];?></h5>
+                                    <dl>
+                                        <dt>Email:</dt>
+                                        <dd><?PHP echo $row['userEmail'];?></dd>
+                                        <dt>Cash Balance:</dt>
+                                        <dd>$<?PHP echo $row['userBalance'];?></dd>
+                                    </dl>
                                     <button>Edit Profile</button>
                                 </div>
                             </div>
