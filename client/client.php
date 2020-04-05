@@ -295,7 +295,13 @@ $purchasedResult = getPurchasedtems($conn);
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+                                                                <?PHP
+                                                                    $conn->next_result();
+                                                                    $sql = "SELECT imagePath FROM ProductImage WHERE productId=".$sellingItems['productId']." LIMIT 1;";
+                                                                    $imageResult = $conn->query($sql);
+                                                                    $row = mysqli_fetch_assoc($imageResult);
+                                                                ?>
+                                                                <img src="../<?PHP echo $row['imagePath'];?>" alt="" width="125px" class="img-fluid img-thumbnail">
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <h3><?= $product['productName'] ?></h3>
