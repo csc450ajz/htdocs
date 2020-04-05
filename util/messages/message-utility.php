@@ -106,7 +106,7 @@ function getProductMessage($conn)
 
         // execute stored procedure
         // $sql = "CALL getCartItems('$userEmail');";
-        $sql = "SELECT * FROM productchat";
+        $sql = "SELECT * FROM productchat WHERE buyerEmail = '".$_SESSION['userEmail']."';";
         $result = $conn->query($sql);
         $conn->next_result();
         echo $conn->error;

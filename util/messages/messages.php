@@ -26,7 +26,7 @@ $messageResult = getProductMessage($conn);
 
             <table class="table">
                 <?php while ($thisRow = $messageResult->fetch_assoc()) {
-                    echo var_dump($thisRow);
+                    //echo var_dump($thisRow);
                     $chatId = $thisRow['chatId']; ?>
                     <tr>
                         <input type='hidden' name='hdnMessage' value='true' />
