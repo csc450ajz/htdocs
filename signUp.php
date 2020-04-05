@@ -23,23 +23,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $state = $_POST['state'];
     $zipCode = $_POST['zip-code'];
 
-    //check to make sure other users are not taken // TODO -- make this a stored procedure
+    //check to make sure other users are not taken 
     $sql = ("SELECT * FROM User WHERE userEmail = $userEmail");
     $result = $conn->query($sql);
 
     if ($result) {
         echo "<div class='alert alert-danger' role='alert'>Username already taken!</div>";
     } else {
+        // add images to file system
+        require_once('util/image-util.php');
+        $photoPath = storeProfileImage($_FILES['profilePic']);
         //call procedure (each new account for now starts with $50.00)
-        $sql = "CALL createAccount('$userEmail', '$fName', '$lName', '$userType', '$userPassword', '50.0', '$streetAddress', '$state', '$zipCode', '$city');";
+        $sql = "CALL createAccount('$userEmail', '$fName', '$lName', '$userType', '$userPassword', '50.0', '$streetAddress', '$state', '$zipCode', '$city', '$photoPath');";
         $conn->query($sql);
-        echo $sql;
-
-        // create stored procedure call
-        $sql = "CALL createAccount()";
+        echo $conn->error;
 
         // send to login page
-        header("Location: /logIn.php");
+        //header("Location: /logIn.php");
     }
 } else {
     //echo "bummer";
@@ -71,7 +71,7 @@ require_once('util/config.html')
         </div>
         <div class="row justify-content-sm-center">
             <div class="col col-sm-10 col-md-8 col-lg-6">
-                <form method="post" action="<?php $self ?>">
+                <form method="post" action="<?php $self ?>" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                         <label for="fName">First Name</label>
@@ -112,6 +112,12 @@ require_once('util/config.html')
                         <div class="form-group col-md-4">
                             <label for="zip-code">ZIP Code</label>
                             <input type="number" name="zip-code" class="form-control" id="zip-code" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="profilePic">Upload a Profile Picture!</label>
+                            <input type="file" class="form-control-file" name="profilePic" accept=".jpg,.JPEG,.JPG,.jpeg,.png,.PNG,.gif,.GIF">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Done</button>
