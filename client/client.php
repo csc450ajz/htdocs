@@ -148,6 +148,12 @@ $purchasedResult = getPurchasedtems($conn);
     });
 </script>
 
+<style>
+    #profile-pic {
+        background: gray;
+    }
+</style>
+
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
@@ -170,11 +176,22 @@ $purchasedResult = getPurchasedtems($conn);
                     <div class="row">
                         <div class="col-md-3">
                             <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
+                                <?PHP 
+                                    $userEmail = $_SESSION['userEmail'];
+                                    $sql = "SELECT * FROM User WHERE User.userEmail = '$userEmail' LIMIT 1;";
+                                    $result = $conn->query($sql);
+                                    $row = mysqli_fetch_assoc($result);
+                                ?>
                                 <div class="card-header">Quick Profile Info</div>
-                                <img class="card-img-top" src="../images/profile.jpg" alt="Card image cap">
+                                <img id="profile-pic" class="card-img-top" src="../<?PHP echo $row['userPhotoPath']?>" onerror="this.src='../images/placeholder.jpg';" alt="Profile picture">
                                 <div class="card-body text-dark">
-                                    <h5 class="card-title">My Name</h5>
-                                    <p class="card-text">User Details Below: email, username, etc.</p>
+                                    <h5 class="card-title"><?PHP echo $row['userFName']." ".$row['userLName'];?></h5>
+                                    <dl>
+                                        <dt>Email:</dt>
+                                        <dd><?PHP echo $row['userEmail'];?></dd>
+                                        <dt>Cash Balance:</dt>
+                                        <dd>$<?PHP echo $row['userBalance'];?></dd>
+                                    </dl>
                                     <button>Edit Profile</button>
                                 </div>
                             </div>
@@ -272,28 +289,33 @@ $purchasedResult = getPurchasedtems($conn);
                                     ?>
                                 </div>
 
-                                <!-- Selling Tab -->
-                                <div class="tab-pane fade" id="v-pills-selling" role="tabpanel" aria-labelledby="v-pills-selling-tab">
-                                    <?php
-                                    if ($sellingResult) {
-                                        while ($sellingItems = mysqli_fetch_assoc($sellingResult)) {
-                                            //echo $sellingItems['productId'];
-                                            $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'];
-                                            $result2 = $conn->query($sql);
-                                            echo $conn->error;
-                                            while ($product = mysqli_fetch_assoc($result2)) {
-                                    ?>
-                                                <div class="col-md-8">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <h3><?= $product['productName'] ?></h3>
-                                                                    <h4>$<?= $product['productPrice'] ?></h4>
-                                                                </div>
+                            <!-- Selling Tab -->
+                            <div class="tab-pane fade" id="v-pills-selling" role="tabpanel" aria-labelledby="v-pills-selling-tab">
+                                <?php
+                                if ($sellingResult) {
+                                    while ($sellingItems = mysqli_fetch_assoc($sellingResult)) {
+                                        //echo $sellingItems['productId'];
+                                        $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'];
+                                        $result2 = $conn->query($sql);
+                                        echo $conn->error;
+                                        while ($product = mysqli_fetch_assoc($result2)) {
+                                ?>
+                                            <div class="col-md-8">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <?PHP
+                                                                    $conn->next_result();
+                                                                    $sql = "SELECT imagePath FROM ProductImage WHERE productId=".$sellingItems['productId']." LIMIT 1;";
+                                                                    $imageResult = $conn->query($sql);
+                                                                    $row = mysqli_fetch_assoc($imageResult);
+                                                                ?>
+                                                                <img src="../<?PHP echo $row['imagePath'];?>" alt="" width="125px" class="img-fluid img-thumbnail">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <h3><?= $product['productName'] ?></h3>
+                                                                <h4>$<?= $product['productPrice'] ?></h4>
                                                             </div>
                                                         </div>
                                                     </div>
