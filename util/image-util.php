@@ -15,7 +15,7 @@
     - stores image path in db at productId param
     */
     function storeProductImage($images, $productId, $conn) {
-
+        // loop through image array and place in file storage
         for ($i = 0; $i < sizeof($images['name']); $i++) {
             // get file name and temp storage name
             $fileName = $images['name'][$i];
@@ -40,5 +40,40 @@
             echo $conn->error;
             $conn->next_result(); //move to next query
         }
+    }
+
+
+    /* 
+    ---------------
+    storeProfileImage()
+    ---------------
+    PARAMS
+    $image : Files array of image
+
+    DESCRIPTION
+    - takes in FILE array for image
+    - stores into userImages folder
+    - returns path to be used in storing in db
+    */
+    function storeProfileImage($image) {
+        // get file name and temp storage name
+        $fileName = $image['name'];
+        $fileTmpName = $image['tmp_name'];
+
+        // get file extension
+        $fileExt = explode('.', $fileName);
+        $fileExt = strtolower(end($fileExt));
+
+        // create unique file name for image
+        $fileNameNew = uniqid('', true).".".$fileExt;
+
+        // designate file destination
+        $fileDestination = 'userImages/'.$fileNameNew;
+
+        // move file to productImages folder
+        move_uploaded_file($fileTmpName, $fileDestination);
+
+        // return path to file
+        return $fileDestination;
     }
 ?>
