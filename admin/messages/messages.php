@@ -6,7 +6,8 @@ include('../util/db-config.php');
 // include('../../util/db-config.php');
 
 require_once('message-utility.php');
-$messageResult = getProductMessage($conn);
+$messageResult = getIssueMessages($conn);
+
 
 
 ?>
@@ -27,18 +28,27 @@ $messageResult = getProductMessage($conn);
         <div class="table-responsive">
 
             <table class="table">
+                <thead>
+                    <td>From</td>
+                    <td>Issue Type</td>
+                    <td>Date</td>
+                </thead>
                 <?php while ($thisRow = $messageResult->fetch_assoc()) {
-                    $chatId = $thisRow['chatId']; ?>
+                    $userResult = getUserDetail($conn, $thisRow['clientEmail']);
+                    $userDetail = $userResult->fetch_assoc();
+
+                ?>
                     <tr>
                         <input type='hidden' name='hdnMessage' value='true' />
+                        <td class="sender"><?= $userDetail['userFName'] ?> <?= $userDetail['userLName'] ?></td>
+                        <td class="content"><?= $thisRow['issueType'] ?></td>
+                        <td class="date"><?= $thisRow['issueDateSubmitted'] ?></td>
+                        <td> <input type="button" name="view" value="view" class="viewDetail btn btn-primary btn-sm" id="<?= $thisRow['issueId'] ?>" /></td>
+                        <td><i id="<?= $thisRow['issueId'] ?>"  class="fas fa-trash deleteIssue" style="cursor: pointer; color: red;"></i></td>
 
-                        <!-- <td class="inbox-small-cells"><i class="fa fa-star"></i></td> -->
-                        <td class="sender"><?= $thisRow['recentSender'] ?></td>
-                        <td class="content"><?= $thisRow['productId'] ?></td>
-                        <!-- <td class="view-message inbox-small-cells"><i class="fa fa-paperclip"></i></td> -->
-                        <td class="date"><?= $thisRow['messageSentTime'] ?></td>
-                        <td> <input type="button" name="view" value="view" class="viewDetail btn btn-primary btn-sm" id="<?= $thisRow['chatId'] ?>" /></td>
-                        <td><button type="submit" name="deleteChat" value="<?= $thisRow['chatId'] ?>" class="btn btn-danger">Delete</button></td>
+                        <!-- <td><button type="submit" name="deleteIssue" value="<?= $thisRow['issueId'] ?>" class="btn btn-danger btn-sm">Delete</button></td> -->
+
+                        <!-- <td><button type="submit" name="deleteChat" value="<?= $thisRow['chatId'] ?>" class="btn btn-danger btn-sm">Delete</button></td> -->
                     </tr>
 
                 <?php }
@@ -49,78 +59,69 @@ $messageResult = getProductMessage($conn);
         </div>
     </form>
 
+   
 
     <script>
         $(document).ready(function() {
             $('.viewDetail').click(function() {
-                var chatId = $(this).attr("id");
-                fetchMessageDetails(chatId);
+                var issueId = $(this).attr("id");
+                fetchMessageDetails(issueId);
                 $('#dataModal').modal("show");
             });
 
-            $('#issueMessage').click(function() {
-                // alert("Got Clicked");
-                // var hrefVal = ('#nav-messages-tab').attr("href");
-                // var fullUrl = window.location.href + hrefVal;
-                // var issueType = ('#issueType').val()
-                // var issueText=('#issueText').val()
+            $('.deleteIssue').click(function() {
 
-
-                // $.ajax({
-                //     url: fullUrl,
-                //     method: "post",
-                //     data: {
-                //         issueType: issueType,
-                //         issueText: issueText
-                //     },
-                //     success: function(data) {
-                //         console.log(data)
-                //         // $('#messageDetail').html(data);
-                //         // $('#dataModal').modal("show");
-                //     }
-                // });
-                // console.log("chatId");
-                // event.preventDefault();
-            });
-
-            $('#frmProductMessage').on('submit', function(event) {
-
-                event.preventDefault();
-                var messageText= $('#messageText').val()
-                var chatId = $('.chatId').val()
+                var issueId = $(this).attr("id");
                 $.ajax({
                     url: "admin.php",
-                    type: "POST",
+                    method: "POST",
                     data: {
-                        hdnMessage: true,
-                        productMessage: true,
-                        messageText: messageText,
-                        chatId: chatId
+                        hdnIssue: true,
+                        deleteIssue: true,
+                        issueId: issueId
                     }
                 }).done(function(msg) {
-                    fetchMessageDetails(chatId)
+                    location.reload();
+                });
+            })
+
+           
+
+            $('#frmIssueMessage').on('submit', function(event) {
+
+                event.preventDefault();
+                var messageText = $('#messageText').val()
+                var issueId = $('#issueId').val()
+                var userEmil = 'admin@admin.com';
+                $.ajax({
+                    url: "../admin/admin.php",
+                    type: "POST",
+                    data: {
+                        hdnIssue: true,
+                        adminMessage: true,
+                        messageText: messageText,
+                        issueId: issueId,
+                        userEmail: userEmail
+                    }
+                }).done(function(msg) {
+                    fetchMessageDetails(issueId)
                 });
             });
 
-            function fetchMessageDetails(chatId) {
+            function fetchMessageDetails(issueId) {
                 $.ajax({
-                    url: "../util/messages/messageAJAX.php",
+                    url: "../admin/messages/messageAJAX.php",
                     method: "post",
                     data: {
-                        chatId: chatId
+                        issueId: issueId
                     },
                     success: function(data) {
                         console.log(data)
                         $('#messageDetail').html(data);
-                        // $('#dataModal').modal("show");
                     }
                 });
             }
 
-            // $('#nav-messages-tab').click(function() {
-            //     var loc = $(this).attr("href");
-            //     console.log(window.location.href + loc)
-            // })
         });
     </script>
     <!-- Modal -->
@@ -134,9 +135,8 @@ $messageResult = getProductMessage($conn);
                     </button>
                 </div>
 
-                <form action="<?php echo htmlentities($_SERVER['SCRIPT_FILENAME']); ?>" method="POST" name="frmProductMessage" id="frmProductMessage">
+                <form action="<?php echo htmlentities($_SERVER['SCRIPT_FILENAME']); ?>" method="POST" name="frmIssueMessage" id="frmIssueMessage">
                     <div class="modal-body" id="messageDetail">
-                        <!-- window.location.href -->
 
 
                     </div>
@@ -160,7 +160,7 @@ $messageResult = getProductMessage($conn);
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Send New Message to Admin</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Send Message to User</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

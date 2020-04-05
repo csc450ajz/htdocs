@@ -12,36 +12,25 @@ include('../util/check-login.php');
 // }
 
 
-if (array_key_exists('hdnMessage', $_POST)) {
-    if (isset($_POST['productMessage'])) {
-        $chatId = $_POST['chatId'];
-        $userEmail = $_SESSION['userEmail'];
+if (array_key_exists('hdnIssue', $_POST)) {
+    if (isset($_POST['adminMessage'])) {
+        $issueId = $_POST['issueId'];
+        $userEmail = $_POST['userEmail'];
         $messageText = $_POST['messageText'];
         // echo ($messageText);
-        $sql = "INSERT INTO chatmessages (userEmail, chatId, messageText, messageSentTime) VALUES('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO adminmessages (clientEmail, issueId, messageText, messageTime) VALUES('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
         $result = $conn->query($sql);
         // echo $result;
-    } elseif (isset($_POST['issueMessage'])) {
-        $userEmail = $_SESSION['userEmail'];
-        $messageText = $_POST['issueText'];
-        $issueType = $_POST['issueType'];
-
-        $sql = "INSERT INTO issue (clientEmail, issueType, issueText, issueDateSubmitted) VALUES('$userEmail', '$issueType' ,'$messageText', CURRENT_TIMESTAMP)";
-        $result = $conn->query($sql);
-
-        $issueId = mysqli_insert_id($conn);
-        $sql = "INSERT INTO adminmessages (clientEmail, issueId, messageText, messageTime) VALUES ('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
+    } elseif (isset($_POST['deleteIssue'])) {
+        $issueId = $_POST['issueId'];
+        $sql = "DELETE FROM issue WHERE issueId='$issueId'";
         if ($conn->query($sql)) {
             $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
-            $tabTag = "#messages";
-
-            header("Location: {$currentUrl}{$tabTag}");
+            $tabTag = "{$tabTag}#messages";
+            echo $tabTag;
+            // header("Location: {$currentUrl}{$tabTag}");
             // echo '<script>$("a[href="#nav-messages"]").tab("show")</script>';
         }
-    } elseif (isset($_POST['deleteChat'])) {
-        $chatId = $_POST['deleteChat'];
-        $sql = "DELETE FROM productChat WHERE chatId = '$chatId'";
-        $conn->query($sql);
     }
 }
 
@@ -166,39 +155,15 @@ require_once('../util/config.html')
                     </div>
                 </div>
                 <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
-                    <div class="row">
-                        <div class="col-2">
-                        <!-- <i class="fas fa-edit" data-toggle="modal" data-target="#messageModal" style="cursor: pointer;"></i> -->
-                            <!-- <a href="#" class="btn btn-primary btn-" role="button" data-toggle="modal" data-target="#messageModal"><i class="fas fa-external-link-alt"></i></a> -->
-                        </div>
-                        <div class="col-10" style="margin: 0px;">
-                            <h3>Messages</h3>
-                            <i class="fas fa-edit" data-toggle="modal" data-target="#messageModal" style="cursor: pointer; float: right; margin-bottom: 5px;"></i>
 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Inbox</a>
-                                <!-- <a class="nav-link" id="v-pills-inbox-tab" data-toggle="pill" href="#v-pills-inbox" role="tab" aria-controls="v-pills-inbox" aria-selected="false">Sent</a> -->
-                            </div>
-                        </div>
-                        <div class="col-10">
-                            <div class="tab-content" id="v-pills-tabContent">
-                                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                                    <h5>Messages With Sellers and Buyers</h5>
-                                    <?php
-                                    require_once('../util/messages/messages.php');
+                        <h3>Messages</h3>
 
-                                    ?>
-                                </div>
-                                <!-- <div class="tab-pane fade" id="v-pills-inbox" role="tabpanel" aria-labelledby="v-pills-inbox-tab">...</div> -->
-                            </div>
-                        </div>
+                        <?php
+                        require_once('../admin/messages/messages.php');
+
+                        ?>
 
 
-                    </div>
                 </div>
                 <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="city-attractions-tab">
                     <p>Users</p>
@@ -214,6 +179,10 @@ require_once('../util/config.html')
 
 
     </div>
+    <?php
+    require_once('./../footer.html');
+
+    ?>
 </body>
 
 </html>
