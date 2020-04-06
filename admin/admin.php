@@ -27,8 +27,7 @@ if (array_key_exists('hdnIssue', $_POST)) {
         if ($conn->query($sql)) {
             $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
             $tabTag = "{$tabTag}#messages";
-            echo $tabTag;
-            // header("Location: {$currentUrl}{$tabTag}");
+            header("Location: {$currentUrl}{$tabTag}");
             // echo '<script>$("a[href="#nav-messages"]").tab("show")</script>';
         }
     }
@@ -48,6 +47,32 @@ require_once('../util/config.html')
     <title>Admin</title>
 </head>
 
+<style>
+    .nav-mytabs {
+        margin-top: 2rem;
+    }
+
+    .nav-mytabs li:not(:last-child) {
+        margin-right: 7px;
+    }
+
+    .nav-mytabs a {
+        position: relative;
+        top: 4px;
+        padding: 10px 25px;
+        border-radius: 2px 2px 0 0;
+        background: lightslategray;
+        color: white;
+        opacity: 0.7;
+        transition: all 0.1s ease-in-out;
+    }
+
+    .nav-mytabs a.active,
+    .nav-mytabs a:hover {
+        opacity: 1;
+        top: 0;
+    }
+</style>
 <script>
     $(document).ready(() => {
         let url = location.href.replace(/\/$/, "");
@@ -156,20 +181,25 @@ require_once('../util/config.html')
                 </div>
                 <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
 
-                        <h3>Messages</h3>
+                    <h3>Messages</h3>
 
-                        <?php
-                        require_once('../admin/messages/messages.php');
+                    <?php
+                    require_once('../admin/messages/messages.php');
 
-                        ?>
+                    ?>
 
 
                 </div>
                 <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="city-attractions-tab">
-                    <p>Users</p>
+                    <br>
+                    <?php
+                    require_once('users/users.php');
+
+                    ?>
                 </div>
 
                 <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="city-attractions-tab">
+                    <br>
                     <p>Categories</p>
                 </div>
             </div>
@@ -183,6 +213,8 @@ require_once('../util/config.html')
     require_once('./../footer.html');
 
     ?>
+
+
 </body>
 
 </html>

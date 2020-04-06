@@ -16,8 +16,8 @@ $messageResult = getIssueMessages($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 
     <title>Messages</title>
 </head>
@@ -29,9 +29,11 @@ $messageResult = getIssueMessages($conn);
 
             <table class="table">
                 <thead>
-                    <td>From</td>
-                    <td>Issue Type</td>
-                    <td>Date</td>
+                    <tr>
+                        <th>From</th>
+                        <th>Issue Type</th>
+                        <th>Date</th>
+                    </tr>
                 </thead>
                 <?php while ($thisRow = $messageResult->fetch_assoc()) {
                     $userResult = getUserDetail($conn, $thisRow['clientEmail']);
@@ -39,14 +41,16 @@ $messageResult = getIssueMessages($conn);
 
                 ?>
                     <tr>
-                        <input type='hidden' name='hdnMessage' value='true' />
+                        <input type='hidden' name='hdnIssue' value='true' />
+                        <input type='hidden' name='issueId' value='<?= $thisRow['issueId'] ?>' />
+
                         <td class="sender"><?= $userDetail['userFName'] ?> <?= $userDetail['userLName'] ?></td>
                         <td class="content"><?= $thisRow['issueType'] ?></td>
                         <td class="date"><?= $thisRow['issueDateSubmitted'] ?></td>
                         <td> <input type="button" name="view" value="view" class="viewDetail btn btn-primary btn-sm" id="<?= $thisRow['issueId'] ?>" /></td>
-                        <td><i id="<?= $thisRow['issueId'] ?>"  class="fas fa-trash deleteIssue" style="cursor: pointer; color: red;"></i></td>
+                        <!-- <td><i id="<?= $thisRow['issueId'] ?>"  class="fas fa-trash deleteIssue" style="cursor: pointer; color: red;"></i></td> -->
 
-                        <!-- <td><button type="submit" name="deleteIssue" value="<?= $thisRow['issueId'] ?>" class="btn btn-danger btn-sm">Delete</button></td> -->
+                        <td><button type="submit" name="deleteIssue" value="<?= $thisRow['issueId'] ?>" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
 
                         <!-- <td><button type="submit" name="deleteChat" value="<?= $thisRow['chatId'] ?>" class="btn btn-danger btn-sm">Delete</button></td> -->
                     </tr>
@@ -59,7 +63,7 @@ $messageResult = getIssueMessages($conn);
         </div>
     </form>
 
-   
+
 
     <script>
         $(document).ready(function() {
@@ -85,7 +89,7 @@ $messageResult = getIssueMessages($conn);
                 });
             })
 
-           
+
 
             $('#frmIssueMessage').on('submit', function(event) {
 
@@ -165,7 +169,7 @@ $messageResult = getIssueMessages($conn);
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST" name="frmMessage" id="frmIssueMessage">
+                <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST" name="frmMessage" id="frmMessage">
                     <div class="modal-body">
 
                         <div class="form-group">

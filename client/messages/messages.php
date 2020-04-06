@@ -13,8 +13,8 @@ $messageResult = getProductMessage($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 
     <title>Messages</title>
 </head>
@@ -25,11 +25,12 @@ $messageResult = getProductMessage($conn);
         <div class="table-responsive">
 
             <table class="table">
-                <thead>
-                    <td>From</td>
-                    <td>Product</td>
-                    <td>Chat Start Date</td>
-                </thead>
+            <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Product</th>
+                        <th>Chat Start Date</th>
+                    </tr>
                 <?php while ($thisRow = $messageResult->fetch_assoc()) {
                     $userResult = getUserDetail($conn, $thisRow['recentSender']);
                     $userDetail = $userResult->fetch_assoc();
@@ -45,7 +46,7 @@ $messageResult = getProductMessage($conn);
                         <td class="content"><?= $productDetail['productName'] ?></td>
                         <td class="date"><?= $thisRow['chatStartDate'] ?></td>
                         <td> <input type="button" name="view" value="view" class="viewDetail btn btn-primary btn-sm" id="<?= $thisRow['chatId'] ?>" /></td>
-                        <td><button type="submit" name="deleteChat" value="<?= $thisRow['chatId'] ?>" class="btn btn-danger btn-sm">Delete</button></td>
+                        <td><button type="submit" name="deleteChat" value="<?= $thisRow['chatId'] ?>" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
                     </tr>
 
                 <?php }

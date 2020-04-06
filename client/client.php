@@ -26,7 +26,9 @@ if (array_key_exists('hdnMessage', $_POST)) {
         // echo ($messageText);
         $sql = "INSERT INTO chatmessages (userEmail, chatId, messageText, messageSentTime) VALUES('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
         $result = $conn->query($sql);
-        // echo $result;
+
+        $sql = "UPDATE productchat SET recentSender='$userEmail' WHERE chatId = '$chatId'";
+        $conn->query($sql);
     } elseif (isset($_POST['issueMessage'])) {
         $userEmail = $_SESSION['userEmail'];
         $messageText = $_POST['issueText'];
@@ -121,6 +123,32 @@ $purchasedResult = getPurchasedtems($conn);
 <head>
     <title>Seller</title>
 </head>
+<style>
+    .nav-mytabs {
+        margin-top: 2rem;
+    }
+
+    .nav-mytabs li:not(:last-child) {
+        margin-right: 7px;
+    }
+
+    .nav-mytabs a {
+        position: relative;
+        top: 4px;
+        padding: 10px 25px;
+        border-radius: 2px 2px 0 0;
+        background: lightslategray;
+        color: white;
+        opacity: 0.7;
+        transition: all 0.1s ease-in-out;
+    }
+
+    .nav-mytabs a.active,
+    .nav-mytabs a:hover {
+        opacity: 1;
+        top: 0;
+    }
+</style>
 <script>
     $(document).ready(() => {
         let url = location.href.replace(/\/$/, "");
@@ -176,21 +204,21 @@ $purchasedResult = getPurchasedtems($conn);
                     <div class="row">
                         <div class="col-md-3">
                             <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
-                                <?PHP 
-                                    $userEmail = $_SESSION['userEmail'];
-                                    $sql = "SELECT * FROM User WHERE User.userEmail = '$userEmail' LIMIT 1;";
-                                    $result = $conn->query($sql);
-                                    $row = mysqli_fetch_assoc($result);
+                                <?PHP
+                                $userEmail = $_SESSION['userEmail'];
+                                $sql = "SELECT * FROM User WHERE User.userEmail = '$userEmail' LIMIT 1;";
+                                $result = $conn->query($sql);
+                                $row = mysqli_fetch_assoc($result);
                                 ?>
                                 <div class="card-header">Quick Profile Info</div>
-                                <img id="profile-pic" class="card-img-top" src="../<?PHP echo $row['userPhotoPath']?>" onerror="this.src='../images/placeholder.jpg';" alt="Profile picture">
+                                <img id="profile-pic" class="card-img-top" src="../<?PHP echo $row['userPhotoPath'] ?>" onerror="this.src='../images/placeholder.jpg';" alt="Profile picture">
                                 <div class="card-body text-dark">
-                                    <h5 class="card-title"><?PHP echo $row['userFName']." ".$row['userLName'];?></h5>
+                                    <h5 class="card-title"><?PHP echo $row['userFName'] . " " . $row['userLName']; ?></h5>
                                     <dl>
                                         <dt>Email:</dt>
-                                        <dd><?PHP echo $row['userEmail'];?></dd>
+                                        <dd><?PHP echo $row['userEmail']; ?></dd>
                                         <dt>Cash Balance:</dt>
-                                        <dd>$<?PHP echo $row['userBalance'];?></dd>
+                                        <dd>$<?PHP echo $row['userBalance']; ?></dd>
                                     </dl>
                                     <button>Edit Profile</button>
                                 </div>
@@ -224,9 +252,11 @@ $purchasedResult = getPurchasedtems($conn);
                     </div>
                 </div>
                 <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
-                    <div class="container">
-                        <h3>Messages <i class="fas fa-edit" data-toggle="modal" data-target="#messageModal" style="cursor: pointer; float: right;"></i></h3>
+                    <br>
+                    <div>
+                        <h3><i class="fas fa-edit" data-toggle="modal" data-target="#messageModal" style="cursor: pointer; float: right;"></i></h3>
                     </div>
+                    <br>
                     <h5>Message With Sellers and Buyers</h5>
                     <?php
                     require_once('../client/messages/messages.php');
@@ -242,6 +272,7 @@ $purchasedResult = getPurchasedtems($conn);
                     ?> -->
                 </div>
                 <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
+                    <br>
                     <div class="row">
                         <div class="col-2">
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -289,52 +320,13 @@ $purchasedResult = getPurchasedtems($conn);
                                     ?>
                                 </div>
 
-                            <!-- Selling Tab -->
-                            <div class="tab-pane fade" id="v-pills-selling" role="tabpanel" aria-labelledby="v-pills-selling-tab">
-                                <?php
-                                if ($sellingResult) {
-                                    while ($sellingItems = mysqli_fetch_assoc($sellingResult)) {
-                                        //echo $sellingItems['productId'];
-                                        $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'];
-                                        $result2 = $conn->query($sql);
-                                        echo $conn->error;
-                                        while ($product = mysqli_fetch_assoc($result2)) {
-                                ?>
-                                            <div class="col-md-8">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <?PHP
-                                                                    $conn->next_result();
-                                                                    $sql = "SELECT imagePath FROM ProductImage WHERE productId=".$sellingItems['productId']." LIMIT 1;";
-                                                                    $imageResult = $conn->query($sql);
-                                                                    $row = mysqli_fetch_assoc($imageResult);
-                                                                ?>
-                                                                <img src="../<?PHP echo $row['imagePath'];?>" alt="" width="125px" class="img-fluid img-thumbnail">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <h3><?= $product['productName'] ?></h3>
-                                                                <h4>$<?= $product['productPrice'] ?></h4>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                </div>
+                                <!-- Selling Tab -->
+                                <div class="tab-pane fade" id="v-pills-selling" role="tabpanel" aria-labelledby="v-pills-selling-tab">
                                     <?php
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                </div>
-
-                                <!-- Purchased Tab -->
-                                <div class="tab-pane fade" id="v-pills-purchased" role="tabpanel" aria-labelledby="v-pills-purchased-tab">
-                                    <?php
-                                    if ($purchasedResult) {
-                                        while ($orderItems = mysqli_fetch_assoc($purchasedResult)) {
-                                            //echo $orderItems['productId'];
-                                            $sql = "SELECT * FROM Product WHERE productId= " . $orderItems['productId'];
+                                    if ($sellingResult) {
+                                        while ($sellingItems = mysqli_fetch_assoc($sellingResult)) {
+                                            //echo $sellingItems['productId'];
+                                            $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'];
                                             $result2 = $conn->query($sql);
                                             echo $conn->error;
                                             while ($product = mysqli_fetch_assoc($result2)) {
@@ -344,45 +336,86 @@ $purchasedResult = getPurchasedtems($conn);
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-md-6">
-                                                                    <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+                                                                    <?PHP
+                                                                    $conn->next_result();
+                                                                    $sql = "SELECT imagePath FROM ProductImage WHERE productId=" . $sellingItems['productId'] . " LIMIT 1;";
+                                                                    $imageResult = $conn->query($sql);
+                                                                    $row = mysqli_fetch_assoc($imageResult);
+                                                                    ?>
+                                                                    <img src="../<?PHP echo $row['imagePath']; ?>" alt="" width="125px" class="img-fluid img-thumbnail">
                                                                 </div>
                                                                 <div class="col-md-6">
                                                                     <h3><?= $product['productName'] ?></h3>
                                                                     <h4>$<?= $product['productPrice'] ?></h4>
-                                                                    <p><i>Sold by: <?= $product['userEmail'] ?></i></p>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <hr />
                                                     </div>
-                                                    <hr />
-                                                </div>
-                                    <?php
+                                        <?php
                                             }
                                         }
                                     }
-                                    ?>
-                                </div>
-                                <!-- Add Item Tab -->
-                                <div class="tab-pane fade" id="v-pills-add" role="tabpanel" aria-labelledby="v-pills-add-tab">
-                                    <!-- Link to postProduct.php -->
-                                    <?php
-                                    require_once('postProduct.php');
+                                        ?>
+                                                </div>
 
-                                    ?>
-                                </div>
+                                                <!-- Purchased Tab -->
+                                                <div class="tab-pane fade" id="v-pills-purchased" role="tabpanel" aria-labelledby="v-pills-purchased-tab">
+                                                    <?php
+                                                    if ($purchasedResult) {
+                                                        while ($orderItems = mysqli_fetch_assoc($purchasedResult)) {
+                                                            //echo $orderItems['productId'];
+                                                            $sql = "SELECT * FROM Product WHERE productId= " . $orderItems['productId'];
+                                                            $result2 = $conn->query($sql);
+                                                            echo $conn->error;
+                                                            while ($product = mysqli_fetch_assoc($result2)) {
+                                                    ?>
+                                                                <div class="col-md-8">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <h3><?= $product['productName'] ?></h3>
+                                                                                    <h4>$<?= $product['productPrice'] ?></h4>
+                                                                                    <p><i>Sold by: <?= $product['userEmail'] ?></i></p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr />
+                                                                </div>
+                                                    <?php
+                                                            }
+                                                        }
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <!-- Add Item Tab -->
+                                                <div class="tab-pane fade" id="v-pills-add" role="tabpanel" aria-labelledby="v-pills-add-tab">
+                                                    <!-- Link to postProduct.php -->
+                                                    <?php
+                                                    require_once('postProduct.php');
 
+                                                    ?>
+                                                </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div> <!-- End of Tabs -->
+            </div> <!-- End of Tabs -->
 
+
+        </div>
+        <?php
+        require_once('footer.html');
+
+        ?>
     </div>
-    <?php
-    require_once('./../footer.html');
-
-    ?>
 </body>
 
 </html>
