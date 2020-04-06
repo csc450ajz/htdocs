@@ -65,7 +65,7 @@ if (isset($_POST['userActions'])) {
             break;
 
         case 'delete':
-            $result = deleteUser($conn, $_POST['useEmail']);
+            $result = deleteUser($conn, $_POST['userEmail']);
             if ($result) {
                 echo ("Deleted User");
             }
