@@ -172,7 +172,27 @@ include('../util/db-config.php');
                         success: function(data) {
                             console.log(data);
                             getUsers();
-                        }
+                        },
+                        error: function(jqXHR, exception) {
+                            console.log(jqXHR);
+                            var msg = '';
+                            if (jqXHR.status === 0) {
+                                msg = 'Not connect.\n Verify Network.';
+                            } else if (jqXHR.status == 404) {
+                                msg = 'Requested page not found. [404]';
+                            } else if (jqXHR.status == 500) {
+                                msg = 'Internal Server Error [500].';
+                            } else if (exception === 'parsererror') {
+                                msg = 'Requested JSON parse failed.';
+                            } else if (exception === 'timeout') {
+                                msg = 'Time out error.';
+                            } else if (exception === 'abort') {
+                                msg = 'Ajax request aborted.';
+                            } else {
+                                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                            }
+                            alert(msg);
+                        },
                     })
                 } else {
                     var userFName = $('#userFName').val();
@@ -180,6 +200,8 @@ include('../util/db-config.php');
                     var userEmail = $('#userEmail').val();
                     var userType = $('#userType').val();
                     var userPassword = $('#userPassword').val();
+                    console.log(userEmail, userFName, userLName);
+
                     $.ajax({
                         url: "users/usersUtility.php",
                         method: "POST",
@@ -192,8 +214,31 @@ include('../util/db-config.php');
                             userPassword: userPassword
                         },
                         success: function(data) {
-                            getUsers();
-                        }
+                            console.log(data);
+
+                            // getUsers();
+                        },
+                        error: function(jqXHR, exception) {
+                            console.log(jqXHR);
+
+                            var msg = '';
+                            if (jqXHR.status === 0) {
+                                msg = 'Not connect.\n Verify Network.';
+                            } else if (jqXHR.status == 404) {
+                                msg = 'Requested page not found. [404]';
+                            } else if (jqXHR.status == 500) {
+                                msg = 'Internal Server Error [500].';
+                            } else if (exception === 'parsererror') {
+                                msg = 'Requested JSON parse failed.';
+                            } else if (exception === 'timeout') {
+                                msg = 'Time out error.';
+                            } else if (exception === 'abort') {
+                                msg = 'Ajax request aborted.';
+                            } else {
+                                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                            }
+                            alert(msg);
+                        },
                     })
                 }
 
@@ -201,16 +246,40 @@ include('../util/db-config.php');
 
             $(document).on('click', '.delete', function() {
                 var userEmail = $(this).attr("id");
+                console.log(userEmail)
                 $.ajax({
-                    url: "users/usersUtitily.php",
+                    url: "users/usersUtility.php",
                     method: "POST",
                     data: {
                         userActions: 'delete',
                         userEmail: userEmail
                     },
                     success: function(data) {
-                        getUsers();
-                    }
+                        location.reload();
+                        // location.reload()
+                        // getUsers();
+                    },
+                    error: function(jqXHR, exception) {
+                        console.log(jqXHR);
+
+                        var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        alert(msg);
+                    },
                 });
 
             });
