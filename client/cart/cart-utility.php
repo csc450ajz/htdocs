@@ -29,7 +29,7 @@
             $sql = "CALL insertCartItem('$productId', '$userEmail');";
             $cartResult = $conn->query($sql);
             $conn->next_result(); // allows following queries to occur
-            echo $conn->error;
+            //echo $conn->error;
         } else {
             header("Location: /logIn.php");
             $_SESSION['redirect'] = '/index.php'; // setting this in case we implement a redirect on login page
@@ -52,9 +52,28 @@
             $sql = "CALL getCartItems('$userEmail');";
             $result = $conn->query($sql);
             $conn->next_result();
-            echo $conn->error;
+            //echo $conn->error;
             return $result;
         }
     }
+    /* 
+    ---------------
+    deleteCartItem()
+    ---------------
+    - Checks if user is logged in, otherwise route to login page
+    - If logged in, deletes specified item from cart
+    */
+    function deleteCartItem($conn, $deleteId) {
+        // make sure the user is logged in, otherwise redirect to login page
+        if(isset($_SESSION['userEmail'])) {
+            $userEmail = $_SESSION['userEmail'];
 
+            // execute stored procedure
+            $sql = "DELETE FROM CartItems WHERE productId='$deleteId' AND userEmail='$userEmail';";
+            echo $sql;
+            $result = $conn->query($sql);
+            $conn->next_result();
+            echo $conn->error;
+        }
+    }
 ?>
