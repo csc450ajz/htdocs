@@ -92,13 +92,13 @@ if (array_key_exists('hdnMessage', $_POST)) {
             </div>
             <div class="col-md-4">
                 <h3 class="my-3"><?= $product['productName']; ?></h3>
-                <p>Brand: Nike</p>
+                <p>Brand: <?= $product['productBrand']; ?></p>
                 <p>Availability: In Stock</p>
                 <br>
                 <h5>Price: $<?= $product['productPrice']; ?></h5>
 
                 <form action="">
-                    <label for="">Choice 1</label>
+                    <!-- <label for="">Choice 1</label>
                     <select name="" id="">
                         <option value="">1</option>
 
@@ -108,7 +108,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
                     <select name="" id="">
                         <option value="">1</option>
 
-                    </select>
+                    </select> -->
 
                     <br>
 
@@ -120,7 +120,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-description" aria-selected="true">Description</a>
-                        <a class="nav-item nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-reviews" role="tab" aria-controls="nav-reviews" aria-selected="false">Reviews</a>
+                        <!-- <a class="nav-item nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-reviews" role="tab" aria-controls="nav-reviews" aria-selected="false">Reviews</a> -->
                         <a class="nav-item nav-link" id="nav-message-tab" data-toggle="tab" href="#nav-message" role="tab" aria-controls="nav-message" aria-selected="false">Message Seller</a>
                     </div>
                 </nav>
