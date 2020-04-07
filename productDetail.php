@@ -98,6 +98,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
                 <h5>Price: $<?= $product['productPrice']; ?></h5>
 
                 <form action="">
+<<<<<<< HEAD
                     <!-- <label for="">Choice 1</label>
                     <select name="" id="">
                         <option value="">1</option>
@@ -111,6 +112,8 @@ if (array_key_exists('hdnMessage', $_POST)) {
                     </select> -->
 
                     <br>
+=======
+>>>>>>> f3f717b5da1c24b3591c45cae02f5b2a1b9c2c55
 
                     <button class="btn btn-primary">Add to Cart</button>
                 </form>
@@ -126,20 +129,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab"><?= $product['productDesc']; ?></div>
-                    <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
-                        <?php
-                        $sql = "CALL getProductReview(" . $product['productId'] . ");";
-                        $result = $conn->query($sql);
-                        if ($result) {
-                            $productReview = mysqli_fetch_assoc($result);
-                        } // TODO -- implement some way to handle 0 or multiple reviews
-                        ?>
-
-                        <p><?= $productReview['userEmail']; ?></p>
-                        <span> Rate: <?= $productReview['reviewRating']; ?>/5</span>
-                        <p>Comment: <?= $productReview['reviewContent']; ?></p>
-
-                    </div>
+                    
                     <div class="tab-pane fade" id="nav-message" role="tabpanel" aria-labelledby="nav-message-tab">
 
                         <?php if (isset($_SESSION['userEmail'])) { ?>

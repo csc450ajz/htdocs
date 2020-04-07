@@ -6,7 +6,7 @@ include('util/db-config.php');
 
 // if productId is passed in POST, add to cart
 if (isset($_POST['productId'])) {
-    require_once("util/cart-utility.php");
+    require_once("client/cart/cart-utility.php");
     addCartItem($_POST['productId'], $conn);
 }
 
