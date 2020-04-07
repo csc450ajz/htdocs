@@ -1,6 +1,6 @@
 <?php
 //index.php
-session_start();
+//session_start();
 
 // The JSON standard MIME header. Output as JSON, not HTML
 // header('Content-type: application/json');
