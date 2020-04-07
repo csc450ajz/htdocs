@@ -98,19 +98,6 @@ if (array_key_exists('hdnMessage', $_POST)) {
                 <h5>Price: $<?= $product['productPrice']; ?></h5>
 
                 <form action="">
-                    <label for="">Choice 1</label>
-                    <select name="" id="">
-                        <option value="">1</option>
-
-                    </select>
-                    <br>
-                    <label for="">Choice 2</label>
-                    <select name="" id="">
-                        <option value="">1</option>
-
-                    </select>
-
-                    <br>
 
                     <button class="btn btn-primary">Add to Cart</button>
                 </form>
@@ -120,26 +107,12 @@ if (array_key_exists('hdnMessage', $_POST)) {
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-description" aria-selected="true">Description</a>
-                        <a class="nav-item nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-reviews" role="tab" aria-controls="nav-reviews" aria-selected="false">Reviews</a>
                         <a class="nav-item nav-link" id="nav-message-tab" data-toggle="tab" href="#nav-message" role="tab" aria-controls="nav-message" aria-selected="false">Message Seller</a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab"><?= $product['productDesc']; ?></div>
-                    <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
-                        <?php
-                        $sql = "CALL getProductReview(" . $product['productId'] . ");";
-                        $result = $conn->query($sql);
-                        if ($result) {
-                            $productReview = mysqli_fetch_assoc($result);
-                        } // TODO -- implement some way to handle 0 or multiple reviews
-                        ?>
-
-                        <p><?= $productReview['userEmail']; ?></p>
-                        <span> Rate: <?= $productReview['reviewRating']; ?>/5</span>
-                        <p>Comment: <?= $productReview['reviewContent']; ?></p>
-
-                    </div>
+                    
                     <div class="tab-pane fade" id="nav-message" role="tabpanel" aria-labelledby="nav-message-tab">
 
                         <?php if (isset($_SESSION['userEmail'])) { ?>
