@@ -16,8 +16,8 @@ $messageResult = getIssueMessages($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 
     <title>Messages</title>
 </head>
@@ -29,9 +29,11 @@ $messageResult = getIssueMessages($conn);
 
             <table class="table">
                 <thead>
-                    <td>From</td>
-                    <td>Issue Type</td>
-                    <td>Date</td>
+                    <tr>
+                        <th>From</th>
+                        <th>Issue Type</th>
+                        <th>Date</th>
+                    </tr>
                 </thead>
                 <?php while ($thisRow = $messageResult->fetch_assoc()) {
                     $userResult = getUserDetail($conn, $thisRow['clientEmail']);
@@ -43,8 +45,9 @@ $messageResult = getIssueMessages($conn);
                         <td class="sender"><?= $userDetail['userFName'] ?> <?= $userDetail['userLName'] ?></td>
                         <td class="content"><?= $thisRow['issueType'] ?></td>
                         <td class="date"><?= $thisRow['issueDateSubmitted'] ?></td>
-                        <td> <input type="button" name="view" value="view" class="viewDetail btn btn-primary btn-sm" id="<?= $thisRow['issueId'] ?>" /></td>
-                        <td><i id="<?= $thisRow['issueId'] ?>"  class="fas fa-trash deleteIssue" style="cursor: pointer; color: red;"></i></td>
+                        <td> <input type="button" name="view" value="view" class="view btn btn-primary btn-sm" id="<?= $thisRow['issueId'] ?>" /></td>
+                        <!-- <td><i id="<?= $thisRow['issueId'] ?>" class="fas fa-trash delete" style="cursor: pointer; color: red;"></i></td> -->
+                        <td><button type="button" id="<?= $thisRow['issueId'] ?>" class="btn btn-danger btn-sm delete"><i class="fas fa-trash"></i></button></td>
 
                         <!-- <td><button type="submit" name="deleteIssue" value="<?= $thisRow['issueId'] ?>" class="btn btn-danger btn-sm">Delete</button></td> -->
 
@@ -59,24 +62,24 @@ $messageResult = getIssueMessages($conn);
         </div>
     </form>
 
-   
+
 
     <script>
         $(document).ready(function() {
-            $('.viewDetail').click(function() {
+            $('.view').click(function() {
                 var issueId = $(this).attr("id");
-                fetchMessageDetails(issueId);
-                $('#dataModal').modal("show");
+                getMessageDetails(issueId);
+                $('#detailModal').modal("show");
             });
 
-            $('.deleteIssue').click(function() {
+            $('.delete').click(function() {
 
                 var issueId = $(this).attr("id");
                 $.ajax({
-                    url: "admin.php",
+                    url: "client.php",
                     method: "POST",
                     data: {
-                        hdnIssue: true,
+                        // hdnIssue: true,
                         deleteIssue: true,
                         issueId: issueId
                     }
@@ -86,38 +89,37 @@ $messageResult = getIssueMessages($conn);
             })
 
             $('#frmClientIsue').on('submit', function(event) {
-                alert("issueId, userEmail, messageText")
+                console.log("issueId, userEmail, messageText")
 
-                // event.preventDefault();
+                event.preventDefault();
 
                 var messageText = $('#messageText').val()
                 var issueId = $('.issueId').val()
-                var userEmail =$('#userEmail').val()
+                var userEmail = $('#userEmail').val()
                 $.ajax({
                     url: "client.php",
                     type: "POST",
                     data: {
-                        hdnIssue: true,
+                        // hdnIssue: true,
                         adminMessage: true,
                         messageText: messageText,
                         issueId: issueId,
                         userEmail: userEmail
                     }
                 }).done(function(msg) {
-
-                    fetchMessageDetails(issueId)
+                    getMessageDetails(issueId)
                 });
             });
 
-            function fetchMessageDetails(issueId) {
+            function getMessageDetails(issueId) {
                 $.ajax({
-                    url: "../client/messages/messageAJAX.php",
+                    url: "messages/messageAJAX.php",
                     method: "post",
                     data: {
                         issueId: issueId
                     },
                     success: function(data) {
-                        $('#messageDetail').html(data);
+                        $('#issueMessageDetail').html(data);
                     }
                 });
             }
@@ -125,7 +127,7 @@ $messageResult = getIssueMessages($conn);
         });
     </script>
     <!-- Modal -->
-    <div class="modal fade" id="dataModal" tabindex="-1">
+    <div class="modal fade" id="detailModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -136,7 +138,7 @@ $messageResult = getIssueMessages($conn);
                 </div>
 
                 <form action="<?php echo htmlentities($_SERVER['SCRIPT_FILENAME']); ?>" method="POST" name="frmClientIssue" id="frmClientIsue">
-                    <div class="modal-body" id="messageDetail">
+                    <div class="modal-body" id="issueMessageDetail">
 
 
                     </div>

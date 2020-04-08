@@ -200,7 +200,10 @@ require_once('../util/config.html')
 
                 <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="city-attractions-tab">
                     <br>
-                    <p>Categories</p>
+                    <?php
+                    require_once('categories/categories.php');
+
+                    ?>
                 </div>
             </div>
         </div>

@@ -18,6 +18,17 @@ if (isset($_POST['adminMessage'])) {
     $result = $conn->query($sql);
 }
 
+if (isset($_POST['deleteIssue'])) {
+    $issueId = $_POST['issueId'];
+    $sql = "DELETE FROM issue WHERE issueId='$issueId'";
+    if ($conn->query($sql)) {
+        $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
+        $tabTag = "{$tabTag}#messages";
+        header("Location: {$currentUrl}{$tabTag}");
+        // echo '<script>$("a[href="#nav-messages"]").tab("show")</script>';
+    }
+}
+
 if (array_key_exists('hdnMessage', $_POST)) {
     if (isset($_POST['productMessage'])) {
         $chatId = $_POST['chatId'];
@@ -265,11 +276,11 @@ $purchasedResult = getPurchasedtems($conn);
 
                     <hr />
 
-                    <!-- <h5>Message With Admins</h5>
+                    <h5>Message With Admins</h5>
                     <?php
-                    // require_once('../client/messages/adminMessages.php');
+                    require_once('../client/messages/adminMessages.php');
 
-                    ?> -->
+                    ?>
                 </div>
                 <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
                     <br>

@@ -98,22 +98,6 @@ if (array_key_exists('hdnMessage', $_POST)) {
                 <h5>Price: $<?= $product['productPrice']; ?></h5>
 
                 <form action="">
-<<<<<<< HEAD
-                    <!-- <label for="">Choice 1</label>
-                    <select name="" id="">
-                        <option value="">1</option>
-
-                    </select>
-                    <br>
-                    <label for="">Choice 2</label>
-                    <select name="" id="">
-                        <option value="">1</option>
-
-                    </select> -->
-
-                    <br>
-=======
->>>>>>> f3f717b5da1c24b3591c45cae02f5b2a1b9c2c55
 
                     <button class="btn btn-primary">Add to Cart</button>
                 </form>

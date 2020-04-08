@@ -91,31 +91,33 @@ $messageResult = getIssueMessages($conn);
 
 
 
-            $('#frmIssueMessage').on('submit', function(event) {
+            $('#frmIssueMessages').on('submit', function(event) {
 
                 event.preventDefault();
                 var messageText = $('#messageText').val()
                 var issueId = $('#issueId').val()
-                var userEmil = 'admin@admin.com';
+                var userEmail = 'admin@admin.com';
+                console.log(messageText, issueId, userEmail)
                 $.ajax({
-                    url: "../admin/admin.php",
-                    type: "POST",
+                    url: "admin.php",
+                    method: "POST",
                     data: {
                         hdnIssue: true,
                         adminMessage: true,
                         messageText: messageText,
                         issueId: issueId,
                         userEmail: userEmail
+                    },
+                    success: function(msg) {
+                        fetchMessageDetails(issueId)
                     }
-                }).done(function(msg) {
-                    fetchMessageDetails(issueId)
-                });
+                })
             });
 
             function fetchMessageDetails(issueId) {
                 $.ajax({
-                    url: "../admin/messages/messageAJAX.php",
-                    method: "post",
+                    url: "messages/messageAJAX.php",
+                    method: "POST",
                     data: {
                         issueId: issueId
                     },
@@ -139,7 +141,7 @@ $messageResult = getIssueMessages($conn);
                     </button>
                 </div>
 
-                <form action="<?php echo htmlentities($_SERVER['SCRIPT_FILENAME']); ?>" method="POST" name="frmIssueMessage" id="frmIssueMessage">
+                <form name="frmIssueMessages" id="frmIssueMessages">
                     <div class="modal-body" id="messageDetail">
 
 

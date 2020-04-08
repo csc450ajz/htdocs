@@ -24,7 +24,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
-                            <h3 class="card-title">User List</h3>
+                            <h3 class="card-title">Users List</h3>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" align="right">
                             <button type="button" name="add" id="btnAdd" data-toggle="modal" data-target="#userModal" class="btn btn-success btn-xs"><i class="fas fa-plus"></i></button>
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <!-- <input type="hidden" name="userEm" id="userId" /> -->
+                        <!-- <input type="hidden" name="userEmail" id="userEmail" /> -->
                         <input type="hidden" name="btnAction" id="btnAction" />
                         <input type="submit" name="action" id="action" class="btn btn-info" value="Add" />
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -255,9 +255,9 @@
                         userEmail: userEmail
                     },
                     success: function(data) {
-                        location.reload();
+                        // location.reload();
                         // location.reload()
-                        // getUsers();
+                        getUsers();
                     },
                     error: function(jqXHR, exception) {
                         console.log(jqXHR);
