@@ -128,6 +128,25 @@ function getPurchasedtems($conn)
 } //End of Function
 $purchasedResult = getPurchasedtems($conn);
 
+function totalProductSold($conn, $userEmail)
+{
+    $sql = "SELECT * FROM orders WHERE sellerEmail='$userEmail'";
+    $result = $conn->query($sql);
+    $total = mysqli_num_rows($result);
+    $conn->next_result();
+    echo $conn->error;
+    return $total;
+}
+
+function totalOrdersMade($conn, $userEmail)
+{
+    $sql = "SELECT * FROM orders WHERE buyerEmail='$userEmail'";
+    $result = $conn->query($sql);
+    $total = mysqli_num_rows($result);
+    $conn->next_result();
+    echo $conn->error;
+    return $total;
+}
 ?>
 
 
@@ -241,17 +260,18 @@ $purchasedResult = getPurchasedtems($conn);
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header"><strong>Total Users</strong></div>
+                                        <div class="card-header"><strong>Total Products Sold</strong></div>
                                         <div class="card-body" align="center">
-                                            <h1>100</h1>
+                                            <h1><?= totalProductSold($conn, $userEmail) ?></h1>
+                                            <h5>Revenue: $</h5>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header"><strong>Total Categories</strong></div>
+                                        <div class="card-header"><strong>Total Orders Made</strong></div>
                                         <div class="card-body" align="center">
-                                            <h1>10</h1>
+                                            <h1><?= totalOrdersMade($conn, $userEmail) ?></h1>
                                         </div>
                                     </div>
                                 </div>

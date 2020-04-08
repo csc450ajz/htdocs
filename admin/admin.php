@@ -33,6 +33,25 @@ if (array_key_exists('hdnIssue', $_POST)) {
     }
 }
 
+function countCategories($conn) {
+    $sql = "SELECT * FROM Category";
+    $result = $conn->query($sql);
+    $total = mysqli_num_rows($result);
+    $conn->next_result();
+    echo $conn->error;
+    return $total;
+}
+
+function countUsers($conn) {
+    $sql = "SELECT * FROM User";
+    $result = $conn->query($sql);
+    $total = mysqli_num_rows($result);
+    $conn->next_result();
+    echo $conn->error;
+    return $total;
+}
+
+
 
 ?>
 
@@ -124,12 +143,23 @@ require_once('../util/config.html')
                     <br>
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
+                        <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
+                                <?PHP
+                                $userEmail = $_SESSION['userEmail'];
+                                $sql = "SELECT * FROM User WHERE User.userEmail = '$userEmail' LIMIT 1;";
+                                $result = $conn->query($sql);
+                                $row = mysqli_fetch_assoc($result);
+                                ?>
                                 <div class="card-header">Quick Profile Info</div>
-                                <img class="card-img-top" src="../images/profile.jpg" alt="Card image cap">
+                                <img id="profile-pic" class="card-img-top" src="../<?PHP echo $row['userPhotoPath'] ?>" onerror="this.src='../images/placeholder.jpg';" alt="Profile picture">
                                 <div class="card-body text-dark">
-                                    <h5 class="card-title">My Name</h5>
-                                    <p class="card-text">User Details Below: email, username, etc.</p>
+                                    <h5 class="card-title"><?PHP echo $row['userFName'] . " " . $row['userLName']; ?></h5>
+                                    <dl>
+                                        <dt>Email:</dt>
+                                        <dd><?PHP echo $row['userEmail']; ?></dd>
+                                        <dt>Cash Balance:</dt>
+                                        <dd>$<?PHP echo $row['userBalance']; ?></dd>
+                                    </dl>
                                     <button>Edit Profile</button>
                                 </div>
                             </div>
@@ -139,24 +169,24 @@ require_once('../util/config.html')
                         <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="card">
+                                    <div class="card border-dark mb-3">
                                         <div class="card-header"><strong>Total Users</strong></div>
                                         <div class="card-body" align="center">
-                                            <h1>100</h1>
+                                            <h1><?= countUsers($conn) ?></h1>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 border-dark mb-3">
                                     <div class="card">
                                         <div class="card-header"><strong>Total Categories</strong></div>
                                         <div class="card-body" align="center">
-                                            <h1>10</h1>
+                                        <h1><?= countCategories($conn) ?></h1>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <br>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-header"><strong>Unread Messages</strong></div>
@@ -173,7 +203,7 @@ require_once('../util/config.html')
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
 
