@@ -7,74 +7,111 @@ if (isset($_POST['categoryActions'])) {
 
     switch ($actions) {
         case 'getCategories':
-
             $output = '';
-            $counter = 1;
-            $usersResult = getUsers($conn);
-            while ($thisRow = mysqli_fetch_assoc($usersResult)) {
-
+            $categoriesResult = getCategories($conn);
+            while ($thisRow = mysqli_fetch_assoc($categoriesResult)) {
+                $status = '';
+                if ($thisRow['categoryStatus'] == 'active') {
+                    $status = '<span class="badge badge-success">Active</span>';
+                } else {
+                    $status = '<span class="badge badge-danger">Inactive</span>';
+                }
                 $output .= '  
                 <tr>  
-                <td>' . $counter . '</td>
-                <td>' . $thisRow["userFName"] . ' ' . $thisRow["userLName"] . '</td>
-                <td id="email">' . $thisRow["userEmail"] . '</td>
-                <td id="type">' . $thisRow["userType"] . '</td>
-                <td id="password">' . $thisRow["userPassword"] . '</td>
-                <td><input type="button" name="view" value="view" class="view btn btn-primary btn-sm" id="' . $thisRow["userId"] . '" /></td>
-                <td><button type="button" name="delete" id="' . $thisRow["userId"] . '" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></button></td>
-                <td id="FName" style="display:none;">' . $thisRow["userFName"] . '</td>
-                <td id="LName" style="display:none;">' . $thisRow["userLName"] . '</td>
+                <td id="categoryId">' . $thisRow['categoryId'] . '</td>
+                <td id="categoryName">' . $thisRow["categoryName"] . '</td>
+                <td id="categoryStatus">' . $status . '</td>
+                <td><button type="button" name="edit" id="' . $thisRow["categoryId"] . '" class="btn btn-warning btn-xs editCat"><i class="fas fa-edit"></i></button></td>
+                <td><button type="button" name="delete" id="' . $thisRow["categoryId"] . '" class="btn btn-danger btn-xs deleteCat"><i class="fas fa-trash"></i></button></td>
                 </tr>
         
                 ';
-                $counter += 1;
             }
-            // <td><button type="button" name="edit" id="' . $thisRow["userId"] . '" class="btn btn-warning btn-xs edit"><i class="fas fa-user-edit"></i></button></td>
 
             echo $output;
             break;
 
-        // case 'getUser':
+        case 'getCategory':
 
-        //     $output = '';
-        //     $counter = 1;
-        //     $usersResult = getUsers($conn);
-        //     while ($thisRow = mysqli_fetch_assoc($usersResult)) {
+            $output = [];
+            $categoryId = $_POST['categoryId'];
+            $categoryResult = getCategoryDetail($conn, $categoryId);
+            while ($thisRow = mysqli_fetch_assoc($categoryResult)) {
 
-        //         $output .= '  
-        //             <tr>  
-        //             <td>' . $counter . '</td>
-        //             <td>' . $thisRow["userFName"] . ' ' . $thisRow["userLName"] . '</td>
-        //             <td>' . $thisRow["userEmail"] . '</td>
-        //             <td>' . $thisRow["userType"] . '</td>
-        //             <td><button type="button" name="update" id="' . $thisRow["userId"] . '" class="btn btn-warning btn-xs update">Update</button></td>
-        //             <td><button type="button" name="delete" id="' . $thisRow["userId"] . '" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></button></td>
-        //             </tr>
-            
-        //             ';
-        //         $counter += 1;
-        //     }
+                $output['categoryId'] = $thisRow['categoryId'];
+                $output['categoryName'] = $thisRow['categoryName'];
+                $output['categoryStatus'] = $thisRow['categoryStatus'];
+            }
+            // echo $output;
+            echo json_encode($output);
+            break;
 
-        //     echo $output;
-        //     break;
         case 'new':
+            $result = createCategory($conn, $_POST['categoryName'], $_POST['categoryStatus']);
+            if ($result) {
+                echo ("Created New Category");
+            }
+            break;
+
         case 'update':
+            $result = updateCategory($conn, $_POST['categoryId'], $_POST['categoryName'], $_POST['categoryStatus']);
+            if ($result) {
+                echo ("Update Category");
+            }
+            break;
+
         case 'delete':
+            $result = deleteCategory($conn, $_POST['categoryId']);
+            if ($result) {
+                echo ("Updated Category status");
+            }
+            break;
+
+        default:
+            break;
     }
 }
 
-function getUsers($conn)
+function getCategories($conn)
 {
-    $sql = "SELECT * FROM User";
+    $sql = "SELECT * FROM Category";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
     return $result;
 }
 
-function getUseDetail($conn, $userEmail)
+function getCategoryDetail($conn, $categoryId)
 {
-    $sql = "SELECT * FROM User WHERE userEmail='$userEmail'";
+    $sql = "SELECT * FROM Category WHERE categoryId='$categoryId'";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
+
+
+function createCategory($conn, $categoryName, $categoryStatus)
+{
+    $sql = "INSERT INTO category (categoryId, categoryName, categoryStatus) VALUES (NULL, '$categoryName','$categoryStatus')";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
+
+function updateCategory($conn, $categoryId, $categoryName, $categoryStatus)
+{
+    $sql = "UPDATE category SET categoryName='$categoryName', categoryStatus='$categoryStatus' WHERE categoryId= '$categoryId'";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
+
+function deleteCategory($conn, $categoryId)
+{
+    $sql = "UPDATE category SET categoryStatus='inactive' WHERE categoryId= '$categoryId'";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
