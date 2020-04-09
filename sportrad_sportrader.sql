@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 05, 2020 at 03:31 AM
+-- Generation Time: Apr 09, 2020 at 04:23 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.4.2
 
@@ -40,7 +40,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getCartItems` (IN `email` VARCHAR(1
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getFeaturedProducts` ()  BEGIN
-	SELECT * FROM Product LIMIT 4;
+	SELECT * FROM Product WHERE Product.productStatus = "active" LIMIT 4;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProductInfo` (IN `requestId` INT(20))  BEGIN
@@ -71,10 +71,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insertCartItem` (IN `cartProductId`
 	INSERT INTO CartItems (productId, userEmail) VALUES (cartProductId, cartUserEmail);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `performTransaction` (IN `buyerEmail` VARCHAR(255), IN `sellerEmail` VARCHAR(100), IN `productId` INT(20), IN `orderTotal` FLOAT, IN `orderDiscount` FLOAT, IN `orderShipAddress` VARCHAR(255))  BEGIN 
-	DELETE FROM CartItems WHERE CartItems.productId = productId; 
-    INSERT INTO Orders (Orders.buyerEmail, Orders.sellerEmail, Orders.productId, Orders.orderTotal, Orders.orderDiscount, Orders.orderShipAddress) VALUES (buyerEmail, sellerEmail, productId, orderTotal, orderDiscount, orderShipAddress); 
-    UPDATE Product SET Product.productStatus = "sold" WHERE Product.productId = productId; 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `performTransaction` (IN `buyerEmail` VARCHAR(255), IN `sellerEmail` VARCHAR(100), IN `productId` INT(20), IN `orderTotal` FLOAT, IN `orderDiscount` FLOAT, IN `orderShipAddress` VARCHAR(255), IN `orderShipCity` VARCHAR(255), IN `orderShipState` VARCHAR(5), IN `orderShipZip` INT(20))  BEGIN 
+	DELETE FROM CartItems 
+    WHERE CartItems.productId = productId; 
+    
+    INSERT INTO Orders (Orders.buyerEmail, Orders.sellerEmail, Orders.productId, Orders.orderTotal, Orders.orderDiscount, Orders.orderShipAddress, Orders.orderShipCity, Orders.orderShipState, Orders.orderShipZip) 
+    VALUES (buyerEmail, sellerEmail, productId, orderTotal, orderDiscount, orderShipAddress, orderShipCity, orderShipState, orderShipZip); 
+    
+    UPDATE Product 
+    SET Product.productStatus = "sold" 
+    WHERE Product.productId = productId; 
+    
+    UPDATE User
+    SET User.userBalance = User.userBalance - orderTotal 
+    WHERE User.userEmail = buyerEmail;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProduct` (IN `productName` VARCHAR(255), IN `productDesc` VARCHAR(255), IN `productPrice` FLOAT, IN `productCondition` VARCHAR(255), IN `productSize` VARCHAR(255), IN `productColor` VARCHAR(255), IN `productStatus` VARCHAR(255), IN `productBrand` VARCHAR(100), IN `categoryId` INT(20), IN `genderId` INT(20), IN `productDiscount` FLOAT, IN `userEmail` VARCHAR(100), IN `productId` INT(20))  BEGIN
@@ -136,7 +146,7 @@ CREATE TABLE `AdminMessages` (
 --
 
 INSERT INTO `AdminMessages` (`messageId`, `clientEmail`, `issueId`, `messageText`, `messageTime`) VALUES
-(1, 'admin@admin.com', 23, 'asdf', '2020-04-04 18:43:48');
+(3, 'bob@gmail.com', 25, 'How is sales tax administered?', '2020-04-07 01:16:47');
 
 -- --------------------------------------------------------
 
@@ -154,14 +164,7 @@ CREATE TABLE `CartItems` (
 --
 
 INSERT INTO `CartItems` (`userEmail`, `productId`) VALUES
-('admin@admin.com', 3),
-('bob@gmail.com', 3),
-('RyanStick@sporTrader.com', 3),
-('test@test.com', 3),
-('RyanStick@sporTrader.com', 4),
-('sally@gmail.com', 4),
-('RyanStick@sporTrader.com', 5),
-('RyanStick@sporTrader.com', 8);
+('RyanStick@sporTrader.com', 5);
 
 -- --------------------------------------------------------
 
@@ -204,7 +207,8 @@ CREATE TABLE `ChatMessages` (
 INSERT INTO `ChatMessages` (`messageId`, `userEmail`, `chatId`, `messageText`, `messageSentTime`) VALUES
 (1, 'sally@gmail.com', 2, 'Hi! Wondering about your product.', '2020-04-04 19:12:18'),
 (2, 'bob@gmail.com', 2, 'Thanks for reaching out.', '2020-04-04 19:13:00'),
-(3, 'bob@gmail.com', 3, 'Hi! Would you do $50 for this?', '2020-04-04 19:24:26');
+(3, 'bob@gmail.com', 3, 'Hi! Would you do $50 for this?', '2020-04-04 19:24:26'),
+(4, 'bob@gmail.com', 2, 'How can I help you?', '2020-04-07 01:15:26');
 
 -- --------------------------------------------------------
 
@@ -245,29 +249,7 @@ CREATE TABLE `Issue` (
 --
 
 INSERT INTO `Issue` (`issueId`, `clientEmail`, `issueType`, `issueText`, `issueDateSubmitted`) VALUES
-(1, 'admin@admin.com', '', '', '2020-04-03 20:37:13'),
-(2, 'admin@admin.com', '', '', '2020-04-03 20:43:41'),
-(3, 'admin@admin.com', '', '', '2020-04-03 20:43:43'),
-(4, 'admin@admin.com', '', '', '2020-04-03 20:43:44'),
-(5, 'admin@admin.com', '', '', '2020-04-03 20:43:45'),
-(6, 'admin@admin.com', '', '', '2020-04-03 20:43:45'),
-(7, 'admin@admin.com', '', '', '2020-04-03 20:43:49'),
-(8, 'admin@admin.com', '', '', '2020-04-03 20:44:16'),
-(9, 'admin@admin.com', '', '', '2020-04-03 20:44:18'),
-(10, 'admin@admin.com', '', '', '2020-04-03 20:44:19'),
-(11, 'admin@admin.com', '', '', '2020-04-03 20:44:20'),
-(12, 'admin@admin.com', '', '', '2020-04-03 20:44:21'),
-(13, 'admin@admin.com', '', '', '2020-04-03 20:44:22'),
-(14, 'admin@admin.com', '', '', '2020-04-03 20:44:22'),
-(15, 'admin@admin.com', '', '', '2020-04-03 20:44:23'),
-(16, 'admin@admin.com', '', '', '2020-04-03 20:44:24'),
-(17, 'admin@admin.com', '', '', '2020-04-03 20:44:25'),
-(18, 'admin@admin.com', '', '', '2020-04-03 20:44:25'),
-(19, 'admin@admin.com', '', '', '2020-04-03 20:44:26'),
-(20, 'admin@admin.com', 'Things', 'Check this out.', '2020-04-04 13:37:47'),
-(21, 'admin@admin.com', 'Things', 'adsfasdfasdfasdf', '2020-04-04 13:37:57'),
-(22, 'admin@admin.com', 'adafsdf', 'asdfasdf', '2020-04-04 13:40:25'),
-(23, 'admin@admin.com', 'adfa', 'asdf', '2020-04-04 13:43:48');
+(25, 'bob@gmail.com', 'Sales Tax', 'How is sales tax administered?', '2020-04-06 20:16:47');
 
 -- --------------------------------------------------------
 
@@ -283,15 +265,11 @@ CREATE TABLE `Orders` (
   `orderTotal` float NOT NULL,
   `orderDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `orderDiscount` float NOT NULL,
-  `orderShipAddress` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `orderShipAddress` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `orderShipCity` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `orderShipState` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `orderShipZip` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `Orders`
---
-
-INSERT INTO `Orders` (`orderId`, `buyerEmail`, `sellerEmail`, `productId`, `orderTotal`, `orderDate`, `orderDiscount`, `orderShipAddress`) VALUES
-(1, 'test@test.com', '', 4, 50, '2020-03-13 04:00:00', 0, '123 SomeStreet, New York, NY 11223');
 
 -- --------------------------------------------------------
 
@@ -325,10 +303,6 @@ INSERT INTO `Product` (`productId`, `productName`, `productDesc`, `productPrice`
 (4, 'Nike Free Run 5.0', 'This pair of running shoes is in great shape! New without tags.', 55, 'New', '11.5', 'Blue', 'active', 3, 0.1, 'joe@gmail.com', 15, NULL, NULL),
 (5, 'Men\'s Adidas Black Sweatshirt', 'Lightly worn Adidas Originals sweatshirt.', 15, 'Used - Good', 'Men\'s Large', 'Black', 'active', 4, 0, 'sally@gmail.com', 5, 1, NULL),
 (8, 'Ogio Golf Bag', 'Great condition golf bag, ready for the upcoming season!', 120.59, 'Used - Like New', '45\" x 15\"', 'Black', 'active', 4, 0, 'TopHat@TopHat.com', 0, NULL, NULL),
-(31, 'New Shoe', 'Nice shoe!', 12.11, 'New', 'M', 'Grey', 'active', 3, 0, 'bob@gmail.com', 0, 1, 'Nike'),
-(32, 'adsf', 'asdf', 12, 'New', 'asdf', 'asdf', 'active', 4, 0, 'bob@gmail.com', 0, 1, 'ads'),
-(33, 'asdf', 'asdf', 12, 'New', 'asd', 'ads', 'active', 3, 0, 'bob@gmail.com', 0, 1, 'asdf'),
-(34, 'adsf', 'asdf', 12.66, 'Used - Fair', 'm', 'asdf', 'active', 4, 0, 'bob@gmail.com', 0, 2, 'asdf'),
 (35, 'Spalding Basketball', 'A brand-new, in package orange basketball! ', 25, 'New', '28.5', 'Orange', 'active', 4, 0, 'acmaser12@gmail.com', 0, 2, 'Spalding');
 
 -- --------------------------------------------------------
@@ -351,7 +325,7 @@ CREATE TABLE `ProductChat` (
 --
 
 INSERT INTO `ProductChat` (`chatId`, `buyerEmail`, `sellerEmail`, `productId`, `chatStartDate`, `recentSender`) VALUES
-(2, 'bob@gmail.com', 'sally@gmail.com', 8, '2020-04-04 19:11:48', 'sally@gmail.com'),
+(2, 'bob@gmail.com', 'sally@gmail.com', 8, '2020-04-07 01:15:26', 'bob@gmail.com'),
 (3, 'bob@gmail.com', 'joe@gmail.com', 4, '2020-04-04 19:24:26', 'bob@gmail.com');
 
 -- --------------------------------------------------------
@@ -385,7 +359,7 @@ CREATE TABLE `User` (
   `userLName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `userType` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `userPassword` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `addressID` int(20) NOT NULL,
+  `addressID` int(20) DEFAULT NULL,
   `userBalance` float NOT NULL,
   `userPhotoPath` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -395,7 +369,7 @@ CREATE TABLE `User` (
 --
 
 INSERT INTO `User` (`userEmail`, `userFName`, `userLName`, `userType`, `userPassword`, `addressID`, `userBalance`, `userPhotoPath`) VALUES
-('acmaser12@gmail.com', 'Adam', 'Maser', 'client', 'password', 12, 50, 'userImages/5e892905612cc0.01122673.png'),
+('acmaser12@gmail.com', 'Adam', 'Maser', 'client', 'password', 12, 19.41, 'userImages/5e892905612cc0.01122673.png'),
 ('admin@admin.com', 'Admin', 'Admin', 'admin', 'admin', 1, 0, ''),
 ('bob@gmail.com', 'Bob', 'Johnson', 'client', 'password', 4, 200, 'path_to_photo'),
 ('joe@gmail.com', 'Joe', 'Smith', 'client', 'password', 2, 200, 'path_to_photo'),
@@ -512,7 +486,7 @@ ALTER TABLE `Address`
 -- AUTO_INCREMENT for table `AdminMessages`
 --
 ALTER TABLE `AdminMessages`
-  MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `Category`
@@ -524,7 +498,7 @@ ALTER TABLE `Category`
 -- AUTO_INCREMENT for table `ChatMessages`
 --
 ALTER TABLE `ChatMessages`
-  MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `messageId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Gender`
@@ -536,13 +510,13 @@ ALTER TABLE `Gender`
 -- AUTO_INCREMENT for table `Issue`
 --
 ALTER TABLE `Issue`
-  MODIFY `issueId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `issueId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `Orders`
 --
 ALTER TABLE `Orders`
-  MODIFY `orderId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `orderId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `Product`
