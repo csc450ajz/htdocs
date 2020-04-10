@@ -45,16 +45,23 @@ $userFName = $row['userFName'];
             <ul class='navbar-nav mr-auto'>
                 <li class='nav-item dropdown'>
                     <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    Browse Categories
+                    Browse Products
                     </a>
                     <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
-                        <a class='dropdown-item' href='#'>Sporting Gear</a>
-                        <a class='dropdown-item' href='#'>Memorabilia</a>
+                        <span class='dropdown-item disabled'>Choose a Category:</span>
+                        <?PHP 
+                            $sql = "SELECT * FROM Category LIMIT 5";
+                            $conn->next_result();
+                            $catResult = $conn->query($sql);
+                            while ($category = mysqli_fetch_assoc($catResult)):
+                                $id = $category['categoryId'];
+                                $name = $category['categoryName'];
+                                echo "<div class='dropdown-divider'></div>";
+                                echo "<a class='dropdown-item' href='#'>$name</a>";
+                            endwhile;
+                        ?>
                         <div class='dropdown-divider'></div>
-                        <a class='dropdown-item' href='#'>Browse by Sport</a>
-                        <div class='dropdown-divider'></div>
-                        <a class='dropdown-item' href='#'>Browse by Type</a>
-                        <div class='dropdown-divider'></div>
+                        <a href="#" class="dropdown-item">All Products</a>
                     </div>
                 </li>
             </ul>
@@ -80,7 +87,7 @@ $userFName = $row['userFName'];
                 <li>
                     <div class="dropdown show">
                     <a class="btn btn-md btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img id="profile-nav-img" src="/<?= $row['userPhotoPath'];?>" width="30px" height="30px" style="border: 1px solid white;">
+                        <img id="profile-nav-img" src="/<?= $row['userPhotoPath']; ?>" width="30px" height="30px" style="border: 1px solid white;" onerror="this.src='/images/profile.png';">
                         <?=$userFName?>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">

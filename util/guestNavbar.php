@@ -22,17 +22,20 @@
             Browse Categories
           </a>
                     <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
-                        <a class='dropdown-item' href='#'>Sporting Gear</a>
-                        <a class='dropdown-item' href='#'>Memorabilia</a>
+                        <span class='dropdown-item disabled'>Choose a Category:</span>
+                        <?PHP 
+                            $sql = "SELECT * FROM Category LIMIT 5";
+                            $conn->next_result();
+                            $catResult = $conn->query($sql);
+                            while ($category = mysqli_fetch_assoc($catResult)):
+                                $id = $category['categoryId'];
+                                $name = $category['categoryName'];
+                                echo "<div class='dropdown-divider'></div>";
+                                echo "<a class='dropdown-item' href='#'>$name</a>";
+                            endwhile;
+                        ?>
                         <div class='dropdown-divider'></div>
-                        <a class='dropdown-item' href='#'>Browse by Sport</a>
-                        <div class='dropdown-divider'></div>
-                        <a class='dropdown-item' href='#'>Browse by Type</a>
-                        <div class='dropdown-divider'></div>
-                        <form class='dropdown-item form my-2 my-lg-0'>
-                            <input class='form-control mr-sm-2' type='search' placeholder='Search' aria-label='Search' width='80%'>
-                            <button class='btn btn-dark my-2 my-sm-0' type='submit'>Search Products</button>
-                        </form>
+                        <a href="#" class="dropdown-item">All Products</a>
                     </div>
                 </li>
             </ul>
