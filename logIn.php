@@ -77,7 +77,7 @@ function console_log($message) {
 <!DOCTYPE html>
 <html>
 <?php
-require_once('util/config.html')
+require_once('util/config.php');
 ?>
 
 <head>

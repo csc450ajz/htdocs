@@ -75,7 +75,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
 
 
 //Get Navigation Bar
-require_once('../util/config.html');
+require_once('../util/config.php');
 
 //Get Sold Items
 function getSoldItems($conn)

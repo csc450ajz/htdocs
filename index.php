@@ -12,7 +12,7 @@ if (isset($_POST['productId'])) {
 
 
 // get navbar
-require_once('util/config.html');
+require_once('util/config.php');
 
 
 // call getFeaturedProducts() stored procedure

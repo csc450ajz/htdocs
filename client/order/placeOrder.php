@@ -9,7 +9,7 @@ if(!checkLogin()) {
 // get db connection
 include('../../util/db-config.php');
 // get navbar
-require_once('../../util/config.html');
+require_once('../../util/config.php');
 // get items in cart
 require_once('../cart/cart-utility.php');
 $productId = $_POST['productId'];

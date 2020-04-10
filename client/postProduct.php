@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 <?php
-include('../util/config.html');
+include('../util/config.php');
 ?>
 
 <head>

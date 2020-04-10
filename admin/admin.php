@@ -1,7 +1,3 @@
-<!-- admin.php - admin page
-      
-    -->
-
 <?php
 //index.php
 include('../util/db-config.php');

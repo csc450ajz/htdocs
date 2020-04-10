@@ -13,3 +13,4 @@ if (isset($_POST['deleteId'])) {
     $conn->query($sql);
     echo $sql." | ".$conn->error;
 }
+?>

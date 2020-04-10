@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 <?php
-require_once('util/config.html')
+require_once('util/config.php');
 ?>
 
 <head>

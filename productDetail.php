@@ -8,7 +8,7 @@
 <?php
 session_start();
 
-require_once('util/config.html');
+require_once('util/config.php');
 include('util/db-config.php');
 //include('databaseConnection.php');
 $error = "";

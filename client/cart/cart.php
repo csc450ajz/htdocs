@@ -7,10 +7,9 @@ if(!checkLogin()) {
     header("Location: ../../logIn.php");
 }
 // get db connection
-//include('databaseConnection.php');
 include('../../util/db-config.php');
 // get navbar
-require_once('../../util/config.html');
+require_once('../../util/config.php');
 // get items in cart
 require_once('cart-utility.php');
 $cartResult = getCartItems($conn);
