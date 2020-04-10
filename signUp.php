@@ -49,7 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <title>SporTrader Login</title>
 </head>
-
+<?php
+require_once(('util'.$navbar));
+?>
 <body>
 <div class="container">
         <div class="row justify-content-sm-center">
