@@ -211,7 +211,7 @@ require_once('../util'.$navbar);
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h3 class="display-4">Welcome</h3>
+            <h3 class="display-4">Welcome, <?=$userFName?>!</h3>
             <ul class="nav nav-mytabs" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>

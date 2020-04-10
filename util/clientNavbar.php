@@ -1,20 +1,18 @@
+<?php
+$userEmail = $_SESSION['userEmail'];
+$userResult = $conn->query("SELECT * FROM User WHERE userEmail='$userEmail';");
+$row = mysqli_fetch_assoc($userResult);
+$userFName = $row['userFName'];
+?>
+
 <head>
-    <!--
-        This file contains the head elements and toolbar used on all client-facing pages
-        Simply call require_once('util/config.php') to add it to a page
-    
-        Includes:
-            - Boostrap CDN
-            - Overall site styles (site.css)
-            - jQuery (for Bootsrap)
-    -->
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
     
     <link rel='stylesheet' type='text/css' href='.../style/site.css'>
-    </head>
+</head>
     <body>
     <nav class='navbar navbar-expand-lg navbar-dark' style='background-color: black;'>
         <a class='navbar-brand' href='/index.php'>Sportrader</a>
@@ -28,8 +26,8 @@
             <ul class='navbar-nav mr-auto'>
                 <li class='nav-item dropdown'>
                     <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-            Browse Categories
-          </a>
+                    Browse Categories
+                    </a>
                     <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
                         <a class='dropdown-item' href='#'>Sporting Gear</a>
                         <a class='dropdown-item' href='#'>Memorabilia</a>
@@ -38,28 +36,19 @@
                         <div class='dropdown-divider'></div>
                         <a class='dropdown-item' href='#'>Browse by Type</a>
                         <div class='dropdown-divider'></div>
-                        <form class='dropdown-item form my-2 my-lg-0'>
-                            <input class='form-control mr-sm-2' type='search' placeholder='Search' aria-label='Search' width='80%'>
-                            <button class='btn btn-dark my-2 my-sm-0' type='submit'>Search Products</button>
-                        </form>
                     </div>
                 </li>
             </ul>
     
             <ul class='navbar-nav ml-auto'>
                 <li>
-    
+                    <a class="nav-item" href="/client/cart/cart.php" data-toggle="tooltip" title="View Cart"><img style="width: 25px; margin: 0 12px 0 12px;" src='/images/cart.png'></a>
                 </li>
-                <li class='nav-item dropdown'>
-                    <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-            My Account
-          </a>
-                    <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
-                        <a class='dropdown-item' href='/logIn.php'>Sign In</a>
-                        <a class='dropdown-item' href='/client/cart/cart.php'>View Cart</a>
-                        <a class='dropdown-item' href='/util/logout.php'>Logout</a>
-                        <a class='dropdown-item' href='/signUp.php'>Sign Up</a>
-                    </div>
+                <li>
+                    <a class="nav-item" href="/client/client.php" data-toggle="tooltip" title="Your Profile"><img style="width: 25px; margin: 0 12px 0 12px;" src='/images/profile.png'></a>
+                </li>
+                <li>
+                    <a class="nav-item" href="/util/logout.php" data-toggle="tooltip" title="Logout"><img style="width: 25px; margin: 0 12px 0 12px;" src='/images/logout.png'></a>
                 </li>
             </ul>
         </div>
