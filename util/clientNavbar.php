@@ -1,4 +1,5 @@
 <?php
+$conn->next_result();
 $userEmail = $_SESSION['userEmail'];
 $userResult = $conn->query("SELECT * FROM User WHERE userEmail='$userEmail';");
 $row = mysqli_fetch_assoc($userResult);
@@ -12,6 +13,24 @@ $userFName = $row['userFName'];
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
     
     <link rel='stylesheet' type='text/css' href='.../style/site.css'>
+    <style>
+        #profile-nav-img {
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: black;
+        }
+        #cartCount {
+            font-size: 8pt;
+            border-radius: 50%;
+            color: white;
+            background-color: red;
+            border: 1px solid white;
+            position: relative;
+            right: -40px;
+            top: -10px;
+            padding: 2px 5px;
+        }
+    </style>
 </head>
     <body>
     <nav class='navbar navbar-expand-lg navbar-dark' style='background-color: black;'>
@@ -42,23 +61,41 @@ $userFName = $row['userFName'];
     
             <ul class='navbar-nav ml-auto'>
                 <li>
-                    <a class="nav-item" href="/client/cart/cart.php" data-toggle="tooltip" title="View Cart"><img style="width: 25px; margin: 0 12px 0 12px;" src='/images/cart.png'></a>
+                <?php
+                    $cartCount = "";
+                    $conn->next_result();
+                    $itemResult = $conn->query("SELECT COUNT(productId) FROM CartItems WHERE userEmail='$userEmail';");
+                    if ($itemResult) {
+                        $cartRow = mysqli_fetch_assoc($itemResult);
+                        $itemCount = $cartRow['COUNT(productId)'];
+                        if ($itemCount > 0) {
+                            $cartCount = "<span id='cartCount'>$itemCount</span>";
+                        }
+                    }
+                    
+                    ?>
+                    <a class="nav-item nav-text" href="/client/cart/cart.php" data-toggle="tooltip" title="View Cart"><?=$cartCount?><img style="width: 30px; margin: 5px 20px 0 0;" src='/images/cart.png'></a>
                 </li>
+                
                 <li>
-                    <a class="nav-item" href="/client/client.php" data-toggle="tooltip" title="Your Profile"><img style="width: 25px; margin: 0 12px 0 12px;" src='/images/profile.png'></a>
-                </li>
-                <li>
-                    <a class="nav-item" href="/util/logout.php" data-toggle="tooltip" title="Logout"><img style="width: 25px; margin: 0 12px 0 12px;" src='/images/logout.png'></a>
+                    <div class="dropdown show">
+                    <a class="btn btn-md btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img id="profile-nav-img" src="/<?= $row['userPhotoPath'];?>" width="30px" height="30px" style="border: 1px solid white;">
+                        <?=$userFName?>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/client/client.php">Profile</a>
+                        <a class="dropdown-item" href="/util/logout.php">Logout</a>
+                    </div>
+                    </div>
                 </li>
             </ul>
         </div>
     </nav>
     
     <!-- jQuery CDN links for Bootstrap -->
-    <!-- <script src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN' crossorigin='anonymous'></script> -->
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous'></script>
-    <!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous'></script> -->
     
     </body>
