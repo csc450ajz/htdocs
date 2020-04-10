@@ -237,7 +237,7 @@ require_once('../util'.$navbar);
                                 $row = mysqli_fetch_assoc($result);
                                 ?>
                                 <div class="card-header">Quick Profile Info</div>
-                                <img id="profile-pic" class="card-img-top" src="../<?PHP echo $row['userPhotoPath'] ?>" onerror="this.src='../images/placeholder.jpg';" alt="Profile picture">
+                                <img id="profile-pic" class="card-img-top" src="../<?PHP echo $row['userPhotoPath'] ?>" onerror="this.src='../images/profile.png';" alt="Profile picture">
                                 <div class="card-body text-dark">
                                     <h5 class="card-title"><?PHP echo $row['userFName'] . " " . $row['userLName']; ?></h5>
                                     <dl>
@@ -439,7 +439,7 @@ require_once('../util'.$navbar);
 
         </div>
         <?php
-        require_once('footer.html');
+        require_once('../footer.html');
 
         ?>
     </div>
