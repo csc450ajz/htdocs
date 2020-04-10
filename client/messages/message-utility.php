@@ -1,35 +1,4 @@
 <?php
-//index.php
-//session_start();
-
-// The JSON standard MIME header. Output as JSON, not HTML
-// header('Content-type: application/json');
-
-
-// include('../db-config.php');
-// include('inventoryManagementLib.php');
-
-// if(!isset($_SESSION["type"]))
-// {
-//  header("location:login.php");
-// }
-
-
-
-
-/*
-    This page defines a series of cart functions, 
-    such as adding an item to the cart or removing
-    an item from the cart
-
-    Developer: Please be sure to pass in a mysqli
-    connection object ($conn) into any function
-    call, as this ensures there are not duplicate
-    connection objects.
-    */
-
-/* 
-
 /* 
     ---------------
     getProductMessage()

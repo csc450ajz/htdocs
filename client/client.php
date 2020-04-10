@@ -1,13 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <?php
+require_once('../util/config.php');
 // check that user is logged in, if not kick to login page
-require_once('../util/check-login.php');
 if (!checkLogin()) {
     header("Location: logIn.php");
 }
-//Database Connection
-include('../util/db-config.php');
 
 if (isset($_POST['adminMessage'])) {
     $issueId = $_POST['issueId'];
@@ -70,12 +68,6 @@ if (array_key_exists('hdnMessage', $_POST)) {
     }
 }
 
-
-
-
-
-//Get Navigation Bar
-require_once('../util/config.php');
 
 //Get Sold Items
 function getSoldItems($conn)
@@ -153,6 +145,10 @@ function totalOrdersMade($conn, $userEmail)
 <head>
     <title>Seller</title>
 </head>
+
+<?php
+require_once('../util'.$navbar);
+?>
 <style>
     .nav-mytabs {
         margin-top: 2rem;

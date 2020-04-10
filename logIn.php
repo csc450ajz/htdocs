@@ -1,14 +1,14 @@
+<!DOCTYPE html>
+<html>
 <?php
+require_once('util/config.php');
 // if user is already logged in, redirect to profile page
-include('util/check-login.php');
 if (checkAdmin()) {
     header('Location: admin/admin.php');
 } else if (checkClient()) {
     header('Location: client/client.php');
 } 
 
-// create db connection 
-include('util/db-config.php');
 
 $message = '';
 if (isset($_POST["login"])) {
@@ -18,15 +18,9 @@ if (isset($_POST["login"])) {
     if ($stmt = $conn->prepare($sql)) {
         //pass parameters
         $stmt->bind_param("s", $_POST["user_email"]);
-        if ($stmt->errno) {
-            echo "Statement prapare has error";
-        }
 
         // execute
         $stmt->execute();
-        if ($stmt->errno) {
-            echo "Could not execute prepared statment";
-        }
 
         $stmt->store_result();
         $rowCount = $stmt->num_rows;
@@ -74,20 +68,19 @@ function console_log($message) {
 
 ?>
 
-<!DOCTYPE html>
-<html>
+
 <?php
-require_once('util/config.php');
 ?>
 
 <head>
     <title>SporTrader Login</title>
 </head>
-
+<?php
+require_once(('util'.$navbar));
+?>
 <body>
     <br />
     <div class="container" style="max-width: 500px; margin: auto;">
-        <!-- <h2 align="center">SporTraders</h2> -->
         <img src="images/logo.png" alt="Company Logo" style="border-radius: 50%; display: block; margin: auto; width: 50%;">
         <br />
         <div class="card">
@@ -106,9 +99,6 @@ require_once('util/config.php');
                     <div class="form-group">
                         <input type="submit" name="login" value="Login" class="btn btn-success" />
                     </div>
-                    <!-- <div>
-                        <label for=""></label>
-                    </div> -->
                 </form>
             </div>
         </div>

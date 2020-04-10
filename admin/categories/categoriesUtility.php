@@ -1,7 +1,5 @@
 <?php
-include('../../util/db-config.php');
-
-
+require_once('../../util/db-config.php');
 if (isset($_POST['categoryActions'])) {
     $actions = $_POST['categoryActions'];
 

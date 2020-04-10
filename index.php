@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-//require_once('databaseConnection.php');
-include('util/db-config.php');
+// get navbar
+require_once('util/config.php');
 
 // if productId is passed in POST, add to cart
 if (isset($_POST['productId'])) {
@@ -11,8 +11,7 @@ if (isset($_POST['productId'])) {
 }
 
 
-// get navbar
-require_once('util/config.php');
+
 
 
 // call getFeaturedProducts() stored procedure
@@ -40,10 +39,10 @@ $result = $conn->query($sql);
         min-height: 400px;
     }
 </style>
-
+<?php
+require_once(('util'.$navbar));
+?>
 <body>
-
-
     <div class="container">
         <div class="row">
             <div class="col">

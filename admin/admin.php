@@ -1,11 +1,9 @@
 <?php
-//index.php
-include('../util/db-config.php');
+require_once('../util/config.php');
 // ensure that user is admin, otherwise kick back to login page
-include('../util/check-login.php');
-// if (!checkAdmin()) {
-//     header("Location: ../logIn.php");
-// }
+if (!checkAdmin()) {
+    header("Location: ../logIn.php");
+}
 
 
 if (array_key_exists('hdnIssue', $_POST)) {
@@ -54,7 +52,7 @@ function countUsers($conn) {
 <!DOCTYPE html>
 <html>
 <?php
-require_once('../util/config.html')
+require_once(("../util".$navbar));
 ?>
 
 
@@ -114,7 +112,7 @@ require_once('../util/config.html')
         });
     });
 </script>
-
+<?$navbar?>
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">

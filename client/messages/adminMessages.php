@@ -2,7 +2,6 @@
 <html lang="en">
 
 <?php
-include('../util/db-config.php');
 require_once('message-utility.php');
 $messageResult = getIssueMessages($conn);
 

@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+// get config file
+require_once('../../util/config.php');
 // check that user is logged in, if not kick to login page
 require_once('../../util/check-login.php');
 if(!checkLogin()) {
     header("Location: ../../logIn.php");
 }
-// get db connection
-include('../../util/db-config.php');
-// get navbar
-require_once('../../util/config.php');
 // get items in cart
 require_once('cart-utility.php');
 $cartResult = getCartItems($conn);
-
-
 ?>
 
 <head>
     <title>cart.php</title>
 </head>
-
+<?php
+require_once('../../util'.$navbar);
+?>
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">

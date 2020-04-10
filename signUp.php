@@ -1,14 +1,11 @@
 <?php
+require_once('util/config.php');
 // if user is already logged in, redirect to profile page
-include('util/check-login.php');
 if (checkAdmin()) {
     header('Location: admin/admin.php');
 } else if (checkClient()) {
     header('Location: client/client.php');
 } 
-
-// create db connection 
-include('util/db-config.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // gather information from POST array
@@ -49,10 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html>
-<?php
-require_once('util/config.php');
-?>
-
 <head>
     <title>SporTrader Login</title>
 </head>

@@ -1,3 +1,6 @@
+<?php
+require_once('util/config.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +9,10 @@
        
     ?>
 </head>
+<?php
+require_once(('path-to-util'.$navbar));
+
+?>
 <body>
     <div class="container">
         <div class="row justify-content-sm-center">

@@ -1,13 +1,7 @@
 <?php
-
-
-include('../../util/db-config.php');
+require_once('../../util/db-config.php');
 require_once('message-utility.php');
 session_start();
-// if(!isset($_SESSION["type"]))
-// {
-//  header("location:login.php");
-// }
 
 
 if (isset($_POST['chatId'])) {
