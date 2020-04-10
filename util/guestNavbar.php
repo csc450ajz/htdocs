@@ -1,13 +1,4 @@
 <head>
-    <!--
-        This file contains the head elements and toolbar used on all client-facing pages
-        Simply call require_once('util/config.php') to add it to a page
-    
-        Includes:
-            - Boostrap CDN
-            - Overall site styles (site.css)
-            - jQuery (for Bootsrap)
-    -->
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
@@ -48,28 +39,22 @@
     
             <ul class='navbar-nav ml-auto'>
                 <li>
-    
+                    <a class="btn btn-md btn-secondary" href="/logIn.php" role="button" id="login">
+                        Login
+                    </a>
                 </li>
-                <li class='nav-item dropdown'>
-                    <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-            My Account
-          </a>
-                    <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
-                        <a class='dropdown-item' href='/logIn.php'>Sign In</a>
-                        <a class='dropdown-item' href='/client/cart/cart.php'>View Cart</a>
-                        <a class='dropdown-item' href='/util/logout.php'>Logout</a>
-                        <a class='dropdown-item' href='/signUp.php'>Sign Up</a>
-                    </div>
+                    <span style="color: white; margin: 7px 20px 0;">Or</span>
+                <li>
+                    <a class="btn btn-md btn-secondary" href="/signUp.php" role="button" id="login">
+                        Sign Up
+                    </a>
                 </li>
             </ul>
         </div>
     </nav>
     
     <!-- jQuery CDN links for Bootstrap -->
-    <!-- <script src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN' crossorigin='anonymous'></script> -->
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous'></script>
-    <!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous'></script> -->
-    
     </body>
