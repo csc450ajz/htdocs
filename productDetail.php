@@ -39,7 +39,7 @@ if (isset($_GET['productId'])) {
         if ($result) {
             $product = mysqli_fetch_assoc($result);
             $productViews = $product['productViews'] + 1;
-            // updateProductViews($conn, $product['productId'], $productViews);
+            updateProductViews($conn, $product['productId'], $productViews);
         } else {
             //there's a query error
             // TODO - Implement an error message to tell user that the product is not available.
@@ -103,15 +103,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
         $("#myTab a:first").tab('show'); // show first image on page load
 
         $('a[data-toggle="tab"]').on("click", function() {
-            let id = $(this).attr("id");
-            let newUrl;
-            if (hash == "#nav-home") {
-                newUrl = url.split("#")[0];
-            } else {
-                newUrl = url.split("#")[0] + hash;
-            }
-            newUrl += "/";
-            history.replaceState(null, null, newUrl);
+            
         });
     });
 </script>
