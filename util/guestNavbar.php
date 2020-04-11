@@ -16,26 +16,26 @@
         <div class='collapse navbar-collapse' id='navbarSupportedContent'>
     
     
-            <ul class='navbar-nav mr-auto'>
+        <ul class='navbar-nav mr-auto'>
                 <li class='nav-item dropdown'>
                     <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-            Browse Categories
-          </a>
+                        Browse Products
+                    </a>
                     <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
                         <span class='dropdown-item disabled'>Choose a Category:</span>
-                        <?PHP 
-                            $sql = "SELECT * FROM Category LIMIT 5";
-                            $conn->next_result();
-                            $catResult = $conn->query($sql);
-                            while ($category = mysqli_fetch_assoc($catResult)):
-                                $id = $category['categoryId'];
-                                $name = $category['categoryName'];
-                                echo "<div class='dropdown-divider'></div>";
-                                echo "<a class='dropdown-item' href='#'>$name</a>";
-                            endwhile;
+                        <?PHP
+                        $sql = "SELECT * FROM Category LIMIT 5";
+                        $conn->next_result();
+                        $catResult = $conn->query($sql);
+                        while ($category = mysqli_fetch_assoc($catResult)) :
+                            $id = $category['categoryId'];
+                            $name = $category['categoryName'];
+                            echo "<div class='dropdown-divider'></div>";
+                            echo "<a class='dropdown-item' href='categoryProducts.php?categoryId=$id'>$name</a>";
+                        endwhile;
                         ?>
                         <div class='dropdown-divider'></div>
-                        <a href="#" class="dropdown-item">All Products</a>
+                        <a href="categoryProducts.php?allProducts" class="dropdown-item">All Products</a>
                     </div>
                 </li>
             </ul>
