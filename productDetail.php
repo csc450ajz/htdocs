@@ -4,12 +4,21 @@
 
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <?php
-session_start();
-
+// get config file
 require_once('util/config.php');
-include('util/db-config.php');
+
+?>
+
+<head>
+    <title>cart.php</title>
+</head>
+<?php
+require_once('util' . $navbar);
+
+// require_once('util/config.php');
+// include('util/db-config.php');
 //include('databaseConnection.php');
 $error = "";
 $errormsg = "";
@@ -18,11 +27,10 @@ $errormsg = "";
 if (isset($_GET['productId'])) {
     //clean it up
     if (!is_numeric($_GET['productId'])) {
-        //Non numeric value entered. Someone tampered with the bookid
+        //Non numeric value entered. Someone tampered with the productId
         $error = true;
         $errormsg = " Security, Serious error. Contact webmaster: productId enter: " . $_GET['productId'] . "";
     } else {
-        //book_id is numeric number
         //clean it up
         $productId = mysqli_real_escape_string($conn, $_GET['productId']);
         $sql = "CALL getProductInfo('$productId')";
@@ -30,6 +38,8 @@ if (isset($_GET['productId'])) {
         $conn->next_result(); // allow next query to execute
         if ($result) {
             $product = mysqli_fetch_assoc($result);
+            $productViews = $product['productViews'] + 1;
+            // updateProductViews($conn, $product['productId'], $productViews);
         } else {
             //there's a query error
             // TODO - Implement an error message to tell user that the product is not available.
@@ -48,21 +58,63 @@ if (array_key_exists('hdnMessage', $_POST)) {
 
         $sql = "INSERT INTO productchat (buyerEmail, sellerEmail, productId, recentSender) VALUES('$userEmail', '$sellerEmail', '$productId', '$userEmail')";
         $result = $conn->query($sql);
-        
+
         $chatId = mysqli_insert_id($conn);
         $messageTime = $product['chatStartDat'];
         $sql = "INSERT INTO chatmessages (userEmail, chatId, messageText, messageSentTime) VALUES ('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
-        if($conn->query($sql)) {
-            echo '<script>alert("Message Sent")</script>'; 
+        if ($conn->query($sql)) {
+            echo '<script>alert("Message Sent")</script>';
         }
-        
     }
 }
+
+function updateProductViews($conn, $productId, $productViews)
+{
+    $sql = "UPDATE product SET productViews='$productViews' WHERE productId='$productId'";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
+
+function getProductImages($conn, $productId)
+{
+    $sql = "SELECT * FROM productimage WHERE productId='$productId'";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
+$productImagesResults = getProductImages($conn, $product['productId'])
 ?>
 
 <head>
     <title>Product Detail</title>
 </head>
+<style>
+    /* .productDetail {
+        height: 120px;
+    } */
+</style>
+<script>
+    $(document).ready(function() {
+        // var id = $("#myTab a:first").attr("id");
+        // $(".tab-pane").attr("id").val(id);
+        $("#myTab a:first").tab('show'); // show first image on page load
+
+        $('a[data-toggle="tab"]').on("click", function() {
+            let id = $(this).attr("id");
+            let newUrl;
+            if (hash == "#nav-home") {
+                newUrl = url.split("#")[0];
+            } else {
+                newUrl = url.split("#")[0] + hash;
+            }
+            newUrl += "/";
+            history.replaceState(null, null, newUrl);
+        });
+    });
+</script>
 
 <body>
     <br>
@@ -72,23 +124,54 @@ if (array_key_exists('hdnMessage', $_POST)) {
 
         <div class="row">
 
-            <div class="col-md-8">
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">
-                        <img class="img-fluid" src="images/1.jpg" alt="">
+            <div class="col-md-8 productDetail">
+
+                <div class="row">
+
+
+
+                    <div class="tab-content" id="myTabContent" style="margin:auto">
+                        <?php
+                        if (mysqli_num_rows($productImagesResults) > 0) {
+
+                            while ($productImages = mysqli_fetch_assoc($productImagesResults)) {
+
+                        ?>
+                                <div class="tab-pane fade" id="<?= $productImages['imageID']; ?>">
+                                    <img class="" src="<?= $productImages['imagePath']; ?>" alt="" style="width: 90%; height: 400px;" onerror="this.src='images/placeholder.jpg';">
+                                </div>
+                            <?php }
+                        } else {
+                            ?>
+                            <div class="tab-pane fade" id="placeholder">
+                                <img class="" src="images/placeholder.jpg" alt="" style="width: 90%; height: 400px;">
+                            </div>
+                        <?php } ?>
                     </div>
-                    <!-- <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">Product reviews goes here</div>
-                    <div class="tab-pane fade" id="nav-message" role="tabpanel" aria-labelledby="nav-message-tab">Place for buyer to message seller</div> -->
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist" style="width: 80%; align-items: center;">
+                        <?php
+                        $productImagesResults = getProductImages($conn, $product['productId']);
+                        if (mysqli_num_rows($productImagesResults) > 0) {
+
+                            while ($images = mysqli_fetch_assoc($productImagesResults)) {
+                        ?>
+                                <li class="nav-item col-4" style="padding: 0px">
+                                    <a class="nav-link " id="<?= $images['imageID']; ?>" data-toggle="tab" href="#<?= $images['imageID']; ?>">
+                                        <img class="img-fluid" src="<?= $images['imagePath']; ?>" alt="" style="width: auto;" onerror="this.src='images/placeholder.jpg';">
+                                    </a>
+                                </li>
+                            <?php }
+                        } else { ?>
+                            <li class="nav-item col-4" style="padding: 0px">
+                                <a class="nav-link " id="placeholder-img" data-toggle="tab" href="#placeholder">
+                                    <img class="img-fluid" src="images/placeholder.jpg" alt="" style="width: auto;">
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+
                 </div>
-                <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-description" aria-selected="true">Description</a>
-                        <!-- <a class="nav-item nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-reviews" role="tab" aria-controls="nav-reviews" aria-selected="false">Reviews</a>
-                        <a class="nav-item nav-link" id="nav-message-tab" data-toggle="tab" href="#nav-message" role="tab" aria-controls="nav-message" aria-selected="false">Message Seller</a> -->
-                    </div>
-                </nav>
-
-
             </div>
             <div class="col-md-4">
                 <h3 class="my-3"><?= $product['productName']; ?></h3>
@@ -113,73 +196,94 @@ if (array_key_exists('hdnMessage', $_POST)) {
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab"><?= $product['productDesc']; ?></div>
-                    
+
                     <div class="tab-pane fade" id="nav-message" role="tabpanel" aria-labelledby="nav-message-tab">
 
                         <?php if (isset($_SESSION['userEmail'])) { ?>
-                        <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST" name="frmMessage" id="frmMessage">
+                            <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST" name="frmMessage" id="frmMessage">
 
-                            <div class="container">
+                                <div class="container">
 
-                                <div class="row">
-                                    <textarea name="messageText" class="form-control" rows="3" placeholder="Enter your message here"></textarea>
-                                    <input type='hidden' name='hdnMessage' value='<?= $product['productId']; ?>' />
-                                    <input type='hidden' name='sellerEmail' value='<?= $product['userEmail']; ?>' />
-                                    <button type="submit" name="productMessage" class="btn btn-success">Send</button>
+                                    <div class="row">
+                                        <textarea name="messageText" class="form-control" rows="3" placeholder="Enter your message here"></textarea>
+                                        <input type='hidden' name='hdnMessage' value='<?= $product['productId']; ?>' />
+                                        <input type='hidden' name='sellerEmail' value='<?= $product['userEmail']; ?>' />
+                                        <button type="submit" name="productMessage" class="btn btn-success">Send</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                        </form>
-                        <?php }else { ?>
+                            </form>
+                        <?php } else { ?>
                             <div>
                                 <h5>Please sign in to message the seller</h5>
                                 <a href="logIn.php" type="button" class="btn btn-primary">Sign in</a>
                                 <!-- <button class="btn btn-primary" href="logIn.php">Sign in</button> -->
                             </div>
 
-                        <?php } ?> 
+                        <?php } ?>
                     </div>
                 </div>
             </div>
 
         </div>
         <!-- /.row -->
-
+        <hr>
         <!-- Related Projects Row -->
         <h3 class="my-4">Related Products</h3>
 
-        <div class="row">
+      
 
-            <div class="col-md-3 col-sm-6 mb-4">
-                <a href="#">
-                    <img class="img-fluid" src="images/1.jpg" alt="">
-                </a>
-            </div>
 
-            <div class="col-md-3 col-sm-6 mb-4">
-                <a href="#">
-                    <img class="img-fluid" src="images/1.jpg" alt="">
-                </a>
-            </div>
+        <style>
+            .related {
+                min-height: 350px;
+            }
+        </style>
 
-            <div class="col-md-3 col-sm-6 mb-4">
-                <a href="#">
-                    <img class="img-fluid" src="images/1.jpg" alt="">
-                </a>
-            </div>
+        <div class="row flex-row flex-nowrap overflow-auto">
 
-            <div class="col-md-3 col-sm-6 mb-4">
-                <a href="#">
-                    <img class="img-fluid" src="images/1.jpg" alt="">
-                </a>
-            </div>
+            <?php
+            $sql = "SELECT * FROM product WHERE genderId=" . $product['genderId'];
+            $result = $conn->query($sql);
+
+            while ($product = mysqli_fetch_assoc($result)) {
+                $id = $product['productId'];
+                $sql = "SELECT imagePath FROM ProductImage WHERE productId='$id' LIMIT 1;";
+                // DEBUG echo $sql;
+                $conn->next_result();
+                $imageResult = $conn->query($sql);
+                $images = mysqli_fetch_assoc($imageResult);
+
+            ?>
+
+                <div class="col-xs-8 col-md-6 col-lg-3">
+                    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+                        <div class="card related">
+                            <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
+                            <div class="card-body">
+                                <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
+                                <p class="card-text">$<?= $product['productPrice']; ?></p>
+                                <!-- Send product id as encoded value -->
+                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                                <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
+                                <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            <?php } ?>
 
         </div>
+        <hr>
+
         <!-- /.row -->
 
     </div>
     <!-- /.container -->
 
+    <?php require_once('footer.html'); ?>
 </body>
 
 </html>
