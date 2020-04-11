@@ -40,8 +40,9 @@ $result = $conn->query($sql);
     }
 </style>
 <?php
-require_once(('util'.$navbar));
+require_once(('util' . $navbar));
 ?>
+
 <body>
     <div class="container">
         <div class="row">
@@ -96,17 +97,24 @@ require_once(('util'.$navbar));
                 </div>
             </div>
         </div>
-        <h2 class="text-center">Featured Products</h2>
+        <h2 class="text-center">Most Viewed Products</h2>
 
         <div class="row">
 
-            <?php while ($product = mysqli_fetch_assoc($result)) : ?>
+            <?php while ($product = mysqli_fetch_assoc($result)) :
+                $id = $product['productId'];
+                $sql = "SELECT imagePath FROM ProductImage WHERE productId='$id' LIMIT 1;";
+                // DEBUG echo $sql;
+                $conn->next_result();
+                $imageResult = $conn->query($sql);
+                $images = mysqli_fetch_assoc($imageResult);
+            ?>
 
                 <div class="col-xs-8 col-md-6 col-lg-3">
                     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
 
                         <div class="card featured">
-                            <img src="images/placeholder.jpg" alt="" style="width: auto; height: 200px;">
+                            <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
                             <div class="card-body">
                                 <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
                                 <!-- TODO: Add product star reviews -->
@@ -141,24 +149,39 @@ require_once(('util'.$navbar));
         ?>
         <h2>Featured Men Products</h2>
         <div class="row flex-row flex-nowrap overflow-auto">
- <?php while ($product = mysqli_fetch_assoc($result)) {
 
-                ?>
+            <?php
+            $sql = "SELECT * FROM product WHERE genderId= 1";
+            $result = $conn->query($sql);
 
-            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
-               
-                    <div class="col-4">
-                        <div class="card card-block">
-                            <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
-                            <h5>$<?= $product['productPrice']; ?></h5>
+            while ($product = mysqli_fetch_assoc($result)) {
+                $id = $product['productId'];
+                $sql = "SELECT imagePath FROM ProductImage WHERE productId='$id' LIMIT 1;";
+                // DEBUG echo $sql;
+                $conn->next_result();
+                $imageResult = $conn->query($sql);
+                $images = mysqli_fetch_assoc($imageResult);
 
-                            <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
-                            <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
+            ?>
+
+                <div class="col-xs-8 col-md-6 col-lg-3">
+                    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+                        <div class="card" style="min-height: 350px">
+                            <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
+                            <div class="card-body">
+                                <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
+                                <p class="card-text">$<?= $product['productPrice']; ?></p>
+                                <!-- Send product id as encoded value -->
+                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                                <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
+                                <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
+
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
-            </form>
-        <?php } ?>
+                </div>
+            <?php } ?>
 
         </div>
 
@@ -168,28 +191,39 @@ require_once(('util'.$navbar));
         <div class="row flex-row flex-nowrap overflow-auto">
 
             <?php
-            $sql = "SELECT * FROM product WHERE product.genderId=2";
+            $sql = "SELECT * FROM product WHERE genderId= 2";
             $result = $conn->query($sql);
 
             while ($product = mysqli_fetch_assoc($result)) {
+                $id = $product['productId'];
+                $sql = "SELECT imagePath FROM ProductImage WHERE productId='$id' LIMIT 1;";
+                // DEBUG echo $sql;
+                $conn->next_result();
+                $imageResult = $conn->query($sql);
+                $images = mysqli_fetch_assoc($imageResult);
 
             ?>
-                <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
 
-                    <div class="col-4">
-                        <div class="card card-block">
-                            <img class="d-block w-100" src="images/balls.jpg" alt="Balls">
-                            <h5>$<?= $product['productPrice']; ?></h5>
+                <div class="col-xs-8 col-md-6 col-lg-3">
+                    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+                        <div class="card" style="min-height: 350px">
+                            <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
+                            <div class="card-body">
+                                <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
+                                <p class="card-text">$<?= $product['productPrice']; ?></p>
+                                <!-- Send product id as encoded value -->
+                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                                <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
+                                <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
 
-                            <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
-                            <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+
+                </div>
             <?php } ?>
 
         </div>
-
     </div>
 
     <br><br><br>
