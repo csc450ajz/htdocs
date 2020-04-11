@@ -103,7 +103,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
         $("#myTab a:first").tab('show'); // show first image on page load
 
         $('a[data-toggle="tab"]').on("click", function() {
-            
+
         });
     });
 </script>
@@ -170,6 +170,8 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                 <p>Brand: <?= $product['productBrand']; ?></p>
                 <p>Availability: In Stock</p>
                 <br>
+                <p>Size: <?= $product['productSize']; ?></p>
+
                 <h5>Price: $<?= $product['productPrice']; ?></h5>
 
                 <form action="">
@@ -223,7 +225,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
         <!-- Related Projects Row -->
         <h3 class="my-4">Related Products</h3>
 
-      
+
 
 
         <style>
@@ -232,19 +234,24 @@ $productImagesResults = getProductImages($conn, $product['productId'])
             }
         </style>
 
+        <?php
+        $conn->next_result();
+        $sql = "SELECT * FROM product WHERE genderId=" . $product['genderId'];
+        $result = $conn->query($sql);
+        ?>
         <div class="row flex-row flex-nowrap overflow-auto">
 
             <?php
-            $sql = "SELECT * FROM product WHERE genderId=" . $product['genderId'];
-            $result = $conn->query($sql);
-
-            while ($product = mysqli_fetch_assoc($result)) {
-                $id = $product['productId'];
-                $sql = "SELECT imagePath FROM ProductImage WHERE productId='$id' LIMIT 1;";
-                // DEBUG echo $sql;
-                $conn->next_result();
-                $imageResult = $conn->query($sql);
-                $images = mysqli_fetch_assoc($imageResult);
+            if (mysqli_num_rows($result) > 0) {
+                while ($product = mysqli_fetch_assoc($result)) {
+                    $id = $product['productId'];
+                    $sql = "SELECT imagePath FROM ProductImage WHERE productId='$id' LIMIT 1;";
+                    // DEBUG echo $sql;
+                    $conn->next_result();
+                    $imageResult = $conn->query($sql);
+                    $images = mysqli_fetch_assoc($imageResult);
+            
+            
 
             ?>
 
@@ -265,7 +272,10 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                     </form>
 
                 </div>
-            <?php } ?>
+            <?php } 
+        }else {
+            echo '<h5></i>No Related Products</i></h5>';
+        } ?>
 
         </div>
         <hr>
