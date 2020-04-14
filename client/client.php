@@ -246,7 +246,9 @@ require_once('../util'.$navbar);
                                         <dt>Cash Balance:</dt>
                                         <dd>$<?PHP echo $row['userBalance']; ?></dd>
                                     </dl>
-                                    <button>Edit Profile</button>
+                                    <form action="editProfile.php">
+										<button type="submit">Edit Profile</button>
+								    </form>
                                 </div>
                             </div>
                         </div>
