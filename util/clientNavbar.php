@@ -1,10 +1,44 @@
 <?php
 $conn->next_result();
 $userEmail = $_SESSION['userEmail'];
-$userResult = $conn->query("SELECT * FROM User WHERE userEmail='$userEmail';");
+$userResult = getUserDetail($conn, $userEmail);
 $row = mysqli_fetch_assoc($userResult);
 $userFName = $row['userFName'];
+
+if (isset($_POST['updateUserBalance'])) {
+    $userEmail = $_SESSION['userEmail'];
+    $newReward = $_POST['newReward'];
+    $userBalance = $row['userBalance'];
+
+    //Set New Balance
+    $newBalance = $newReward + $userBalance;
+
+    echo $newBalance;
+    //Update User Balance
+    updateUserBalance($conn, $userEmail, $newBalance);
+}
+
+//Function for updating user balance with new balance
+function updateUserBalance($conn, $userEmail, $newBalance)
+{
+    $sql = "UPDATE User SET userBalance='$newBalance' WHERE userEmail='$userEmail'";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
+
+//Function for getting user info
+function getUserDetail($conn, $userEmail)
+{
+    $sql = "SELECT * FROM User WHERE userEmail='$userEmail'";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
 ?>
+
 
 <head>
     <meta charset='utf-8' />
@@ -31,17 +65,52 @@ $userFName = $row['userFName'];
             top: -10px;
             padding: 2px 5px;
         }
+
+        #reward {
+            color: black;
+            cursor: pointer
+        }
     </style>
+
+    <script>
+        function genRandomReward() {
+            var ranNum = Math.floor(Math.random() * 11);
+            if (ranNum > 0) {
+                $.ajax({
+                    url: "util/clientNavbar.php",
+                    method: "POST",
+                    data: {
+                        updateUserBalance: true,
+                        newReward: ranNum
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        swal("Congratulations!", `You've earned ${ranNum} points!`, "success", {
+                            button: "Aww yiss!",
+                        });
+
+                    }
+                });
+
+            } else {
+                swal("Bad Luck!", `Try Again!`, "warning", {
+                    button: "Ow key!",
+                });
+            }
+            // document.getElementById('example').value = ranNum;
+        }
+    </script>
 </head>
 
 <body>
     <nav class='navbar navbar-expand-lg navbar-dark' style='background-color: black;'>
-        <a class='navbar-brand' href='/index.php'>Sportrader</a>
-        <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
+
+        <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='.navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
         </button>
+        <a class='navbar-brand' href='/index.php'>Sportrader</a>
 
-        <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+        <div class='collapse navbar-collapse w-50 order-1 order-md-0 navbarSupportedContent' id='navbarSupportedContent'>
 
 
             <ul class='navbar-nav mr-auto'>
@@ -67,6 +136,11 @@ $userFName = $row['userFName'];
                     </div>
                 </li>
             </ul>
+
+        </div>
+        <a class="navbar-brand mx-auto d-block text-center btn btn-light" id="reward" onclick="genRandomReward()">Earn Reward</a>
+
+        <div class='collapse navbar-collapse w-50 order-1 order-md-0 navbarSupportedContent' id='navbarSupportedContent'>
 
             <ul class='navbar-nav ml-auto'>
                 <li>
@@ -106,5 +180,8 @@ $userFName = $row['userFName'];
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous'></script>
+
+    <!-- Sweet Alert CDN -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 </body>
