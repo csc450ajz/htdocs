@@ -27,7 +27,8 @@ if (array_key_exists('hdnIssue', $_POST)) {
     }
 }
 
-function countCategories($conn) {
+function countCategories($conn)
+{
     $sql = "SELECT * FROM Category";
     $result = $conn->query($sql);
     $total = mysqli_num_rows($result);
@@ -36,7 +37,8 @@ function countCategories($conn) {
     return $total;
 }
 
-function countUsers($conn) {
+function countUsers($conn)
+{
     $sql = "SELECT * FROM User";
     $result = $conn->query($sql);
     $total = mysqli_num_rows($result);
@@ -52,7 +54,7 @@ function countUsers($conn) {
 <!DOCTYPE html>
 <html>
 <?php
-require_once(("../util".$navbar));
+require_once(("../util" . $navbar));
 ?>
 
 
@@ -112,7 +114,8 @@ require_once(("../util".$navbar));
         });
     });
 </script>
-<?$navbar?>
+<? $navbar ?>
+
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
@@ -137,7 +140,7 @@ require_once(("../util".$navbar));
                     <br>
                     <div class="row">
                         <div class="col-md-3">
-                        <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
+                            <div class="card border-dark mb-3 " style="margin-bottom: unset!important;">
                                 <?PHP
                                 $userEmail = $_SESSION['userEmail'];
                                 $sql = "SELECT * FROM User WHERE User.userEmail = '$userEmail' LIMIT 1;";
@@ -154,7 +157,9 @@ require_once(("../util".$navbar));
                                         <dt>Cash Balance:</dt>
                                         <dd>$<?PHP echo $row['userBalance']; ?></dd>
                                     </dl>
-                                    <button>Edit Profile</button>
+                                    <form action="editProfile.php">
+                                        <button type="submit">Edit Profile</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +179,7 @@ require_once(("../util".$navbar));
                                     <div class="card">
                                         <div class="card-header"><strong>Total Categories</strong></div>
                                         <div class="card-body" align="center">
-                                        <h1><?= countCategories($conn) ?></h1>
+                                            <h1><?= countCategories($conn) ?></h1>
                                         </div>
                                     </div>
                                 </div>

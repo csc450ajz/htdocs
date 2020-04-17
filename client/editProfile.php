@@ -11,15 +11,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // gather form values
     $fName = $_POST['fName'];
     $lName = $_POST['lName'];
-    $password = $_POST['password'];
 
-    //Store Image
-    require_once('../util/image-util.php');
-    $photoPath = storeProfileImage($_FILES['profilePic']);
+    //Check if password field is not NULL
+    if ($_POST['password'] != NULL && $_FILES['profilePic'] != NULL) {
+        echo 'Both';
+        $password = $_POST['password'];
+        //Store Image
+        require_once('../util/image-util.php');
+        $photoPath = storeProfileImage($_FILES['profilePic']);
 
-    // Update Profile   
-    $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName', userPassword = '$password', userPhotoPath = '$photoPath' WHERE userEmail = '$userEmail'";
-    $result = $conn->query($sql);
+        // Update Profile   
+        $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName', userPassword = '$password', userPhotoPath = '$photoPath' WHERE userEmail = '$userEmail'";
+        $result = $conn->query($sql);
+    } elseif ($_POST['password'] != NULL) {
+        echo 'Pass';
+
+        $password = $_POST['password'];
+        echo $password;
+
+
+        // Update Profile   
+        $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName', userPassword = '$password' WHERE userEmail = '$userEmail'";
+        $result = $conn->query($sql);
+    } elseif ($_FILES['profilePic'] != NULL) {
+        echo 'files';
+
+        //Store Image
+        require_once('../util/image-util.php');
+        $photoPath = storeProfileImage($_FILES['profilePic']);
+
+        // Update Profile   
+        $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName', userPhotoPath = '$photoPath' WHERE userEmail = '$userEmail'";
+        $result = $conn->query($sql);
+    } else {
+        echo 'none';
+
+        // Update Profile   
+        $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName' WHERE userEmail = '$userEmail'";
+        $result = $conn->query($sql);
+    }
 }
 
 //Get user detail for editing
@@ -55,17 +85,17 @@ require_once(('../util' . $navbar));
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="fName">First Name</label>
-                            <input type="text" name="fName" class="form-control" id="fName" value="<?= $row['userFName'] ?>" maxlength="100" >
+                            <input type="text" name="fName" class="form-control" id="fName" value="<?= $row['userFName'] ?>" maxlength="100">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="lName">Last Name</label>
-                            <input type="text" name="lName" class="form-control" id="lName" value="<?= $row['userLName'] ?>" maxlength="100" >
+                            <input type="text" name="lName" class="form-control" id="lName" value="<?= $row['userLName'] ?>" maxlength="100">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="password">New Password</label>
-                            <input type="text" name="password" class="form-control" id="password" placeholder="New Password" maxlength="100" >
+                            <input type="text" name="password" class="form-control" id="password" placeholder="New Password" maxlength="100">
                         </div>
                     </div>
                     <div class="form-row">
