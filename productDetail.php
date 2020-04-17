@@ -68,6 +68,12 @@ if (array_key_exists('hdnMessage', $_POST)) {
     }
 }
 
+// if productId is passed in POST, add to cart
+if (isset($_POST['productId'])) {
+    require_once("client/cart/cart-utility.php");
+    addCartItem($_POST['productId'], $conn);
+}
+
 function updateProductViews($conn, $productId, $productViews)
 {
     $sql = "UPDATE product SET productViews='$productViews' WHERE productId='$productId'";
@@ -166,15 +172,16 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                 </div>
             </div>
             <div class="col-md-4">
-                <h3 class="my-3"><?= $product['productName']; ?></h3>
-                <p>Brand: <?= $product['productBrand']; ?></p>
-                <p>Availability: In Stock</p>
-                <br>
-                <p>Size: <?= $product['productSize']; ?></p>
+                <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST" name="frmCart" id="frmCart">
 
-                <h5>Price: $<?= $product['productPrice']; ?></h5>
+                    <h3 class="my-3"><?= $product['productName']; ?></h3>
+                    <p>Brand: <?= $product['productBrand']; ?></p>
+                    <p>Availability: In Stock</p>
+                    <br>
+                    <p>Size: <?= $product['productSize']; ?></p>
 
-                <form action="">
+                    <h5>Price: $<?= $product['productPrice']; ?></h5>
+                    <input type="hidden" name="productId" value="<?= $product['productId'] ?>">
 
                     <button class="btn btn-primary">Add to Cart</button>
                 </form>
@@ -250,32 +257,32 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                     $conn->next_result();
                     $imageResult = $conn->query($sql);
                     $images = mysqli_fetch_assoc($imageResult);
-            
-            
+
+
 
             ?>
 
-                <div class="col-xs-8 col-md-6 col-lg-3">
-                    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
-                        <div class="card related">
-                            <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
-                            <div class="card-body">
-                                <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
-                                <p class="card-text">$<?= $product['productPrice']; ?></p>
-                                <!-- Send product id as encoded value -->
-                                <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
-                                <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
-                                <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
+                    <div class="col-xs-8 col-md-6 col-lg-3">
+                        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+                            <div class="card related">
+                                <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
+                                    <p class="card-text">$<?= $product['productPrice']; ?></p>
+                                    <!-- Send product id as encoded value -->
+                                    <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                                    <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
+                                    <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
 
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
 
-                </div>
-            <?php } 
-        }else {
-            echo '<h5></i>No Related Products</i></h5>';
-        } ?>
+                    </div>
+            <?php }
+            } else {
+                echo '<h5></i>No Related Products</i></h5>';
+            } ?>
 
         </div>
         <hr>
