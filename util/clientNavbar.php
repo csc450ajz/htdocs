@@ -1,42 +1,11 @@
 <?php
 $conn->next_result();
 $userEmail = $_SESSION['userEmail'];
-$userResult = getUserDetail($conn, $userEmail);
+$sql = "SELECT * FROM User WHERE userEmail='$userEmail'";
+$userResult = $conn->query($sql);
 $row = mysqli_fetch_assoc($userResult);
 $userFName = $row['userFName'];
 
-if (isset($_POST['updateUserBalance'])) {
-    $userEmail = $_SESSION['userEmail'];
-    $newReward = $_POST['newReward'];
-    $userBalance = $row['userBalance'];
-
-    //Set New Balance
-    $newBalance = $newReward + $userBalance;
-
-    echo $newBalance;
-    //Update User Balance
-    updateUserBalance($conn, $userEmail, $newBalance);
-}
-
-//Function for updating user balance with new balance
-function updateUserBalance($conn, $userEmail, $newBalance)
-{
-    $sql = "UPDATE User SET userBalance='$newBalance' WHERE userEmail='$userEmail'";
-    $result = $conn->query($sql);
-    $conn->next_result();
-    echo $conn->error;
-    return $result;
-}
-
-//Function for getting user info
-function getUserDetail($conn, $userEmail)
-{
-    $sql = "SELECT * FROM User WHERE userEmail='$userEmail'";
-    $result = $conn->query($sql);
-    $conn->next_result();
-    echo $conn->error;
-    return $result;
-}
 ?>
 
 
@@ -77,7 +46,7 @@ function getUserDetail($conn, $userEmail)
             var ranNum = Math.floor(Math.random() * 11);
             if (ranNum > 0) {
                 $.ajax({
-                    url: "util/clientNavbar.php",
+                    url: "../htdocs/util/reward.php",
                     method: "POST",
                     data: {
                         updateUserBalance: true,
@@ -138,7 +107,8 @@ function getUserDetail($conn, $userEmail)
             </ul>
 
         </div>
-        <a class="navbar-brand mx-auto d-block text-center btn btn-light" id="reward" onclick="genRandomReward()">Earn Reward</a>
+        <a class="navbar-brand mx-auto d-block text-center btn btn-light" id="reward">Earn Reward</a>
+        <span class="navbar-brand mx-auto d-block text-center badge badge-success" id="userBalance" style="font-size: 20px"></span>
 
         <div class='collapse navbar-collapse w-50 order-1 order-md-0 navbarSupportedContent' id='navbarSupportedContent'>
 
@@ -184,4 +154,48 @@ function getUserDetail($conn, $userEmail)
     <!-- Sweet Alert CDN -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+
+    <script>
+        $(document).ready(function() {
+            getUserBalance()
+            $(document).on('click', '#reward', function() {
+                var ranNum = Math.floor(Math.random() * 11);
+                if (ranNum > 0) {
+                    $.ajax({
+                        url: "/htdocs/util/reward.php",
+                        method: "POST",
+                        data: {
+                            updateUserBalance: true,
+                            newReward: ranNum
+                        },
+                        success: function(data) {
+                            swal("Congratulations!", `You've earned ${ranNum} points!`, "success", {
+                                button: "Aww yiss!",
+                            });
+                            getUserBalance()
+                        }
+                    });
+
+                } else {
+                    swal("Bad Luck!", `Try Again!`, "warning", {
+                        button: "Ow key!",
+                    });
+                }
+            })
+
+            function getUserBalance() {
+                $.ajax({
+                    url: "/htdocs/util/reward.php",
+                    method: "POST",
+                    data: {
+                        userBalance: true,
+                    },
+                    success: function(data) {
+                        $('#userBalance').html("Balance: $"+ data);
+                    }
+                });
+            }
+
+        })
+    </script>
 </body>

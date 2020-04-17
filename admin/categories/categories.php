@@ -17,7 +17,7 @@
                             <h3 class="card-title">Categories List</h3>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" align="right">
-                            <button type="button" name="add" id="btnAdd" data-toggle="modal" data-target="#categoryModal" class="btn btn-success btn-xs"><i class="fas fa-plus"></i></button>
+                            <button type="button" name="add" id="btnCategoryAdd" data-toggle="modal" data-target="#categoryModal" class="btn btn-success btn-xs"><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
 
@@ -87,7 +87,7 @@
         $(document).ready(function() {
             getCategories();
 
-            $('#btnAdd').click(function() {
+            $('#btnCategoryAdd').click(function() {
                 $('#categoryForm')[0].reset();
                 $('.modal-title').html("<i class='fa fa-plus'></i> Add Category");
                 $('#actions').val("Add");
