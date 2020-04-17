@@ -147,7 +147,7 @@ function totalOrdersMade($conn, $userEmail)
 </head>
 
 <?php
-require_once('../util'.$navbar);
+require_once('../util' . $navbar);
 ?>
 <style>
     .nav-mytabs {
@@ -211,7 +211,7 @@ require_once('../util'.$navbar);
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h3 class="display-4">Welcome, <?=$userFName?>!</h3>
+            <h3 class="display-4">Welcome, <?= $userFName ?>!</h3>
             <ul class="nav nav-mytabs" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
@@ -247,8 +247,8 @@ require_once('../util'.$navbar);
                                         <dd>$<?PHP echo $row['userBalance']; ?></dd>
                                     </dl>
                                     <form action="editProfile.php">
-										<button type="submit">Edit Profile</button>
-								    </form>
+                                        <button type="submit">Edit Profile</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -302,149 +302,187 @@ require_once('../util'.$navbar);
                 </div>
                 <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
                     <br>
-                    <div class="row">
-                        <div class="col-2">
-                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                <a class="nav-link active" id="v-pills-sold-tab" data-toggle="pill" href="#v-pills-sold" role="tab" aria-controls="v-pills-sold" aria-selected="true">Sold</a>
-                                <a class="nav-link" id="v-pills-selling-tab" data-toggle="pill" href="#v-pills-selling" role="tab" aria-controls="v-pills-selling" aria-selected="false">Selling</a>
-                                <a class="nav-link" id="v-pills-purchased-tab" data-toggle="pill" href="#v-pills-purchased" role="tab" aria-controls="v-pills-purchased" aria-selected="false">Purchased</a>
-                                <a class="nav-link" id="v-pills-add-tab" data-toggle="pill" href="#v-pills-add" role="tab" aria-controls="v-pills-add" aria-selected="false">Post Product</a>
+                    <div class="accordion" id="productsTab">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#selling">
+                                        Selling
+                                    </button>
+                                </h5>
                             </div>
-                        </div>
-                        <div class="col-10">
-                            <!-- Start Product of Tabs -->
-                            <div class="tab-content" id="v-pills-tabContent">
-                                <!-- Sold Tab -->
-                                <div class="tab-pane fade show active" id="v-pills-sold" role="tabpanel" aria-labelledby="v-pills-sold-tab">
-                                    <?php
-                                    if ($soldResult) {
-                                        while ($orderItems = mysqli_fetch_assoc($soldResult)) {
-                                            //echo $orderItems['productId'];
-                                            $sql = "SELECT * FROM Product WHERE productId= " . $orderItems['productId'];
-                                            $result2 = $conn->query($sql);
-                                            echo $conn->error;
-                                            while ($product = mysqli_fetch_assoc($result2)) {
-                                    ?>
-                                                <div class="col-md-8">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <h3><?= $product['productName'] ?></h3>
-                                                                    <h4>$<?= $product['productPrice'] ?></h4>
-                                                                    <!--<p><i>Purchased by: <?= $product['userEmail'] ?></i></p> -->
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                </div>
-                                    <?php
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                </div>
 
-                                <!-- Selling Tab -->
-                                <div class="tab-pane fade" id="v-pills-selling" role="tabpanel" aria-labelledby="v-pills-selling-tab">
+                            <div id="selling" class="collapse" data-parent="#productsTab">
+                                <div class="card-body">
+
                                     <?php
                                     if ($sellingResult) {
-                                        while ($sellingItems = mysqli_fetch_assoc($sellingResult)) {
-                                            //echo $sellingItems['productId'];
-                                            $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'];
-                                            $result2 = $conn->query($sql);
-                                            echo $conn->error;
-                                            while ($product = mysqli_fetch_assoc($result2)) {
+                                        if (mysqli_num_rows($sellingResult) > 0) {
+
+                                            while ($sellingItems = mysqli_fetch_assoc($sellingResult)) {
+                                                //echo $sellingItems['productId'];
+                                                $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'];
+                                                $result2 = $conn->query($sql);
+                                                echo $conn->error;
+                                                while ($product = mysqli_fetch_assoc($result2)) {
                                     ?>
-                                                <div class="col-md-8">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <?PHP
-                                                                    $conn->next_result();
-                                                                    $sql = "SELECT imagePath FROM ProductImage WHERE productId=" . $sellingItems['productId'] . " LIMIT 1;";
-                                                                    $imageResult = $conn->query($sql);
-                                                                    $row = mysqli_fetch_assoc($imageResult);
-                                                                    ?>
-                                                                    <img src="../<?PHP echo $row['imagePath']; ?>" alt="" width="125px" class="img-fluid img-thumbnail">
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <h3><?= $product['productName'] ?></h3>
-                                                                    <h4>$<?= $product['productPrice'] ?></h4>
+                                                    <div class="col-md-8">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <?PHP
+                                                                        $conn->next_result();
+                                                                        $sql = "SELECT imagePath FROM ProductImage WHERE productId=" . $sellingItems['productId'] . " LIMIT 1;";
+                                                                        $imageResult = $conn->query($sql);
+                                                                        $row = mysqli_fetch_assoc($imageResult);
+                                                                        ?>
+                                                                        <img src="../<?PHP echo $row['imagePath']; ?>" alt="" width="125px" class="img-fluid img-thumbnail">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <h3><?= $product['productName'] ?></h3>
+                                                                        <h4>$<?= $product['productPrice'] ?></h4>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                            <hr />
                                                         </div>
-                                                        <hr />
-                                                    </div>
                                         <?php
+                                                }
                                             }
+                                        } else {
+                                            echo '<h4>You did not post products for sale yet!</h4>';
                                         }
                                     }
                                         ?>
-                                                </div>
+                                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#postProduct" aria-expanded="false" aria-controls="collapseTwo">
+                                            Post Product
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="postProduct" class="collapse" aria-labelledby="headingTwo" data-parent="#productsTab">
+                                    <div class="card-body">
+                                        <?php
+                                        require_once('postProduct.php');
 
-                                                <!-- Purchased Tab -->
-                                                <div class="tab-pane fade" id="v-pills-purchased" role="tabpanel" aria-labelledby="v-pills-purchased-tab">
-                                                    <?php
-                                                    if ($purchasedResult) {
-                                                        while ($orderItems = mysqli_fetch_assoc($purchasedResult)) {
-                                                            //echo $orderItems['productId'];
-                                                            $sql = "SELECT * FROM Product WHERE productId= " . $orderItems['productId'];
-                                                            $result2 = $conn->query($sql);
-                                                            echo $conn->error;
-                                                            while ($product = mysqli_fetch_assoc($result2)) {
-                                                    ?>
-                                                                <div class="col-md-8">
-                                                                    <div class="card">
-                                                                        <div class="card-body">
-                                                                            <div class="row">
-                                                                                <div class="col-md-6">
-                                                                                    <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <h3><?= $product['productName'] ?></h3>
-                                                                                    <h4>$<?= $product['productPrice'] ?></h4>
-                                                                                    <p><i>Sold by: <?= $product['userEmail'] ?></i></p>
-                                                                                </div>
-                                                                            </div>
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Sold
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#productsTab">
+                                    <div class="card-body">
+                                        <?php
+                                        if ($soldResult) {
+                                            if (mysqli_num_rows($soldResult) > 0) {
+
+                                                while ($orderItems = mysqli_fetch_assoc($soldResult)) {
+                                                    $sql = "SELECT * FROM Product WHERE productId= " . $orderItems['productId'];
+                                                    $result2 = $conn->query($sql);
+                                                    echo $conn->error;
+                                                    while ($product = mysqli_fetch_assoc($result2)) {
+                                        ?>
+                                                        <div class="col-md-8">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <h3><?= $product['productName'] ?></h3>
+                                                                            <h4>$<?= $product['productPrice'] ?></h4>
+                                                                            <!--<p><i>Purchased by: <?= $product['userEmail'] ?></i></p> -->
                                                                         </div>
                                                                     </div>
-                                                                    <hr />
                                                                 </div>
-                                                    <?php
-                                                            }
-                                                        }
+                                                            </div>
+                                                            <hr />
+                                                        </div>
+                                        <?php
                                                     }
-                                                    ?>
-                                                </div>
-                                                <!-- Add Item Tab -->
-                                                <div class="tab-pane fade" id="v-pills-add" role="tabpanel" aria-labelledby="v-pills-add-tab">
-                                                    <!-- Link to postProduct.php -->
-                                                    <?php
-                                                    require_once('postProduct.php');
+                                                }
+                                            } else {
+                                                echo '<h4>You do not have sold products</h4>';
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
 
-                                                    ?>
-                                                </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#purchased" aria-expanded="false" aria-controls="collapseThree">
+                                            Purchased
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="purchased" class="collapse" aria-labelledby="headingThree" data-parent="#productsTab">
+                                    <div class="card-body">
+                                        <?php
+                                        if ($purchasedResult) {
+                                            if (mysqli_num_rows($purchasedResult) > 0) {
 
+                                                while ($orderItems = mysqli_fetch_assoc($purchasedResult)) {
+                                                    //echo $orderItems['productId'];
+                                                    $sql = "SELECT * FROM Product WHERE productId= " . $orderItems['productId'];
+                                                    $result2 = $conn->query($sql);
+                                                    echo $conn->error;
+                                                    while ($product = mysqli_fetch_assoc($result2)) {
+                                        ?>
+                                                        <div class="col-md-8">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <h3><?= $product['productName'] ?></h3>
+                                                                            <h4>$<?= $product['productPrice'] ?></h4>
+                                                                            <p><i>Sold by: <?= $product['userEmail'] ?></i></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <hr />
+                                                        </div>
+                                        <?php
+                                                    }
+                                                }
+                                            } else {
+                                                echo '<h4>You did not buy any products</h4>';
+                                            }
+                                        }
+                                        ?> </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div> <!-- End of Tabs -->
+                </div> <!-- End of Tabs -->
 
 
+            </div>
+            <?php
+            require_once('../footer.html');
+
+            ?>
         </div>
-        <?php
-        require_once('../footer.html');
-
-        ?>
-    </div>
 </body>
 
 </html>
