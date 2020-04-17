@@ -83,13 +83,13 @@ $userFName = $row['userFName'];
                     }
 
                     ?>
-                    <a class="nav-item nav-text" href="/client/cart/cart.php" data-toggle="tooltip" title="View Cart"><?= $cartCount ?><img style="width: 30px; margin: 5px 20px 0 0;" src='images/cart.png'></a>
+                    <a class="nav-item nav-text" href="/client/cart/cart.php" data-toggle="tooltip" title="View Cart"><?= $cartCount ?><img style="width: 30px; margin: 5px 20px 0 0;" src='/images/cart.png'></a>
                 </li>
 
                 <li>
                     <div class="dropdown show">
                         <a class="btn btn-md btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img id="profile-nav-img" src="/<?= $row['userPhotoPath']; ?>" width="30px" height="30px" style="border: 1px solid white;" onerror="this.src='images/profile.png';">
+                            <img id="profile-nav-img" src="/<?= $row['userPhotoPath']; ?>" width="30px" height="30px" style="border: 1px solid white;" onerror="this.src='/images/profile.png';">
                             <?= $userFName ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">

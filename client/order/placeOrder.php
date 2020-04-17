@@ -2,13 +2,6 @@
 <html lang="en">
 <?php
 // check that user is logged in, if not kick to login page
-require_once('../../util/check-login.php');
-if(!checkLogin()) {
-    header("Location: ../..//logIn.php");
-}
-// get db connection
-include('../../util/db-config.php');
-// get navbar
 require_once('../../util/config.php');
 // get items in cart
 require_once('../cart/cart-utility.php');
@@ -23,6 +16,9 @@ $productId = $_POST['productId'];
         margin: 0;
     }
 </style>
+<?php
+require_once('../../util'.$navbar);
+?>
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
