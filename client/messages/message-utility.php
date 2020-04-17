@@ -45,3 +45,12 @@ function getProductDetail($conn, $productId)
     echo $conn->error;
     return $result;
 }
+
+function getUserDetail($conn, $userEmail)
+{
+    $sql = "SELECT * FROM User WHERE userEmail='$userEmail'";
+    $result = $conn->query($sql);
+    $conn->next_result();
+    echo $conn->error;
+    return $result;
+}
