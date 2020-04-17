@@ -36,15 +36,6 @@ function getIssueMessages($conn)
     }
 }
 
-function getUserDetail($conn, $userEmail)
-{
-    $sql = "SELECT * FROM User WHERE userEmail='$userEmail'";
-    $result = $conn->query($sql);
-    $conn->next_result();
-    echo $conn->error;
-    return $result;
-}
-
 function getProductDetail($conn, $productId)
 {
     // execute stored procedure

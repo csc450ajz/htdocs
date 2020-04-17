@@ -5,9 +5,9 @@ if (!checkLogin()) {
     header('Location: /logIn.php');
 }
 
-
+$userEmail = $_SESSION['userEmail'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $userEmail = $_SESSION['userEmail'];
+
     // gather form values
     $fName = $_POST['fName'];
     $lName = $_POST['lName'];
