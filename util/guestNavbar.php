@@ -24,14 +24,14 @@
                     <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
                         <span class='dropdown-item disabled'>Choose a Category:</span>
                         <?PHP
-                        $sql = "SELECT * FROM Category LIMIT 5";
+                        $sql = "SELECT * FROM Category WHERE categoryStatus = 'active' LIMIT 5";
                         $conn->next_result();
                         $catResult = $conn->query($sql);
                         while ($category = mysqli_fetch_assoc($catResult)) :
                             $id = $category['categoryId'];
                             $name = $category['categoryName'];
                             echo "<div class='dropdown-divider'></div>";
-                            echo "<a class='dropdown-item' href='categoryProducts.php?categoryId=$id'>$name</a>";
+                            echo "<a class='dropdown-item' href='/categoryProducts.php?categoryId=$id'>$name</a>";
                         endwhile;
                         ?>
                         <div class='dropdown-divider'></div>
