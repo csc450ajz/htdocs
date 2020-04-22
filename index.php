@@ -10,10 +10,6 @@ if (isset($_POST['productId'])) {
     addCartItem($_POST['productId'], $conn);
 }
 
-
-
-
-
 // call getFeaturedProducts() stored procedure
 $sql = "CALL getFeaturedProducts();";
 $result = $conn->query($sql);
@@ -40,8 +36,9 @@ $result = $conn->query($sql);
     }
 </style>
 <?php
-require_once(('util' . $navbar));
+require_once('util' . $navbar);
 ?>
+<link rel='stylesheet' href='style/products.css'>
 
 <body>
     <div class="container">

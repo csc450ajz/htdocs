@@ -1,25 +1,15 @@
-<!-- productDetail.php - product detail page
-      
-    -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <?php
 // get config file
 require_once('util/config.php');
-
 ?>
-
 <head>
     <title>cart.php</title>
+    <link rel='stylesheet' href='style/products.css'>
 </head>
 <?php
 require_once('util' . $navbar);
-
-// require_once('util/config.php');
-// include('util/db-config.php');
-//include('databaseConnection.php');
 $error = "";
 $errormsg = "";
 // if productId was sent by GET
@@ -123,11 +113,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
         <div class="row">
 
             <div class="col-md-8 productDetail">
-
                 <div class="row">
-
-
-
                     <div class="tab-content" id="myTabContent" style="margin:auto">
                         <?php
                         if (mysqli_num_rows($productImagesResults) > 0) {
@@ -168,7 +154,6 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                             </li>
                         <?php } ?>
                     </ul>
-
                 </div>
             </div>
             <div class="col-md-4">
@@ -185,9 +170,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
 
                     <button class="btn btn-primary">Add to Cart</button>
                 </form>
-
                 <br>
-
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-description" aria-selected="true">Description</a>
@@ -220,27 +203,20 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                                 <a href="logIn.php" type="button" class="btn btn-primary">Sign in</a>
                                 <!-- <button class="btn btn-primary" href="logIn.php">Sign in</button> -->
                             </div>
-
                         <?php } ?>
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- /.row -->
         <hr>
         <!-- Related Projects Row -->
         <h3 class="my-4">Related Products</h3>
-
-
-
-
         <style>
             .related {
                 min-height: 350px;
             }
         </style>
-
         <?php
         $conn->next_result();
         $sql = "SELECT * FROM product WHERE genderId=" . $product['genderId'];
@@ -257,41 +233,30 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                     $conn->next_result();
                     $imageResult = $conn->query($sql);
                     $images = mysqli_fetch_assoc($imageResult);
-
-
-
             ?>
+            <div class="col-xs-8 col-md-6 col-lg-3">
+                <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+                    <div class="card related">
+                        <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
+                        <div class="card-body">
+                            <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
+                            <p class="card-text">$<?= $product['productPrice']; ?></p>
+                            <!-- Send product id as encoded value -->
+                            <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
+                            <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
+                            <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
 
-                    <div class="col-xs-8 col-md-6 col-lg-3">
-                        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
-                            <div class="card related">
-                                <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
-                                <div class="card-body">
-                                    <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
-                                    <p class="card-text">$<?= $product['productPrice']; ?></p>
-                                    <!-- Send product id as encoded value -->
-                                    <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
-                                    <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
-                                    <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
-
-                                </div>
-                            </div>
-                        </form>
-
+                        </div>
                     </div>
+                </form>
+            </div>
             <?php }
             } else {
                 echo '<h5></i>No Related Products</i></h5>';
             } ?>
-
         </div>
         <hr>
-
-        <!-- /.row -->
-
     </div>
-    <!-- /.container -->
-
     <?php require_once('footer.html'); ?>
 </body>
 
