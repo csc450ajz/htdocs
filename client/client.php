@@ -400,7 +400,13 @@ require_once('../util' . $navbar);
                                                                 <div class="card-body">
                                                                     <div class="row">
                                                                         <div class="col-md-6">
-                                                                            <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
+                                                                            <?php 
+                                                                                $sql = "SELECT imagePath FROM ProductImage WHERE productId = " . $orderItems['productId'];
+                                                                                $conn->next_result();
+                                                                                $result3 = $conn->query($sql);
+                                                                                $imagePath = mysqli_fetch_assoc($result3);
+                                                                            ?>
+                                                                            <img src="<?=$imagePath['imagePath'];?>" alt="" class="img-fluid img-thumbnail">
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <h3><?= $product['productName'] ?></h3>

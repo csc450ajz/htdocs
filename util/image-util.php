@@ -29,7 +29,7 @@
             $fileNameNew = uniqid('', true).".".$fileExt;
 
             // designate file destination
-            $fileDestination = '../productImages/'.$fileNameNew;
+            $fileDestination = '/productImages/'.$fileNameNew;
 
             // move file to productImages folder
             move_uploaded_file($fileTmpName, $fileDestination);
