@@ -3,6 +3,8 @@
 <?php
 // get navbar
 require_once('util/config.php');
+// define variable outside of scope
+$categoryName = "";
 
 // if categoryId is passed in POST, display products based on the category
 if (isset($_GET['categoryId'])) {
@@ -14,7 +16,9 @@ if (isset($_GET['categoryId'])) {
 
     //Call getCategoryDetail function
     $categoryResult = getCategoryDetail($conn, $categoryId);
+    //var_dump($categoryResult);
     $category = mysqli_fetch_assoc($categoryResult);
+    $categoryName = $category['categoryName'];
 
     //Else if all product is chosen, display all products
 } elseif (isset($_GET['allProducts'])) {
@@ -22,7 +26,7 @@ if (isset($_GET['categoryId'])) {
     $productsResult = getAllProducts($conn);
 
     //Set cateogry Name to All Products since it is not in the database
-    $category['categortName'] = 'All Products';
+    $category['categoryName'] = 'All Products';
 }
 
 // if productId is passed in POST, add to cart
@@ -40,7 +44,7 @@ function getCategoryBasedProducts($conn, $categoryId)
     $sql = "SELECT * FROM Product WHERE categoryId='$categoryId'";
     $result = $conn->query($sql);
     $conn->next_result();
-    echo $conn->error;
+    //echo var_dump($result);
     return $result;
 }
 
@@ -65,7 +69,7 @@ function getCategoryDetail($conn, $categoryId)
     $sql = "SELECT categoryName FROM Category WHERE categoryId='$categoryId'";
     $result = $conn->query($sql);
     $conn->next_result();
-    echo $conn->error;
+    //echo var_dump($result);
     return $result;
 }
 ?>
@@ -95,6 +99,11 @@ function getCategoryDetail($conn, $categoryId)
             min-height: 350px;
         }
     }
+
+    .card-image {
+        height: 200px;
+        width: auto;
+    }
 </style>
 <?php
 require_once(('util' . $navbar));
@@ -117,7 +126,7 @@ require_once(('util' . $navbar));
             </div>
         </div>
 
-        <h2 class="text-center"><?= $category['categoryName'] ?> Results</h2>
+        <h2 class="text-center"><?= $categoryName?> Results</h2>
 
 
         <div class="row">
@@ -138,7 +147,7 @@ require_once(('util' . $navbar));
                         <form action="<?php echo htmlentities($_SERVER['REQUEST_URI']); ?>" method="POST">
                             <!-- col-md-3 col-sm-6 mb-4 -->
                             <div class="card product">
-                                <img src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';" style="width: auto; height: 200px;">
+                                <img class="card-image" src="<?= $images['imagePath'] ?>" alt="Product Image" onerror="this.src='images/placeholder.jpg';">
                                 <div class="card-body">
                                     <h5 class="card-title"><b><a href="productDetail.php?productId=<?php echo $product['productId']; ?>"><?= $product['productName']; ?></a></b></h5>
                                     <!-- TODO: Add product star reviews -->

@@ -11,7 +11,6 @@ if (isset($_POST['adminMessage'])) {
     $issueId = $_POST['issueId'];
     $userEmail = $_POST['userEmail'];
     $messageText = $_POST['messageText'];
-    // echo ($messageText);
     $sql = "INSERT INTO adminmessages (clientEmail, issueId, messageText, messageTime) VALUES('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
     $result = $conn->query($sql);
 }
@@ -23,7 +22,6 @@ if (isset($_POST['deleteIssue'])) {
         $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
         $tabTag = "{$tabTag}#messages";
         header("Location: {$currentUrl}{$tabTag}");
-        // echo '<script>$("a[href="#nav-messages"]").tab("show")</script>';
     }
 }
 
@@ -53,7 +51,6 @@ if (array_key_exists('hdnMessage', $_POST)) {
             $tabTag = "#messages";
 
             header("Location: {$currentUrl}{$tabTag}");
-            // echo '<script>$("a[href="#nav-messages"]").tab("show")</script>';
         }
     } elseif (isset($_POST['deleteChat'])) {
         $chatId = $_POST['deleteChat'];
@@ -63,7 +60,6 @@ if (array_key_exists('hdnMessage', $_POST)) {
             $tabTag = "#messages";
 
             header("Location: {$currentUrl}{$tabTag}");
-            // echo '<script>$("a[href="#nav-messages"]").tab("show")</script>';
         }
     }
 }
@@ -201,13 +197,11 @@ require_once('../util' . $navbar);
         });
     });
 </script>
-
 <style>
     #profile-pic {
         background: gray;
     }
 </style>
-
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
@@ -252,8 +246,6 @@ require_once('../util' . $navbar);
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-6">
@@ -274,10 +266,7 @@ require_once('../util' . $navbar);
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
-
                     </div>
                 </div>
                 <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
@@ -326,27 +315,27 @@ require_once('../util' . $navbar);
                                                 echo $conn->error;
                                                 while ($product = mysqli_fetch_assoc($result2)) {
                                     ?>
-                                                    <div class="col-md-8">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <?PHP
-                                                                        $conn->next_result();
-                                                                        $sql = "SELECT imagePath FROM ProductImage WHERE productId=" . $sellingItems['productId'] . " LIMIT 1;";
-                                                                        $imageResult = $conn->query($sql);
-                                                                        $row = mysqli_fetch_assoc($imageResult);
-                                                                        ?>
-                                                                        <img src="../<?PHP echo $row['imagePath']; ?>" alt="" width="125px" class="img-fluid img-thumbnail">
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <h3><?= $product['productName'] ?></h3>
-                                                                        <h4>$<?= $product['productPrice'] ?></h4>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                        </div>
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?PHP
+                                                        $conn->next_result();
+                                                        $sql = "SELECT imagePath FROM ProductImage WHERE productId=" . $sellingItems['productId'] . " LIMIT 1;";
+                                                        $imageResult = $conn->query($sql);
+                                                        $row = mysqli_fetch_assoc($imageResult);
+                                                        ?>
+                                                        <img src="../<?PHP echo $row['imagePath']; ?>" style="max-height: 125px; width: auto;" class="img-fluid img-thumbnail">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h3><?= $product['productName'] ?></h3>
+                                                        <h4>$<?= $product['productPrice'] ?></h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
                                         <?php
                                                 }
                                             }
@@ -355,7 +344,7 @@ require_once('../util' . $navbar);
                                         }
                                     }
                                         ?>
-                                                    </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card">
@@ -406,7 +395,7 @@ require_once('../util' . $navbar);
                                                                                 $result3 = $conn->query($sql);
                                                                                 $imagePath = mysqli_fetch_assoc($result3);
                                                                             ?>
-                                                                            <img src="<?=$imagePath['imagePath'];?>" alt="" class="img-fluid img-thumbnail">
+                                                                            <img src="<?=$imagePath['imagePath'];?>" onerror="this.src='/images/placeholder.jpg';" class="img-fluid img-thumbnail">
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <h3><?= $product['productName'] ?></h3>
@@ -451,23 +440,29 @@ require_once('../util' . $navbar);
                                                     echo $conn->error;
                                                     while ($product = mysqli_fetch_assoc($result2)) {
                                         ?>
-                                                        <div class="col-md-8">
-                                                            <div class="card">
-                                                                <div class="card-body">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <img src="images/balls.jpg" alt="" class="img-fluid img-thumbnail">
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <h3><?= $product['productName'] ?></h3>
-                                                                            <h4>$<?= $product['productPrice'] ?></h4>
-                                                                            <p><i>Sold by: <?= $product['userEmail'] ?></i></p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <hr />
+                                        <div class="col-md-8">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <?php 
+                                                                $sql = "SELECT imagePath FROM ProductImage WHERE productId = " . $orderItems['productId'];
+                                                                $conn->next_result();
+                                                                $result4 = $conn->query($sql);
+                                                                $imagePath = mysqli_fetch_assoc($result3);
+                                                            ?>
+                                                            <img src="<?=$imagePath['imagePath'];?>" onerror="this.src='/images/placeholder.jpg';" class="img-fluid img-thumbnail">
                                                         </div>
+                                                        <div class="col-md-6">
+                                                            <h3><?= $product['productName'] ?></h3>
+                                                            <h4>$<?= $product['productPrice'] ?></h4>
+                                                            <p><i>Sold by: <?= $product['userEmail'] ?></i></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
                                         <?php
                                                     }
                                                 }
@@ -480,15 +475,11 @@ require_once('../util' . $navbar);
                             </div>
                         </div>
                     </div>
-                </div> <!-- End of Tabs -->
-
-
+                </div>
             </div>
             <?php
             require_once('../footer.html');
-
             ?>
         </div>
 </body>
-
 </html>

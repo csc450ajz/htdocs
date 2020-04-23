@@ -201,16 +201,13 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                             <div>
                                 <h5>Please sign in to message the seller</h5>
                                 <a href="logIn.php" type="button" class="btn btn-primary">Sign in</a>
-                                <!-- <button class="btn btn-primary" href="logIn.php">Sign in</button> -->
                             </div>
                         <?php } ?>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.row -->
         <hr>
-        <!-- Related Projects Row -->
         <h3 class="my-4">Related Products</h3>
         <style>
             .related {
@@ -223,7 +220,6 @@ $productImagesResults = getProductImages($conn, $product['productId'])
         $result = $conn->query($sql);
         ?>
         <div class="row flex-row flex-nowrap overflow-auto">
-
             <?php
             if (mysqli_num_rows($result) > 0) {
                 while ($product = mysqli_fetch_assoc($result)) {
@@ -243,9 +239,6 @@ $productImagesResults = getProductImages($conn, $product['productId'])
                             <p class="card-text">$<?= $product['productPrice']; ?></p>
                             <!-- Send product id as encoded value -->
                             <input type="hidden" name="productId" value="<?= $product['productId']; ?>" />
-                            <!-- <p><i class="fas fa-star"></i><span>&#215;</span></p> -->
-                            <!-- <button name="btnCart" value="new" class="btn btn-primary">Add to Cart</button> -->
-
                         </div>
                     </div>
                 </form>
