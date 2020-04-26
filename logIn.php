@@ -107,7 +107,8 @@ require_once(('util'.$navbar));
         </div>
     </div>
 
-
+    <?php require_once('footer.html');
+    ?>
 </body>
 
 </html>

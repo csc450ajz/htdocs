@@ -37,6 +37,19 @@ $userFName = $row['userFName'];
             color: black;
             cursor: pointer
         }
+
+        #reward,
+        #userBalance {
+            font-size: 1.5vw;
+        }
+
+        @media only screen and (max-width: 500px) {
+
+            #reward,
+            #userBalance {
+                font-size: 3vw;
+            }
+        }
     </style>
 
     <script>
@@ -106,7 +119,7 @@ $userFName = $row['userFName'];
 
         </div>
         <a class="navbar-brand mx-auto d-block text-center btn btn-light" id="reward">Earn Reward</a>
-        <span class="navbar-brand mx-auto d-block text-center badge badge-success" id="userBalance" style="font-size: 20px"></span>
+        <span class="navbar-brand mx-auto d-block text-center badge badge-success" id="userBalance"></span>
 
         <div class='collapse navbar-collapse w-50 order-1 order-md-0 navbarSupportedContent' id='navbarSupportedContent'>
 
@@ -189,7 +202,7 @@ $userFName = $row['userFName'];
                         userBalance: true,
                     },
                     success: function(data) {
-                        $('#userBalance').html("Balance: $"+ data);
+                        $('#userBalance').html("Balance: $" + data);
                     }
                 });
             }

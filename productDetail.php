@@ -91,6 +91,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
     <title>Product Detail</title>
 </head>
 <style>
+
     /* .productDetail {
         height: 120px;
     } */

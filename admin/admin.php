@@ -242,7 +242,7 @@ require_once(("../util" . $navbar));
 
     </div>
     <?php
-    require_once('./../footer.html');
+    require_once('../footer.html');
 
     ?>
 
