@@ -157,7 +157,7 @@ require_once(("../util" . $navbar));
                                         <dt>Cash Balance:</dt>
                                         <dd>$<?PHP echo $row['userBalance']; ?></dd>
                                     </dl>
-                                    <form action="/htdocs/client/editProfile.php">
+                                    <form action="/client/editProfile.php">
                                         <button type="submit">Edit Profile</button>
                                     </form>
                                 </div>

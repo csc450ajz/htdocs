@@ -9,6 +9,13 @@ require_once('util/config.php');
     <link rel='stylesheet' href='style/products.css'>
 </head>
 <?php
+
+// if productId is passed in POST, add to cart
+if (isset($_POST['productId'])) {
+    require_once("client/cart/cart-utility.php");
+    addCartItem($_POST['productId'], $conn);
+}
+
 require_once('util' . $navbar);
 $error = "";
 $errormsg = "";
@@ -58,11 +65,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
     }
 }
 
-// if productId is passed in POST, add to cart
-if (isset($_POST['productId'])) {
-    require_once("client/cart/cart-utility.php");
-    addCartItem($_POST['productId'], $conn);
-}
+
 
 function updateProductViews($conn, $productId, $productViews)
 {
