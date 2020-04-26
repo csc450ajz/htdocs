@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //Check if password field is not NULL
     if ($_POST['password'] != NULL && $_FILES['profilePic'] != NULL) {
-        echo 'Both';
+        // echo 'Both';
         $password = $_POST['password'];
         //Store Image
         require_once('../util/image-util.php');
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName', userPassword = '$password', userPhotoPath = '$photoPath' WHERE userEmail = '$userEmail'";
         $result = $conn->query($sql);
     } elseif ($_POST['password'] != NULL) {
-        echo 'Pass';
+        // echo 'Pass';
 
         $password = $_POST['password'];
         echo $password;
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName', userPassword = '$password' WHERE userEmail = '$userEmail'";
         $result = $conn->query($sql);
     } elseif ($_FILES['profilePic'] != NULL) {
-        echo 'files';
+        // echo 'files';
 
         //Store Image
         require_once('../util/image-util.php');
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName', userPhotoPath = '$photoPath' WHERE userEmail = '$userEmail'";
         $result = $conn->query($sql);
     } else {
-        echo 'none';
+        // echo 'none';
 
         // Update Profile   
         $sql = "UPDATE User SET userFName = '$fName', userLName = '$lName' WHERE userEmail = '$userEmail'";
