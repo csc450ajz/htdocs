@@ -11,7 +11,7 @@ if (isset($_POST['adminMessage'])) {
     $issueId = $_POST['issueId'];
     $userEmail = $_POST['userEmail'];
     $messageText = $_POST['messageText'];
-    $sql = "INSERT INTO adminmessages (clientEmail, issueId, messageText, messageTime) VALUES('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
+    $sql = "INSERT INTO AdminMessages (clientEmail, issueId, messageText, messageTime) VALUES('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
     $result = $conn->query($sql);
 }
 
@@ -31,21 +31,21 @@ if (array_key_exists('hdnMessage', $_POST)) {
         $userEmail = $_SESSION['userEmail'];
         $messageText = $_POST['messageText'];
         // echo ($messageText);
-        $sql = "INSERT INTO chatmessages (userEmail, chatId, messageText, messageSentTime) VALUES('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO ChatMessages (userEmail, chatId, messageText, messageSentTime) VALUES('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
         $result = $conn->query($sql);
 
-        $sql = "UPDATE productchat SET recentSender='$userEmail' WHERE chatId = '$chatId'";
+        $sql = "UPDATE ProductChat SET recentSender='$userEmail' WHERE chatId = '$chatId'";
         $conn->query($sql);
     } elseif (isset($_POST['issueMessage'])) {
         $userEmail = $_SESSION['userEmail'];
         $messageText = $_POST['issueText'];
         $issueType = $_POST['issueType'];
 
-        $sql = "INSERT INTO issue (clientEmail, issueType, issueText, issueDateSubmitted) VALUES('$userEmail', '$issueType' ,'$messageText', CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO Issue (clientEmail, issueType, issueText, issueDateSubmitted) VALUES('$userEmail', '$issueType' ,'$messageText', CURRENT_TIMESTAMP)";
         $result = $conn->query($sql);
 
         $issueId = mysqli_insert_id($conn);
-        $sql = "INSERT INTO adminmessages (clientEmail, issueId, messageText, messageTime) VALUES ('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO AdminMessages (clientEmail, issueId, messageText, messageTime) VALUES ('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
         if ($conn->query($sql)) {
             $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
             $tabTag = "#messages";
@@ -54,7 +54,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
         }
     } elseif (isset($_POST['deleteChat'])) {
         $chatId = $_POST['deleteChat'];
-        $sql = "DELETE FROM productChat WHERE chatId = '$chatId'";
+        $sql = "DELETE FROM ProductChat WHERE chatId = '$chatId'";
         if ($conn->query($sql)) {
             $currentUrl = htmlentities($_SERVER['REQUEST_URI']);
             $tabTag = "#messages";
@@ -118,7 +118,7 @@ $purchasedResult = getPurchasedtems($conn);
 
 function totalProductSold($conn, $userEmail)
 {
-    $sql = "SELECT * FROM orders WHERE sellerEmail='$userEmail'";
+    $sql = "SELECT * FROM Orders WHERE sellerEmail='$userEmail'";
     $result = $conn->query($sql);
     $total = mysqli_num_rows($result);
     $conn->next_result();
@@ -128,7 +128,7 @@ function totalProductSold($conn, $userEmail)
 
 function totalOrdersMade($conn, $userEmail)
 {
-    $sql = "SELECT * FROM orders WHERE buyerEmail='$userEmail'";
+    $sql = "SELECT * FROM Orders WHERE buyerEmail='$userEmail'";
     $result = $conn->query($sql);
     $total = mysqli_num_rows($result);
     $conn->next_result();

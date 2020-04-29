@@ -13,7 +13,7 @@ function getProductMessage($conn)
     if (isset($_SESSION['userEmail'])) {
         $userEmail = $_SESSION['userEmail'];
 
-        $sql = "SELECT * FROM productchat WHERE buyerEmail= '$userEmail' OR sellerEmail= '$userEmail'";
+        $sql = "SELECT * FROM ProductChat WHERE buyerEmail= '$userEmail' OR sellerEmail= '$userEmail'";
         $result = $conn->query($sql);
         $conn->next_result();
         echo $conn->error;
@@ -28,7 +28,7 @@ function getIssueMessages($conn)
         $userEmail = $_SESSION['userEmail'];
 
         // execute stored procedure
-        $sql = "SELECT * FROM issue WHERE clientEmail='$userEmail'";
+        $sql = "SELECT * FROM Issue WHERE clientEmail='$userEmail'";
         $result = $conn->query($sql);
         $conn->next_result();
         echo $conn->error;
