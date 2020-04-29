@@ -78,6 +78,9 @@ function getCategoryDetail($conn, $categoryId)
     <title>Sportrader</title>
 </head>
 <style>
+    h1 {
+        padding: 40px;
+    }
     .row {
         margin: 15px 0px;
     }
@@ -111,24 +114,7 @@ require_once(('util' . $navbar));
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <h4>Search Products</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-10">
-                <!-- Search form -->
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-dark" type="button" value="search">Search</button>
-            </div>
-        </div>
-
-        <h2 class="text-center"><?= $categoryName?> Results</h2>
-
-
+        <h1 class="text-center"><?= $categoryName?> Results</h1>
         <div class="row">
 
             <?php

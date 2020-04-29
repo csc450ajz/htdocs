@@ -19,6 +19,9 @@ $result = $conn->query($sql);
     <title>Sportrader</title>
 </head>
 <style>
+    h1 {
+        text-align: center;
+    }
     .row {
         margin: 15px 0px;
     }
@@ -44,18 +47,23 @@ require_once('util' . $navbar);
     <div class="container">
         <div class="row">
             <div class="col">
-                <h4>Search Products</h4>
+                <h1>Welcome to Sportrader!</h1>
             </div>
         </div>
+        <hr>
         <div class="row">
-            <div class="col-md-10">
-                <!-- Search form -->
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+            <div class="col-md-6">
+                <h2>What is Sportrader?</h2>
+                <p>Think of Sportrader as a cross between eBay and Craigslist, but for sports. We believe Sportrader provides
+                the perfect platform for fans of all sports to buy and sell their favorite gear and memorabilia.</p>
             </div>
-            <div class="col-md-2">
-                <button class="btn btn-dark" type="button" value="search">Search</button>
+            <div class="col-md-6">
+                <h2>How do I use Sportrader?</h2>
+                <p>To get started, create an account and browse the products for sale! If you have something to sell, head into 
+                your profile and post it! Also use the Reward button at any time to try your luck at winning more site currency!</p>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col">
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
