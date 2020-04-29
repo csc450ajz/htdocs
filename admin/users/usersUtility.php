@@ -97,7 +97,7 @@ function getUserDetail($conn, $userEmail)
 
 function createUser($conn, $userEmail, $userFName, $userLName, $userType, $userPassword)
 {
-    $sql = "INSERT INTO user (userEmail, userFName, userLName, userType, userPassword, userBalance) VALUES ('$userEmail', '$userFName','$userLName', '$userType', '$userPassword', 0)";
+    $sql = "INSERT INTO User (userEmail, userFName, userLName, userType, userPassword, userBalance) VALUES ('$userEmail', '$userFName','$userLName', '$userType', '$userPassword', 0)";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
@@ -106,7 +106,7 @@ function createUser($conn, $userEmail, $userFName, $userLName, $userType, $userP
 
 function updateUser($conn, $userEmail, $userFName, $userLName, $userType, $userPassword)
 {
-    $sql = "UPDATE user SET userFName='$userFName', userLName='$userLName', userType='$userType', userPassword='$userPassword' WHERE userEmail= '$userEmail'";
+    $sql = "UPDATE User SET userFName='$userFName', userLName='$userLName', userType='$userType', userPassword='$userPassword' WHERE userEmail= '$userEmail'";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
@@ -115,7 +115,7 @@ function updateUser($conn, $userEmail, $userFName, $userLName, $userType, $userP
 
 function deleteUser($conn, $userEmail)
 {
-    $sql = "DELETE FROM user WHERE userEmail='$userEmail'";
+    $sql = "DELETE FROM User WHERE userEmail='$userEmail'";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;

@@ -53,12 +53,12 @@ if (array_key_exists('hdnMessage', $_POST)) {
         $productId = $_POST['hdnMessage'];
         $conn->next_result();
 
-        $sql = "INSERT INTO productchat (buyerEmail, sellerEmail, productId, recentSender) VALUES('$userEmail', '$sellerEmail', '$productId', '$userEmail')";
+        $sql = "INSERT INTO ProductChat (buyerEmail, sellerEmail, productId, recentSender) VALUES ('$userEmail', '$sellerEmail', '$productId', '$userEmail')";
         $result = $conn->query($sql);
 
         $chatId = mysqli_insert_id($conn);
         $messageTime = $product['chatStartDat'];
-        $sql = "INSERT INTO chatmessages (userEmail, chatId, messageText, messageSentTime) VALUES ('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO ChatMessages (userEmail, chatId, messageText, messageSentTime) VALUES ('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
         if ($conn->query($sql)) {
             echo '<script>alert("Message Sent")</script>';
         }
@@ -69,7 +69,7 @@ if (array_key_exists('hdnMessage', $_POST)) {
 
 function updateProductViews($conn, $productId, $productViews)
 {
-    $sql = "UPDATE product SET productViews='$productViews' WHERE productId='$productId'";
+    $sql = "UPDATE Product SET productViews='$productViews' WHERE productId='$productId'";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
@@ -78,7 +78,7 @@ function updateProductViews($conn, $productId, $productViews)
 
 function getProductImages($conn, $productId)
 {
-    $sql = "SELECT * FROM productimage WHERE productId='$productId'";
+    $sql = "SELECT * FROM ProductImage WHERE productId='$productId'";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
@@ -220,7 +220,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
         </style>
         <?php
         $conn->next_result();
-        $sql = "SELECT * FROM product WHERE genderId=" . $product['genderId'];
+        $sql = "SELECT * FROM Product WHERE genderId=" . $product['genderId'];
         $result = $conn->query($sql);
         ?>
         <div class="row flex-row flex-nowrap overflow-auto">

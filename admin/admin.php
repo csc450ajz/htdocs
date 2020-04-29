@@ -12,7 +12,7 @@ if (array_key_exists('hdnIssue', $_POST)) {
         $userEmail = $_POST['userEmail'];
         $messageText = $_POST['messageText'];
         // echo ($messageText);
-        $sql = "INSERT INTO adminmessages (clientEmail, issueId, messageText, messageTime) VALUES('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO AdminMessages (clientEmail, issueId, messageText, messageTime) VALUES('$userEmail', '$issueId', '$messageText', CURRENT_TIMESTAMP)";
         $result = $conn->query($sql);
         // echo $result;
     } elseif (isset($_POST['deleteIssue'])) {

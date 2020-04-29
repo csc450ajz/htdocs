@@ -91,7 +91,7 @@ function getCategoryDetail($conn, $categoryId)
 
 function createCategory($conn, $categoryName, $categoryStatus)
 {
-    $sql = "INSERT INTO category (categoryId, categoryName, categoryStatus) VALUES (NULL, '$categoryName','$categoryStatus')";
+    $sql = "INSERT INTO Category (categoryId, categoryName, categoryStatus) VALUES (NULL, '$categoryName','$categoryStatus')";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
@@ -100,7 +100,7 @@ function createCategory($conn, $categoryName, $categoryStatus)
 
 function updateCategory($conn, $categoryId, $categoryName, $categoryStatus)
 {
-    $sql = "UPDATE category SET categoryName='$categoryName', categoryStatus='$categoryStatus' WHERE categoryId= '$categoryId'";
+    $sql = "UPDATE Category SET categoryName='$categoryName', categoryStatus='$categoryStatus' WHERE categoryId= '$categoryId'";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
@@ -109,7 +109,7 @@ function updateCategory($conn, $categoryId, $categoryName, $categoryStatus)
 
 function deleteCategory($conn, $categoryId)
 {
-    $sql = "UPDATE category SET categoryStatus='inactive' WHERE categoryId= '$categoryId'";
+    $sql = "UPDATE Category SET categoryStatus='inactive' WHERE categoryId= '$categoryId'";
     $result = $conn->query($sql);
     $conn->next_result();
     echo $conn->error;
