@@ -22,7 +22,7 @@ if (isset($_POST['issueId'])) {
 
     $output = '';
     $issueId = $_POST['issueId'];
-    $sql = "SELECT * FROM adminmessages WHERE issueId= '$issueId'";
+    $sql = "SELECT * FROM AdminMessages WHERE issueId= '$issueId'";
     $result = $conn->query($sql);
 
     $output .= '  

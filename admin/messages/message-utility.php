@@ -44,7 +44,7 @@ function getIssueMessages($conn)
         $userEmail = $_SESSION['userEmail'];
 
         // execute stored procedure
-        $sql = "SELECT * FROM issue";
+        $sql = "SELECT * FROM Issue";
         $result = $conn->query($sql);
         $conn->next_result();
         echo $conn->error;
