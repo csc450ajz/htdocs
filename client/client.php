@@ -317,7 +317,7 @@ require_once('../util' . $navbar);
 
                                             while ($sellingItems = mysqli_fetch_assoc($sellingResult)) {
                                                 //echo $sellingItems['productId'];
-                                                $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'];
+                                                $sql = "SELECT * FROM Product WHERE productId= " . $sellingItems['productId'] . " AND productStatus='active'";
                                                 $result2 = $conn->query($sql);
                                                 echo $conn->error;
                                                 while ($product = mysqli_fetch_assoc($result2)) {
@@ -333,7 +333,7 @@ require_once('../util' . $navbar);
                                                                         $imageResult = $conn->query($sql);
                                                                         $row = mysqli_fetch_assoc($imageResult);
                                                                         ?>
-                                                                        <img src="../<?PHP echo $row['imagePath']; ?>" style="max-height: 125px; width: auto;" class="img-fluid img-thumbnail">
+                                                                        <img src="..<?PHP echo $row['imagePath'];?>" style="max-height: 125px; width: auto;" onerror="this.src='/images/placeholder.jpg';" class="img-fluid img-thumbnail">
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <h3><?= $product['productName'] ?></h3>
@@ -343,6 +343,7 @@ require_once('../util' . $navbar);
                                                             </div>
                                                             <hr />
                                                         </div>
+                                                    </div>
                                         <?php
                                                 }
                                             }
@@ -351,7 +352,6 @@ require_once('../util' . $navbar);
                                         }
                                     }
                                         ?>
-                                                    </div>
                                 </div>
                             </div>
                             <div class="card">

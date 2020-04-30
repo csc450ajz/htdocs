@@ -156,7 +156,7 @@ require_once('util' . $navbar);
         <div class="row flex-row flex-nowrap overflow-auto">
 
             <?php
-            $sql = "SELECT * FROM product WHERE genderId= 1";
+            $sql = "SELECT * FROM Product WHERE genderId= 1 AND productStatus='active'";
             $result = $conn->query($sql);
 
             while ($product = mysqli_fetch_assoc($result)) {
@@ -196,7 +196,7 @@ require_once('util' . $navbar);
         <div class="row flex-row flex-nowrap overflow-auto">
 
             <?php
-            $sql = "SELECT * FROM product WHERE genderId= 2";
+            $sql = "SELECT * FROM Product WHERE genderId= 2 AND productStatus='active'";
             $result = $conn->query($sql);
 
             while ($product = mysqli_fetch_assoc($result)) {

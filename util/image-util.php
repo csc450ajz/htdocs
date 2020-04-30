@@ -32,7 +32,7 @@
             $fileDestination = '/productImages/'.$fileNameNew;
 
             // move file to productImages folder
-            move_uploaded_file($fileTmpName, $fileDestination);
+            move_uploaded_file($fileTmpName, ('..'.$fileDestination));
 
             // query db and insert new productImage record with path
             $sql = "INSERT INTO ProductImage (imagePath, productId) VALUES ('$fileDestination', '$productId');";
@@ -68,7 +68,7 @@
         $fileNameNew = uniqid('', true).".".$fileExt;
 
         // designate file destination
-        $fileDestination = 'userImages/'.$fileNameNew;
+        $fileDestination = '../userImages/'.$fileNameNew;
 
         // move file to productImages folder
         move_uploaded_file($fileTmpName, $fileDestination);

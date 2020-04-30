@@ -33,7 +33,7 @@
                         endwhile;
                         ?>
                         <div class='dropdown-divider'></div>
-                        <a href="categoryProducts.php?allProducts" class="dropdown-item">All Products</a>
+                        <a href="/categoryProducts.php?allProducts" class="dropdown-item">All Products</a>
                     </div>
                 </li>
             </ul>

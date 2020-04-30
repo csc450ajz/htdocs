@@ -9,7 +9,7 @@ if (isset($_POST['chatId'])) {
     
     $output = '';
     $chatId = $_POST['chatId'];
-    $sql = "SELECT * FROM chatmessages WHERE chatId= '$chatId' ";
+    $sql = "SELECT * FROM ChatMessages WHERE chatId= '$chatId' ";
     $result = $conn->query($sql);
 
 
@@ -51,7 +51,7 @@ if (isset($_POST['issueId'])) {
     $output = '';
     $issueId = $_POST['issueId'];
     $userEmail = $_SESSION['userEmail'];
-    $sql = "SELECT * FROM adminmessages WHERE issueId= '$issueId'";
+    $sql = "SELECT * FROM AdminMessages WHERE issueId= '$issueId'";
     $result = $conn->query($sql);
 
 

@@ -59,7 +59,7 @@ require_once('../../util'.$navbar);
                                                 $imageResult = $conn -> query($sql);
                                                 $row = mysqli_fetch_assoc($imageResult);
                                             ?>
-                                            <img src="../<?php echo $row['imagePath'];?>" onerror="this.src='../../images/placeholder.jpg';" alt="" class="img-fluid img-thumbnail">
+                                            <img src="<?php echo $row['imagePath'];?>" onerror="this.src='../../images/placeholder.jpg';" alt="" class="img-fluid img-thumbnail">
                                         </div>
                                         <div class="col-md-6">
                                             <h5><?= $product['productName'] ?></h5>

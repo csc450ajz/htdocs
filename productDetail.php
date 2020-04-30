@@ -5,7 +5,7 @@
 require_once('util/config.php');
 ?>
 <head>
-    <title>cart.php</title>
+    <title>Product Detail</title>
     <link rel='stylesheet' href='style/products.css'>
 </head>
 <?php
@@ -57,7 +57,6 @@ if (array_key_exists('hdnMessage', $_POST)) {
         $result = $conn->query($sql);
 
         $chatId = mysqli_insert_id($conn);
-        $messageTime = $product['chatStartDat'];
         $sql = "INSERT INTO ChatMessages (userEmail, chatId, messageText, messageSentTime) VALUES ('$userEmail', '$chatId', '$messageText', CURRENT_TIMESTAMP)";
         if ($conn->query($sql)) {
             echo '<script>alert("Message Sent")</script>';
@@ -220,7 +219,7 @@ $productImagesResults = getProductImages($conn, $product['productId'])
         </style>
         <?php
         $conn->next_result();
-        $sql = "SELECT * FROM Product WHERE genderId=" . $product['genderId'];
+        $sql = "SELECT * FROM Product WHERE genderId=" . $product['genderId'] . " LIMIT 4";
         $result = $conn->query($sql);
         ?>
         <div class="row flex-row flex-nowrap overflow-auto">
